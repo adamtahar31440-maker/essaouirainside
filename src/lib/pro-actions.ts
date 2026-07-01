@@ -7,7 +7,8 @@ import { eq, and } from "drizzle-orm";
 import { getDb } from "@/db";
 import { professionals, establishments, categories, serviceOrders, labelApplications } from "@/db/schema";
 import { getProfessionalByClerkId, getLabelApplicationByEstablishmentId } from "@/lib/admin-data";
-import { readLocalized } from "@/lib/localized-form";
+import { readLocalized, ALL_LOCALES } from "@/lib/localized-form";
+import { translateFields } from "@/lib/translate";
 import { slugify } from "@/lib/slug";
 
 const OPEN_APPLICATION_STATUSES = ["pending", "info_requested", "visit_scheduled", "on_hold"];
@@ -25,14 +26,24 @@ export async function applyAsProfessional(formData: FormData) {
 
   const categoryId = Number(formData.get("categoryId"));
   const [category] = await db.select().from(categories).where(eq(categories.id, categoryId));
-  const nameFr = String(formData.get("name_fr") ?? "");
   const contactName = String(formData.get("contactName") ?? "");
+
+  const requestedLocale = String(formData.get("sourceLocale") ?? "fr");
+  const sourceLocale = ALL_LOCALES.includes(requestedLocale) ? requestedLocale : "fr";
+  const name = String(formData.get("name") ?? "");
+  const description = String(formData.get("description") ?? "");
+
+  const targetLocales = ALL_LOCALES.filter((l) => l !== sourceLocale);
+  const translations = await translateFields({ name, description }, targetLocales, sourceLocale);
+
+  const localizedName = { [sourceLocale]: name, ...translations.name };
+  const localizedDescription = { [sourceLocale]: description, ...translations.description };
 
   const [professional] = await db
     .insert(professionals)
     .values({
       clerkUserId: user.id,
-      companyName: nameFr,
+      companyName: name,
       contactName,
       activityType: category?.type ?? "service",
       phone: String(formData.get("phone") ?? ""),
@@ -45,9 +56,9 @@ export async function applyAsProfessional(formData: FormData) {
   await db.insert(establishments).values({
     categoryId,
     subcategory: String(formData.get("subcategory") ?? ""),
-    slug: `${slugify(nameFr)}-${professional.id}`,
-    name: readLocalized(formData, "name"),
-    description: readLocalized(formData, "description"),
+    slug: `${slugify(localizedName.fr || name)}-${professional.id}`,
+    name: localizedName,
+    description: localizedDescription,
     address: String(formData.get("address") ?? ""),
     lat: formData.get("lat") ? Number(formData.get("lat")) : null,
     lng: formData.get("lng") ? Number(formData.get("lng")) : null,

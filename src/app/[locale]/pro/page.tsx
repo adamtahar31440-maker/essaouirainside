@@ -16,6 +16,7 @@ import { SubscriptionPlans } from "@/components/subscription-plans";
 import { LabelBadgeHistory } from "@/components/label-badge-history";
 import { LocalizedFieldGroup } from "@/components/admin/localized-field-group";
 import { CATEGORY_SUBCATEGORIES } from "@/lib/categories";
+import { ALL_LOCALES, LOCALE_LABELS } from "@/lib/localized-form";
 
 const LABEL_APPLICATION_STATUS_LABELS: Record<string, string> = {
   pending: "En attente d'évaluation",
@@ -59,6 +60,22 @@ export default async function ProDashboardPage({
           avant de la publier et de valider ton compte.
         </p>
         <form action={applyAsProfessional} className="max-w-2xl space-y-6 rounded-2xl border border-black/5 bg-white p-6">
+          <div className="rounded-xl border border-ocean-dark/20 bg-ocean-dark/5 p-4">
+            <label className={labelClass}>Langue de rédaction</label>
+            <select name="sourceLocale" defaultValue={ALL_LOCALES.includes(locale) ? locale : "fr"} className={inputClass}>
+              {ALL_LOCALES.map((l) => (
+                <option key={l} value={l}>
+                  {LOCALE_LABELS[l]}
+                </option>
+              ))}
+            </select>
+            <p className="mt-2 text-xs text-foreground/60">
+              Choisissez la langue dans laquelle vous allez rédiger votre fiche. Dès l&apos;envoi de votre demande, elle
+              sera automatiquement traduite dans toutes les autres langues du site avant d&apos;être examinée par notre
+              équipe.
+            </p>
+          </div>
+
           <div>
             <label className={labelClass}>Responsable</label>
             <input name="contactName" className={inputClass} required />
@@ -90,8 +107,14 @@ export default async function ProDashboardPage({
             </div>
           </div>
 
-          <LocalizedFieldGroup field="name" label="Nom de l'établissement" required />
-          <LocalizedFieldGroup field="description" label="Description" multiline />
+          <div>
+            <label className={labelClass}>Nom de l&apos;établissement</label>
+            <input name="name" className={inputClass} required />
+          </div>
+          <div>
+            <label className={labelClass}>Description</label>
+            <textarea name="description" rows={4} className={inputClass} />
+          </div>
 
           <div>
             <label className={labelClass}>Adresse</label>
