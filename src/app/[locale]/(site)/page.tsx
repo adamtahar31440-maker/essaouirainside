@@ -59,9 +59,8 @@ export default async function HomePage({
 
   return (
     <div>
-      <section className="relative overflow-hidden bg-ocean-dark text-white">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,124,150,0.5),transparent_60%)]" />
-        <div className="relative mx-auto flex max-w-7xl flex-col items-start gap-6 px-4 py-24 sm:px-6 lg:py-32">
+      <section className="bg-ocean-dark text-white">
+        <div className="mx-auto flex max-w-7xl flex-col items-start gap-6 px-4 py-24 sm:px-6 lg:py-32">
           <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-6xl">
             {t("heroTitle")}
           </h1>
