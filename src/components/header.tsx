@@ -34,7 +34,7 @@ export function Header({ activeModules = [] }: { activeModules?: string[] }) {
   const pathWithoutLocale = pathname.replace(`/${locale}`, "") || "/";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/5 bg-background">
+    <header className="relative z-50 border-b border-black/5 bg-background">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <Link href={`/${locale}`} className="shrink-0 text-lg font-semibold tracking-tight text-ocean-dark">
           Essaouira <span className="text-terracotta">Inside</span>
