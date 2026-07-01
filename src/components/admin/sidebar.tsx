@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { UserButton } from "@clerk/nextjs";
+import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { can, type Role, type Permission } from "@/lib/roles";
 
@@ -29,36 +31,76 @@ const SECTIONS: { href: string; label: string; permission?: Permission }[] = [
 export function AdminSidebar({ locale, role }: { locale: string; role: Role }) {
   const pathname = usePathname();
   const base = `/${locale}/admin`;
+  const [open, setOpen] = useState(false);
+  const sections = SECTIONS.filter((s) => !s.permission || can(role, s.permission));
+
+  const nav = (onNavigate?: () => void) => (
+    <nav className="flex-1 space-y-0.5 overflow-y-auto p-3">
+      {sections.map((s) => {
+        const href = `${base}${s.href}`;
+        const active = pathname === href;
+        return (
+          <Link
+            key={s.href}
+            href={href}
+            onClick={onNavigate}
+            className={cn(
+              "block rounded-lg px-3 py-2 text-sm font-medium transition",
+              active ? "bg-white/15 text-white" : "text-white/70 hover:bg-white/10 hover:text-white"
+            )}
+          >
+            {s.label}
+          </Link>
+        );
+      })}
+    </nav>
+  );
 
   return (
-    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-black/10 bg-ocean-dark text-white">
-      <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+    <>
+      {/* Mobile top bar */}
+      <div className="flex items-center justify-between border-b border-black/10 bg-ocean-dark px-4 py-3 text-white lg:hidden">
+        <button onClick={() => setOpen(true)} aria-label="Menu" className="p-1">
+          <Menu size={22} />
+        </button>
         <Link href={base} className="text-sm font-semibold">
           Essaouira <span className="text-terracotta">Inside</span>
         </Link>
         <UserButton />
       </div>
-      <nav className="flex-1 space-y-0.5 overflow-y-auto p-3">
-        {SECTIONS.filter((s) => !s.permission || can(role, s.permission)).map((s) => {
-          const href = `${base}${s.href}`;
-          const active = pathname === href;
-          return (
-            <Link
-              key={s.href}
-              href={href}
-              className={cn(
-                "block rounded-lg px-3 py-2 text-sm font-medium transition",
-                active ? "bg-white/15 text-white" : "text-white/70 hover:bg-white/10 hover:text-white"
-              )}
-            >
-              {s.label}
-            </Link>
-          );
-        })}
-      </nav>
-      <div className="border-t border-white/10 p-3 text-xs text-white/50">
-        Connecté en tant que {role}
-      </div>
-    </aside>
+
+      {/* Mobile drawer */}
+      {open && (
+        <div className="fixed inset-0 z-[80] lg:hidden">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setOpen(false)} />
+          <aside className="absolute inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col bg-ocean-dark text-white rtl:left-auto rtl:right-0">
+            <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+              <span className="text-sm font-semibold">Menu</span>
+              <button onClick={() => setOpen(false)} aria-label="Fermer" className="p-1">
+                <X size={20} />
+              </button>
+            </div>
+            {nav(() => setOpen(false))}
+            <div className="border-t border-white/10 p-3 text-xs text-white/50">
+              Connecté en tant que {role}
+            </div>
+          </aside>
+        </div>
+      )}
+
+      {/* Desktop sidebar */}
+      <aside className="hidden h-full w-64 shrink-0 flex-col border-r border-black/10 bg-ocean-dark text-white lg:flex">
+        <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+          <Link href={base} className="text-sm font-semibold">
+            Essaouira <span className="text-terracotta">Inside</span>
+          </Link>
+          <UserButton />
+        </div>
+        {nav()}
+        <div className="border-t border-white/10 p-3 text-xs text-white/50">
+          Connecté en tant que {role}
+        </div>
+      </aside>
+    </>
   );
 }

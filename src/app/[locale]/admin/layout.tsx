@@ -18,9 +18,9 @@ export default async function AdminLayout({
   if (!role || !ADMIN_ROLES.includes(role)) redirect(`/${locale}`);
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen flex-col lg:flex-row">
       <AdminSidebar locale={locale} role={role} />
-      <div className="flex-1 bg-sand/20 p-8">{children}</div>
+      <div className="min-w-0 flex-1 bg-sand/20 p-4 sm:p-6 lg:p-8">{children}</div>
     </div>
   );
 }
