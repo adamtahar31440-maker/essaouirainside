@@ -75,7 +75,7 @@ export default async function HomePage({
             <Link
               key={c.id}
               href={`/${locale}/${CATEGORY_TYPE_TO_PATH[c.type]}`}
-              className="flex flex-col items-center gap-3 rounded-2xl border border-black/5 bg-white p-6 text-center shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+              className="flex flex-col items-center gap-3 rounded-2xl border border-black/5 bg-white p-6 text-center shadow-sm sm:transition sm:hover:-translate-y-0.5 sm:hover:shadow-md"
             >
               <span className="text-ocean-dark">{CATEGORY_ICONS[c.type]}</span>
               <span className="text-sm font-semibold text-ocean-dark">
