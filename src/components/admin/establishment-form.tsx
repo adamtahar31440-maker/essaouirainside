@@ -142,6 +142,7 @@ export function EstablishmentForm({
           <label className={labelClass}>Statut</label>
           <select name="status" defaultValue={establishment?.status ?? "active"} className={inputClass}>
             <option value="active">Actif</option>
+            <option value="pending">En attente (candidature pro)</option>
             <option value="disabled">Désactivé</option>
           </select>
         </div>

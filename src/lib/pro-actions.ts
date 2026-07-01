@@ -2,13 +2,19 @@
 
 import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { eq, and } from "drizzle-orm";
 import { getDb } from "@/db";
-import { professionals, establishments, serviceOrders, labelApplications } from "@/db/schema";
+import { professionals, establishments, categories, serviceOrders, labelApplications } from "@/db/schema";
 import { getProfessionalByClerkId, getLabelApplicationByEstablishmentId } from "@/lib/admin-data";
+import { readLocalized } from "@/lib/localized-form";
+import { slugify } from "@/lib/slug";
 
 const OPEN_APPLICATION_STATUSES = ["pending", "info_requested", "visit_scheduled", "on_hold"];
 
+// The professional submits their full establishment fiche as part of the
+// application itself, so the Super Admin reviews real content (not just a
+// company name) before deciding to validate or refuse.
 export async function applyAsProfessional(formData: FormData) {
   const user = await currentUser();
   if (!user) throw new Error("Unauthorized");
@@ -17,15 +23,44 @@ export async function applyAsProfessional(formData: FormData) {
   const existing = await getProfessionalByClerkId(user.id);
   if (existing) return;
 
-  await db.insert(professionals).values({
-    clerkUserId: user.id,
-    companyName: String(formData.get("companyName") ?? ""),
-    contactName: String(formData.get("contactName") ?? ""),
-    activityType: String(formData.get("activityType") ?? "service"),
+  const categoryId = Number(formData.get("categoryId"));
+  const [category] = await db.select().from(categories).where(eq(categories.id, categoryId));
+  const nameFr = String(formData.get("name_fr") ?? "");
+  const contactName = String(formData.get("contactName") ?? "");
+
+  const [professional] = await db
+    .insert(professionals)
+    .values({
+      clerkUserId: user.id,
+      companyName: nameFr,
+      contactName,
+      activityType: category?.type ?? "service",
+      phone: String(formData.get("phone") ?? ""),
+      email: user.emailAddresses[0]?.emailAddress ?? String(formData.get("email") ?? ""),
+      website: String(formData.get("website") ?? ""),
+      status: "pending",
+    })
+    .returning();
+
+  await db.insert(establishments).values({
+    categoryId,
+    subcategory: String(formData.get("subcategory") ?? ""),
+    slug: `${slugify(nameFr)}-${professional.id}`,
+    name: readLocalized(formData, "name"),
+    description: readLocalized(formData, "description"),
+    address: String(formData.get("address") ?? ""),
+    lat: formData.get("lat") ? Number(formData.get("lat")) : null,
+    lng: formData.get("lng") ? Number(formData.get("lng")) : null,
     phone: String(formData.get("phone") ?? ""),
-    email: user.emailAddresses[0]?.emailAddress ?? String(formData.get("email") ?? ""),
+    whatsapp: String(formData.get("whatsapp") ?? ""),
     website: String(formData.get("website") ?? ""),
+    priceLevel: String(formData.get("priceLevel") ?? "€€"),
+    images: String(formData.get("images") ?? "")
+      .split(/\r?\n/)
+      .map((s) => s.trim())
+      .filter(Boolean),
     status: "pending",
+    professionalId: professional.id,
   });
 
   revalidatePath("/", "layout");
@@ -43,30 +78,17 @@ export async function updateOwnEstablishment(formData: FormData) {
   const [establishment] = await db.select().from(establishments).where(eq(establishments.id, id));
   if (!establishment || establishment.professionalId !== professional.id) throw new Error("Forbidden");
 
-  const nameFr = String(formData.get("name_fr") ?? establishment.name.fr);
-
   await db
     .update(establishments)
     .set({
-      name: {
-        fr: nameFr,
-        en: String(formData.get("name_en") ?? nameFr),
-        ar: String(formData.get("name_ar") ?? nameFr),
-      },
-      description: {
-        fr: String(formData.get("description_fr") ?? ""),
-        en: String(formData.get("description_en") ?? ""),
-        ar: String(formData.get("description_ar") ?? ""),
-      },
+      name: readLocalized(formData, "name"),
+      description: readLocalized(formData, "description"),
       address: String(formData.get("address") ?? ""),
       phone: String(formData.get("phone") ?? ""),
       whatsapp: String(formData.get("whatsapp") ?? ""),
       website: String(formData.get("website") ?? ""),
-      hours: {
-        fr: String(formData.get("hours_fr") ?? ""),
-        en: String(formData.get("hours_en") ?? ""),
-        ar: String(formData.get("hours_ar") ?? ""),
-      },
+      hours: readLocalized(formData, "hours"),
+      priceLevel: String(formData.get("priceLevel") ?? establishment.priceLevel ?? "€€"),
       images: String(formData.get("images") ?? "")
         .split(/\r?\n/)
         .map((s) => s.trim())
@@ -75,6 +97,7 @@ export async function updateOwnEstablishment(formData: FormData) {
     .where(and(eq(establishments.id, id), eq(establishments.professionalId, professional.id)));
 
   revalidatePath("/", "layout");
+  redirect(`/${formData.get("locale")}/pro`);
 }
 
 export async function applyForLabel(formData: FormData) {

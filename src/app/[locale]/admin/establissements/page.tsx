@@ -50,18 +50,24 @@ export default async function AdminEstablishmentsPage({
                   {categoryById.get(e.categoryId)?.name.fr ?? "—"} / {e.subcategory}
                 </td>
                 <td className="px-4 py-3">
-                  <form action={setEstablishmentStatus.bind(null, e.id, e.status === "active" ? "disabled" : "active")}>
-                    <button
-                      type="submit"
-                      className={
-                        e.status === "active"
-                          ? "rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700"
-                          : "rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-600"
-                      }
-                    >
-                      {e.status === "active" ? "Actif" : "Désactivé"}
-                    </button>
-                  </form>
+                  {e.status === "pending" ? (
+                    <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
+                      En attente (candidature pro)
+                    </span>
+                  ) : (
+                    <form action={setEstablishmentStatus.bind(null, e.id, e.status === "active" ? "disabled" : "active")}>
+                      <button
+                        type="submit"
+                        className={
+                          e.status === "active"
+                            ? "rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700"
+                            : "rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-600"
+                        }
+                      >
+                        {e.status === "active" ? "Actif" : "Désactivé"}
+                      </button>
+                    </form>
+                  )}
                 </td>
                 <td className="px-4 py-3">
                   <form action={toggleEstablishmentFeatured.bind(null, e.id, !e.featured)}>

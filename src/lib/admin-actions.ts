@@ -25,6 +25,8 @@ import {
 } from "@/db/schema";
 import { can, type Role } from "@/lib/roles";
 import { LABEL_CRITERIA } from "@/lib/label-criteria";
+import { slugify } from "@/lib/slug";
+import { readLocalized } from "@/lib/localized-form";
 
 async function requireRole(section: Parameters<typeof can>[1]) {
   const user = await currentUser();
@@ -64,27 +66,6 @@ export async function deleteEstablishment(id: number) {
   revalidatePath("/", "layout");
 }
 
-function slugify(text: string) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
-
-const ALL_LOCALES = ["fr", "en", "ar", "es", "de", "it", "pt", "ru", "zh", "ko", "tr", "he"];
-
-function readLocalized(formData: FormData, field: string): Record<string, string> {
-  const fr = String(formData.get(`${field}_fr`) ?? "");
-  const result: Record<string, string> = { fr };
-  for (const locale of ALL_LOCALES) {
-    if (locale === "fr") continue;
-    const value = formData.get(`${field}_${locale}`);
-    result[locale] = value ? String(value) : fr;
-  }
-  return result;
-}
 
 export async function upsertEstablishment(formData: FormData) {
   await requireRole("establishments");
@@ -244,6 +225,15 @@ export async function setProfessionalStatus(
         publicMetadata: { role: "professional" satisfies Role },
       });
     }
+  }
+
+  // The establishment fiche submitted alongside the application goes live
+  // only once the professional is validated; it's hidden again if refused
+  // or suspended.
+  if (status === "validated") {
+    await db.update(establishments).set({ status: "active" }).where(eq(establishments.professionalId, id));
+  } else if (status === "refused" || status === "suspended") {
+    await db.update(establishments).set({ status: "disabled" }).where(eq(establishments.professionalId, id));
   }
 
   revalidatePath("/", "layout");

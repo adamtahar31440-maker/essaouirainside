@@ -1,4 +1,5 @@
-import { adminGetProfessionals } from "@/lib/admin-data";
+import Link from "next/link";
+import { adminGetProfessionals, adminGetEstablishments } from "@/lib/admin-data";
 import { deleteProfessional, setProfessionalStatus } from "@/lib/admin-actions";
 import { ConfirmSubmitButton } from "@/components/admin/confirm-button";
 import { cn } from "@/lib/utils";
@@ -17,8 +18,14 @@ const STATUS_COLORS: Record<string, string> = {
   suspended: "bg-gray-200 text-gray-600",
 };
 
-export default async function AdminProfessionalsPage() {
-  const items = await adminGetProfessionals();
+export default async function AdminProfessionalsPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const [items, establishments] = await Promise.all([adminGetProfessionals(), adminGetEstablishments()]);
+  const ficheByProfessionalId = new Map(establishments.map((e) => [e.professionalId, e]));
 
   return (
     <div>
@@ -59,6 +66,14 @@ export default async function AdminProfessionalsPage() {
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap items-center gap-3">
+                    {ficheByProfessionalId.has(p.id) && (
+                      <Link
+                        href={`/${locale}/admin/establissements/${ficheByProfessionalId.get(p.id)!.id}`}
+                        className="text-azur hover:underline"
+                      >
+                        Voir la fiche
+                      </Link>
+                    )}
                     {p.status !== "validated" && (
                       <form action={setProfessionalStatus.bind(null, p.id, "validated")}>
                         <button type="submit" className="text-green-700 hover:underline">

@@ -67,7 +67,7 @@ export async function getSimilarEstablishments(categoryId: number, excludeSlug: 
   const rows = await db
     .select()
     .from(establishments)
-    .where(eq(establishments.categoryId, categoryId))
+    .where(and(eq(establishments.categoryId, categoryId), eq(establishments.status, "active")))
     .limit(limit + 1);
   return rows.filter((r) => r.slug !== excludeSlug).slice(0, limit);
 }

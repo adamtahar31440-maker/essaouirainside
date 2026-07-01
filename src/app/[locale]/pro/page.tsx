@@ -9,10 +9,13 @@ import {
   getSubscriptionPlans,
   getLabelApplicationByEstablishmentId,
   getLabelBadges,
+  getAllCategories,
 } from "@/lib/admin-data";
-import { applyAsProfessional, requestMarketplaceService, applyForLabel } from "@/lib/pro-actions";
+import { applyAsProfessional, requestMarketplaceService, applyForLabel, updateOwnEstablishment } from "@/lib/pro-actions";
 import { SubscriptionPlans } from "@/components/subscription-plans";
 import { LabelBadgeHistory } from "@/components/label-badge-history";
+import { LocalizedFieldGroup } from "@/components/admin/localized-field-group";
+import { CATEGORY_SUBCATEGORIES } from "@/lib/categories";
 
 const LABEL_APPLICATION_STATUS_LABELS: Record<string, string> = {
   pending: "En attente d'évaluation",
@@ -47,42 +50,93 @@ export default async function ProDashboardPage({
   const professional = user ? await getProfessionalByClerkId(user.id) : null;
 
   if (!professional) {
+    const categories = await getAllCategories();
     return (
       <div>
         <h1 className="mb-2 text-2xl font-semibold text-ocean-dark">Devenir partenaire</h1>
         <p className="mb-6 text-sm text-foreground/60">
-          Créez votre profil professionnel. Un membre de l&apos;équipe Essaouira Inside validera votre demande.
+          Remplis la fiche complète de ton établissement. Un membre de l&apos;équipe Essaouira Inside l&apos;examinera
+          avant de la publier et de valider ton compte.
         </p>
-        <form action={applyAsProfessional} className="max-w-xl space-y-4 rounded-2xl border border-black/5 bg-white p-6">
-          <div>
-            <label className={labelClass}>Nom de l&apos;entreprise</label>
-            <input name="companyName" className={inputClass} required />
-          </div>
+        <form action={applyAsProfessional} className="max-w-2xl space-y-6 rounded-2xl border border-black/5 bg-white p-6">
           <div>
             <label className={labelClass}>Responsable</label>
-            <input name="contactName" className={inputClass} />
+            <input name="contactName" className={inputClass} required />
           </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label className={labelClass}>Catégorie</label>
+              <select name="categoryId" className={inputClass} required>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name.fr}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className={labelClass}>Sous-catégorie</label>
+              <select name="subcategory" className={inputClass} required>
+                {Object.values(CATEGORY_SUBCATEGORIES)
+                  .flat()
+                  .filter((v, i, arr) => arr.indexOf(v) === i)
+                  .map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          </div>
+
+          <LocalizedFieldGroup field="name" label="Nom de l'établissement" required />
+          <LocalizedFieldGroup field="description" label="Description" multiline />
+
           <div>
-            <label className={labelClass}>Type d&apos;activité</label>
-            <select name="activityType" className={inputClass}>
-              <option value="restaurant">Restaurant</option>
-              <option value="hotel">Hôtel</option>
-              <option value="riad">Riad</option>
-              <option value="activite">Activité</option>
-              <option value="immobilier">Agence immobilière</option>
-              <option value="boutique">Boutique</option>
-              <option value="artisan">Artisan</option>
-              <option value="service">Service</option>
+            <label className={labelClass}>Adresse</label>
+            <input name="address" className={inputClass} />
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label className={labelClass}>Latitude</label>
+              <input name="lat" type="number" step="any" className={inputClass} />
+            </div>
+            <div>
+              <label className={labelClass}>Longitude</label>
+              <input name="lng" type="number" step="any" className={inputClass} />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div>
+              <label className={labelClass}>Téléphone</label>
+              <input name="phone" className={inputClass} />
+            </div>
+            <div>
+              <label className={labelClass}>WhatsApp</label>
+              <input name="whatsapp" className={inputClass} />
+            </div>
+            <div>
+              <label className={labelClass}>Site internet</label>
+              <input name="website" className={inputClass} />
+            </div>
+          </div>
+
+          <div>
+            <label className={labelClass}>Niveau de prix</label>
+            <select name="priceLevel" defaultValue="€€" className={inputClass}>
+              <option value="€">€</option>
+              <option value="€€">€€</option>
+              <option value="€€€">€€€</option>
             </select>
           </div>
+
           <div>
-            <label className={labelClass}>Téléphone</label>
-            <input name="phone" className={inputClass} />
+            <label className={labelClass}>Photos (une URL par ligne)</label>
+            <textarea name="images" rows={4} className={inputClass} placeholder="https://..." />
           </div>
-          <div>
-            <label className={labelClass}>Site internet</label>
-            <input name="website" className={inputClass} />
-          </div>
+
           <button type="submit" className="rounded-full bg-ocean-dark px-6 py-2.5 text-sm font-semibold text-white hover:bg-ocean">
             Envoyer ma demande
           </button>
@@ -154,9 +208,62 @@ export default async function ProDashboardPage({
       <section className="rounded-2xl border border-black/5 bg-white p-6">
         <h2 className="mb-3 text-sm font-semibold text-ocean-dark">Votre fiche établissement</h2>
         {myEstablishment ? (
-          <p className="text-sm text-foreground/70">
-            {myEstablishment.name.fr} — Contactez l&apos;équipe pour toute modification de contenu pour le moment.
-          </p>
+          <form action={updateOwnEstablishment} className="space-y-6">
+            <input type="hidden" name="locale" value={locale} />
+            <input type="hidden" name="id" value={myEstablishment.id} />
+
+            {myEstablishment.status !== "active" && (
+              <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs font-medium text-amber-700">
+                Statut actuel : {myEstablishment.status === "pending" ? "en attente de validation" : "désactivée"} —
+                elle n&apos;est pas encore visible publiquement.
+              </p>
+            )}
+
+            <LocalizedFieldGroup field="name" label="Nom" values={myEstablishment.name} required />
+            <LocalizedFieldGroup field="description" label="Description" values={myEstablishment.description} multiline />
+            <LocalizedFieldGroup field="hours" label="Horaires" values={myEstablishment.hours ?? undefined} />
+
+            <div>
+              <label className={labelClass}>Adresse</label>
+              <input name="address" defaultValue={myEstablishment.address ?? ""} className={inputClass} />
+            </div>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <div>
+                <label className={labelClass}>Téléphone</label>
+                <input name="phone" defaultValue={myEstablishment.phone ?? ""} className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>WhatsApp</label>
+                <input name="whatsapp" defaultValue={myEstablishment.whatsapp ?? ""} className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>Site internet</label>
+                <input name="website" defaultValue={myEstablishment.website ?? ""} className={inputClass} />
+              </div>
+            </div>
+            <div>
+              <label className={labelClass}>Niveau de prix</label>
+              <select name="priceLevel" defaultValue={myEstablishment.priceLevel ?? "€€"} className={inputClass}>
+                <option value="€">€</option>
+                <option value="€€">€€</option>
+                <option value="€€€">€€€</option>
+              </select>
+            </div>
+            <div>
+              <label className={labelClass}>Photos (une URL par ligne)</label>
+              <textarea
+                name="images"
+                defaultValue={myEstablishment.images?.join("\n") ?? ""}
+                rows={4}
+                className={inputClass}
+                placeholder="https://..."
+              />
+            </div>
+
+            <button type="submit" className="rounded-full bg-ocean-dark px-6 py-2.5 text-sm font-semibold text-white hover:bg-ocean">
+              Enregistrer
+            </button>
+          </form>
         ) : (
           <p className="text-sm text-foreground/60">
             Aucune fiche n&apos;est encore reliée à votre compte. Notre équipe va créer votre fiche établissement.
