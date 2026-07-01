@@ -1,0 +1,146 @@
+"use client";
+
+import { useState } from "react";
+import { ALL_LOCALES, LOCALE_LABELS } from "@/lib/localized-form";
+import { PRO_FORM_STRINGS } from "@/lib/pro-form-i18n";
+import { CATEGORY_SUBCATEGORIES } from "@/lib/categories";
+import { subcategoryLabel, PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
+
+const RTL_LOCALES = ["ar", "he"];
+
+const inputClass = "w-full rounded-lg border border-black/10 px-3 py-2 text-sm outline-none focus:border-ocean-dark";
+const labelClass = "mb-1 block text-xs font-semibold text-foreground/60";
+
+export function ProApplicationForm({
+  action,
+  categories,
+  defaultLocale,
+}: {
+  action: (formData: FormData) => void;
+  categories: { id: number; name: Record<string, string> }[];
+  defaultLocale: string;
+}) {
+  const [lang, setLang] = useState(ALL_LOCALES.includes(defaultLocale) ? defaultLocale : "fr");
+  const t = PRO_FORM_STRINGS[lang] ?? PRO_FORM_STRINGS.fr;
+  const dir = RTL_LOCALES.includes(lang) ? "rtl" : "ltr";
+
+  const subcategories = Object.values(CATEGORY_SUBCATEGORIES)
+    .flat()
+    .filter((v, i, arr) => arr.indexOf(v) === i);
+
+  return (
+    <div>
+      <h1 className="mb-2 text-2xl font-semibold text-ocean-dark">{t.heading}</h1>
+      <p className="mb-6 text-sm text-foreground/60">{t.intro}</p>
+      <form
+        action={action}
+        dir={dir}
+        className="max-w-2xl space-y-6 rounded-2xl border border-black/5 bg-white p-6"
+      >
+        <div className="rounded-xl border border-ocean-dark/20 bg-ocean-dark/5 p-4">
+          <label className={labelClass}>{t.langLabel}</label>
+          <select
+            name="sourceLocale"
+            value={lang}
+            onChange={(e) => setLang(e.target.value)}
+            className={inputClass}
+          >
+            {ALL_LOCALES.map((l) => (
+              <option key={l} value={l}>
+                {LOCALE_LABELS[l]}
+              </option>
+            ))}
+          </select>
+          <p className="mt-2 text-xs text-foreground/60">{t.langHint}</p>
+        </div>
+
+        <div>
+          <label className={labelClass}>{t.contactName}</label>
+          <input name="contactName" className={inputClass} required />
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label className={labelClass}>{t.category}</label>
+            <select name="categoryId" className={inputClass} required>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name[lang] ?? c.name.fr}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className={labelClass}>{t.subcategory}</label>
+            <select name="subcategory" className={inputClass} required>
+              {subcategories.map((s) => (
+                <option key={s} value={s}>
+                  {subcategoryLabel(s, lang)}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label className={labelClass}>{t.name}</label>
+          <input name="name" className={inputClass} required dir={dir} />
+        </div>
+        <div>
+          <label className={labelClass}>{t.description}</label>
+          <textarea name="description" rows={4} className={inputClass} dir={dir} />
+        </div>
+
+        <div>
+          <label className={labelClass}>{t.address}</label>
+          <input name="address" className={inputClass} />
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label className={labelClass}>{t.lat}</label>
+            <input name="lat" type="number" step="any" className={inputClass} />
+          </div>
+          <div>
+            <label className={labelClass}>{t.lng}</label>
+            <input name="lng" type="number" step="any" className={inputClass} />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div>
+            <label className={labelClass}>{t.phone}</label>
+            <input name="phone" className={inputClass} />
+          </div>
+          <div>
+            <label className={labelClass}>{t.whatsapp}</label>
+            <input name="whatsapp" className={inputClass} />
+          </div>
+          <div>
+            <label className={labelClass}>{t.website}</label>
+            <input name="website" className={inputClass} />
+          </div>
+        </div>
+
+        <div>
+          <label className={labelClass}>{t.priceLevel}</label>
+          <select name="priceLevel" defaultValue="€€" className={inputClass}>
+            {PRICE_LEVELS.map((level) => (
+              <option key={level} value={level}>
+                {priceLevelLabel(level)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className={labelClass}>{t.images}</label>
+          <textarea name="images" rows={4} className={inputClass} placeholder="https://..." />
+        </div>
+
+        <button type="submit" className="rounded-full bg-ocean-dark px-6 py-2.5 text-sm font-semibold text-white hover:bg-ocean">
+          {t.submit}
+        </button>
+      </form>
+    </div>
+  );
+}

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getAllEstablishments, getCategories } from "@/lib/data";
 import { CATEGORY_TYPE_TO_PATH } from "@/lib/categories";
-import { subcategoryLabel } from "@/lib/labels";
+import { subcategoryLabel, priceLevelLabel } from "@/lib/labels";
 import { EstablishmentCard } from "@/components/establishment-card";
 import { MapSection } from "@/components/map-section";
 import { cn } from "@/lib/utils";
@@ -135,7 +135,7 @@ export default async function SearchPage({
                     price === p ? "border-ocean-dark bg-ocean-dark text-white" : "border-black/10 text-foreground/70"
                   )}
                 >
-                  {p}
+                  {priceLevelLabel(p)}
                 </Link>
               ))}
             </div>

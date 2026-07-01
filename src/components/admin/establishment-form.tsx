@@ -1,5 +1,6 @@
 import { upsertEstablishment } from "@/lib/admin-actions";
 import { CATEGORY_SUBCATEGORIES } from "@/lib/categories";
+import { PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
 import { LocalizedFieldGroup } from "@/components/admin/localized-field-group";
 import { AutoTranslateButton } from "@/components/admin/auto-translate-button";
 
@@ -129,9 +130,11 @@ export function EstablishmentForm({
         <div>
           <label className={labelClass}>Niveau de prix</label>
           <select name="priceLevel" defaultValue={establishment?.priceLevel ?? "€€"} className={inputClass}>
-            <option value="€">€</option>
-            <option value="€€">€€</option>
-            <option value="€€€">€€€</option>
+            {PRICE_LEVELS.map((level) => (
+              <option key={level} value={level}>
+                {priceLevelLabel(level)}
+              </option>
+            ))}
           </select>
         </div>
         <div>

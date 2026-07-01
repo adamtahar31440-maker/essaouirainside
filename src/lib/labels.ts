@@ -40,3 +40,18 @@ export const subcategoryLabels: Record<string, Record<string, string>> = {
 export function subcategoryLabel(slug: string, locale: string) {
   return subcategoryLabels[slug]?.[locale] ?? slug;
 }
+
+// priceLevel is stored internally as "€"/"€€"/"€€€" tier keys (legacy), but the
+// site's currency is the Moroccan dirham, so we always display it as Dh tiers.
+export const PRICE_LEVELS = ["€", "€€", "€€€"] as const;
+
+const PRICE_LEVEL_LABELS: Record<string, string> = {
+  "€": "Dh",
+  "€€": "Dh Dh",
+  "€€€": "Dh Dh Dh",
+};
+
+export function priceLevelLabel(level?: string | null) {
+  if (!level) return "";
+  return PRICE_LEVEL_LABELS[level] ?? level;
+}

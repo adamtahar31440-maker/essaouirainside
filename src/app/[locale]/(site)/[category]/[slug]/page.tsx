@@ -5,7 +5,7 @@ import Link from "next/link";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Phone, MessageCircle, Globe, MapPin, Clock, Wifi, Car, Accessibility } from "lucide-react";
 import { CATEGORY_PATH_TO_TYPE } from "@/lib/categories";
-import { subcategoryLabel } from "@/lib/labels";
+import { subcategoryLabel, priceLevelLabel } from "@/lib/labels";
 import { getEstablishmentBySlug, getSimilarEstablishments } from "@/lib/data";
 import { getLabelBadges } from "@/lib/admin-data";
 import { isModuleActive, CATEGORY_MODULE_KEY } from "@/lib/modules";
@@ -82,7 +82,7 @@ export default async function EstablishmentPage({
     },
     telephone: e.phone ?? undefined,
     url: e.website ?? undefined,
-    priceRange: e.priceLevel ?? undefined,
+    priceRange: e.priceLevel ? priceLevelLabel(e.priceLevel) : undefined,
     ...(e.lat && e.lng
       ? { geo: { "@type": "GeoCoordinates", latitude: e.lat, longitude: e.lng } }
       : {}),
@@ -194,7 +194,7 @@ export default async function EstablishmentPage({
         <aside className="h-fit rounded-2xl border border-black/5 bg-white p-6 shadow-sm">
           {e.priceLevel && (
             <p className="text-sm font-semibold text-foreground/60">
-              {t("price")}: <span className="text-ocean-dark">{e.priceLevel}</span>
+              {t("price")}: <span className="text-ocean-dark">{priceLevelLabel(e.priceLevel)}</span>
             </p>
           )}
           {hours && (

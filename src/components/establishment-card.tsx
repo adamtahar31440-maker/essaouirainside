@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Wifi, Car } from "lucide-react";
+import { priceLevelLabel } from "@/lib/labels";
 
 export function EstablishmentCard({
   href,
@@ -45,7 +46,7 @@ export function EstablishmentCard({
         )}
         {priceLevel && (
           <span className="absolute right-3 top-3 rounded-full bg-black/60 px-2.5 py-1 text-xs font-semibold text-white">
-            {priceLevel}
+            {priceLevelLabel(priceLevel)}
           </span>
         )}
       </div>
