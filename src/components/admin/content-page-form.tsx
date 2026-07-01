@@ -25,6 +25,7 @@ export function ContentPageForm({ locale, page }: { locale: string; page?: Conte
         <select name="section" defaultValue={page?.section ?? "decouvrir"} className={inputClass}>
           <option value="decouvrir">Découvrir</option>
           <option value="vivre">Vivre à Essaouira</option>
+          <option value="assistance-guides">Assistance — Guides pratiques</option>
         </select>
       </div>
 

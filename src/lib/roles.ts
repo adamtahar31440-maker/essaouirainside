@@ -38,7 +38,8 @@ export const PERMISSIONS: Record<
   | "subscriptions"
   | "payments"
   | "modules"
-  | "settings",
+  | "settings"
+  | "assistance",
   Role[]
 > = {
   users: ["admin"],
@@ -58,6 +59,7 @@ export const PERMISSIONS: Record<
   payments: ["admin"],
   modules: [],
   settings: [],
+  assistance: ["admin"],
 };
 
 export type Permission = keyof typeof PERMISSIONS;

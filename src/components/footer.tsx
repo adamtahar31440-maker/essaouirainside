@@ -19,6 +19,7 @@ export function Footer({ activeModules = [] }: { activeModules?: string[] }) {
     { href: "/vivre-a-essaouira", label: nav("living") },
     { href: "/blog", label: nav("blog"), moduleKey: "blog" },
     { href: "/agenda", label: nav("agenda") },
+    { href: "/assistance", label: nav("assistance"), moduleKey: "assistance" },
   ].filter((l) => isActive(l.moduleKey));
 
   return (

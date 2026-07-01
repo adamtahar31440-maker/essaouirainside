@@ -28,6 +28,7 @@ export function Header({ activeModules = [] }: { activeModules?: string[] }) {
     { href: "/blog", label: t("blog"), moduleKey: "blog" },
     { href: "/agenda", label: t("agenda") },
     { href: "/tarifs", label: t("pricing"), moduleKey: "tarifs" },
+    { href: "/assistance", label: t("assistance"), moduleKey: "assistance", urgent: true },
   ].filter((link) => isActive(link.moduleKey));
 
   const pathWithoutLocale = pathname.replace(`/${locale}`, "") || "/";
@@ -44,7 +45,10 @@ export function Header({ activeModules = [] }: { activeModules?: string[] }) {
             <Link
               key={link.href}
               href={`/${locale}${link.href === "/" ? "" : link.href}`}
-              className="text-sm font-medium text-foreground/80 transition hover:text-ocean-dark"
+              className={cn(
+                "text-sm font-medium transition",
+                link.urgent ? "font-semibold text-red-600 hover:text-red-700" : "text-foreground/80 hover:text-ocean-dark"
+              )}
             >
               {link.label}
             </Link>
@@ -79,7 +83,10 @@ export function Header({ activeModules = [] }: { activeModules?: string[] }) {
                 key={link.href}
                 href={`/${locale}${link.href === "/" ? "" : link.href}`}
                 onClick={() => setOpen(false)}
-                className="rounded-md px-2 py-2 text-sm font-medium text-foreground/80 hover:bg-sand/50"
+                className={cn(
+                  "rounded-md px-2 py-2 text-sm font-medium hover:bg-sand/50",
+                  link.urgent ? "text-red-600" : "text-foreground/80"
+                )}
               >
                 {link.label}
               </Link>

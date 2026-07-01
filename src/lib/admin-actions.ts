@@ -18,6 +18,7 @@ import {
   siteSettings,
   adCampaigns,
   newsletterSubscribers,
+  emergencyContacts,
 } from "@/db/schema";
 import { can, type Role } from "@/lib/roles";
 
@@ -469,5 +470,62 @@ export async function deleteUser(clerkUserId: string) {
   await requireRole("users");
   const client = await clerkClient();
   await client.users.deleteUser(clerkUserId);
+  revalidatePath("/", "layout");
+}
+
+// ---- Emergency contacts (Assistance) ----
+export async function upsertEmergencyContact(formData: FormData) {
+  await requireRole("assistance");
+  const db = getDb();
+  const id = formData.get("id") ? Number(formData.get("id")) : null;
+  const nameFr = String(formData.get("name_fr") ?? "");
+
+  const data = {
+    category: String(formData.get("category") ?? "urgences"),
+    name: {
+      fr: nameFr,
+      en: String(formData.get("name_en") ?? nameFr),
+      ar: String(formData.get("name_ar") ?? nameFr),
+    },
+    phone: String(formData.get("phone") ?? "") || null,
+    whatsapp: String(formData.get("whatsapp") ?? "") || null,
+    address: String(formData.get("address") ?? "") || null,
+    lat: formData.get("lat") ? Number(formData.get("lat")) : null,
+    lng: formData.get("lng") ? Number(formData.get("lng")) : null,
+    hours: {
+      fr: String(formData.get("hours_fr") ?? ""),
+      en: String(formData.get("hours_en") ?? ""),
+      ar: String(formData.get("hours_ar") ?? ""),
+    },
+    notes: {
+      fr: String(formData.get("notes_fr") ?? ""),
+      en: String(formData.get("notes_en") ?? ""),
+      ar: String(formData.get("notes_ar") ?? ""),
+    },
+    website: String(formData.get("website") ?? "") || null,
+    country: String(formData.get("country") ?? "") || null,
+    featured: formData.get("featured") === "on",
+  };
+
+  if (id) {
+    await db.update(emergencyContacts).set(data).where(eq(emergencyContacts.id, id));
+  } else {
+    await db.insert(emergencyContacts).values(data);
+  }
+  revalidatePath("/", "layout");
+  redirect(`/${formData.get("locale")}/admin/assistance`);
+}
+
+export async function deleteEmergencyContact(id: number) {
+  await requireRole("assistance");
+  const db = getDb();
+  await db.delete(emergencyContacts).where(eq(emergencyContacts.id, id));
+  revalidatePath("/", "layout");
+}
+
+export async function toggleEmergencyContactFeatured(id: number, featured: boolean) {
+  await requireRole("assistance");
+  const db = getDb();
+  await db.update(emergencyContacts).set({ featured }).where(eq(emergencyContacts.id, id));
   revalidatePath("/", "layout");
 }

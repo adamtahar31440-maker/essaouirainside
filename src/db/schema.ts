@@ -220,3 +220,21 @@ export const siteSettings = pgTable("site_settings", {
   socialLinks: jsonb("social_links").$type<Record<string, string>>().default({}),
   contactEmail: varchar("contact_email", { length: 255 }),
 });
+
+// ---- Assistance & Urgences ----
+export const emergencyContacts = pgTable("emergency_contacts", {
+  id: serial("id").primaryKey(),
+  category: varchar("category", { length: 24 }).notNull(), // urgences|sante|securite|ambassade|depannage|argent|transport|telephone|info_utile
+  name: jsonb("name").$type<Localized>().notNull(),
+  phone: varchar("phone", { length: 64 }),
+  whatsapp: varchar("whatsapp", { length: 64 }),
+  address: varchar("address", { length: 255 }),
+  lat: doublePrecision("lat"),
+  lng: doublePrecision("lng"),
+  hours: jsonb("hours").$type<Localized>(),
+  notes: jsonb("notes").$type<Localized>(),
+  website: varchar("website", { length: 255 }),
+  country: varchar("country", { length: 100 }), // ambassades only
+  featured: boolean("featured").default(false), // shown in the SOS quick panel
+  order: integer("order").default(0),
+});

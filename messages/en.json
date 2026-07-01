@@ -8,6 +8,7 @@
     "shopping": "Shopping",
     "realEstate": "Real Estate",
     "pricing": "For Pros",
+    "assistance": "Help & Emergencies",
     "living": "Living in Essaouira",
     "blog": "Blog",
     "agenda": "Events",
@@ -99,6 +100,28 @@
   "living": {
     "title": "Living in Essaouira",
     "subtitle": "Everything you need to settle and live in Essaouira"
+  },
+  "assistance": {
+    "title": "Help & Emergencies",
+    "subtitle": "Useful numbers, embassies and practical guides to travel safely in Essaouira",
+    "sos": "SOS",
+    "sosTitle": "Need immediate help?",
+    "myLocation": "My location",
+    "call": "Call",
+    "guides": "I'm in trouble",
+    "guidesSubtitle": "Practical guides for emergency situations",
+    "mapTitle": "Emergency contacts map",
+    "categories": {
+      "urgences": "Emergencies",
+      "sante": "Health",
+      "securite": "Safety",
+      "ambassade": "Embassies & Consulates",
+      "depannage": "Repairs & Towing",
+      "argent": "Money",
+      "transport": "Transport",
+      "telephone": "Phone",
+      "info_utile": "Useful info"
+    }
   },
   "footer": {
     "tagline": "The international reference platform on Essaouira.",

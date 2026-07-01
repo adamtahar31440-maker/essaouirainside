@@ -17,6 +17,7 @@ import {
   modules,
   siteSettings,
   newsletterSubscribers,
+  emergencyContacts,
 } from "@/db/schema";
 import { desc, eq, count } from "drizzle-orm";
 
@@ -240,5 +241,17 @@ export async function adminGetNewsletterSubscribers() {
 export async function getSiteSettings() {
   const db = getDb();
   const rows = await db.select().from(siteSettings).limit(1);
+  return rows[0] ?? null;
+}
+
+// ---- Emergency contacts (Assistance) ----
+export async function adminGetEmergencyContacts() {
+  const db = getDb();
+  return db.select().from(emergencyContacts).orderBy(emergencyContacts.category, emergencyContacts.order);
+}
+
+export async function adminGetEmergencyContactById(id: number) {
+  const db = getDb();
+  const rows = await db.select().from(emergencyContacts).where(eq(emergencyContacts.id, id));
   return rows[0] ?? null;
 }

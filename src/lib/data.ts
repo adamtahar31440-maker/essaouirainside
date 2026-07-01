@@ -5,6 +5,7 @@ import {
   articles,
   contentPages,
   events,
+  emergencyContacts,
 } from "@/db/schema";
 import { desc, eq, and, asc } from "drizzle-orm";
 
@@ -130,4 +131,23 @@ export async function getEventBySlug(slug: string) {
   const db = getDb();
   const rows = await db.select().from(events).where(eq(events.slug, slug));
   return rows[0] ?? null;
+}
+
+export async function getEmergencyContacts(category?: string) {
+  const db = getDb();
+  const query = db
+    .select()
+    .from(emergencyContacts)
+    .where(category ? eq(emergencyContacts.category, category) : undefined)
+    .orderBy(asc(emergencyContacts.order));
+  return query;
+}
+
+export async function getFeaturedEmergencyContacts() {
+  const db = getDb();
+  return db
+    .select()
+    .from(emergencyContacts)
+    .where(eq(emergencyContacts.featured, true))
+    .orderBy(asc(emergencyContacts.order));
 }
