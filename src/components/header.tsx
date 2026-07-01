@@ -27,6 +27,7 @@ export function Header({ activeModules = [] }: { activeModules?: string[] }) {
     { href: "/vivre-a-essaouira", label: t("living") },
     { href: "/blog", label: t("blog"), moduleKey: "blog" },
     { href: "/agenda", label: t("agenda") },
+    { href: "/tarifs", label: t("pricing"), moduleKey: "tarifs" },
   ].filter((link) => isActive(link.moduleKey));
 
   const pathWithoutLocale = pathname.replace(`/${locale}`, "") || "/";

@@ -5,8 +5,10 @@ import {
   getInvoicesByProfessionalId,
   getServiceOrdersByProfessionalId,
   adminGetEstablishments,
+  getSubscriptionPlans,
 } from "@/lib/admin-data";
 import { applyAsProfessional, requestMarketplaceService } from "@/lib/pro-actions";
+import { SubscriptionPlans } from "@/components/subscription-plans";
 
 const inputClass = "w-full rounded-lg border border-black/10 px-3 py-2 text-sm outline-none focus:border-ocean-dark";
 const labelClass = "mb-1 block text-xs font-semibold text-foreground/60";
@@ -93,11 +95,12 @@ export default async function ProDashboardPage() {
     );
   }
 
-  const [subscription, invoices, serviceOrders, allEstablishments] = await Promise.all([
+  const [subscription, invoices, serviceOrders, allEstablishments, plans] = await Promise.all([
     getSubscriptionByProfessionalId(professional.id),
     getInvoicesByProfessionalId(professional.id),
     getServiceOrdersByProfessionalId(professional.id),
     adminGetEstablishments(),
+    getSubscriptionPlans(),
   ]);
   const myEstablishment = allEstablishments.find((e) => e.professionalId === professional.id);
 
@@ -110,15 +113,16 @@ export default async function ProDashboardPage() {
 
       <section className="rounded-2xl border border-black/5 bg-white p-6">
         <h2 className="mb-3 text-sm font-semibold text-ocean-dark">Votre abonnement</h2>
-        {subscription ? (
-          <p className="text-sm text-foreground/70">
+        {subscription && subscription.status === "active" ? (
+          <p className="mb-4 text-sm text-foreground/70">
             Plan <strong>{subscription.planKey}</strong> ({subscription.billingCycle}) — statut : {subscription.status}
           </p>
         ) : (
-          <p className="text-sm text-foreground/60">
-            Vous êtes sur le plan Starter (gratuit). Contactez-nous pour passer Premium ou Business.
+          <p className="mb-4 text-sm text-foreground/60">
+            Vous êtes actuellement sur le plan Starter (gratuit). Choisissez un plan pour débloquer plus de visibilité.
           </p>
         )}
+        <SubscriptionPlans plans={plans} currentPlanKey={subscription?.status === "active" ? subscription.planKey : undefined} />
       </section>
 
       <section className="rounded-2xl border border-black/5 bg-white p-6">
