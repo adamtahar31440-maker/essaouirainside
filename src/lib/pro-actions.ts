@@ -4,8 +4,10 @@ import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { eq, and } from "drizzle-orm";
 import { getDb } from "@/db";
-import { professionals, establishments, serviceOrders } from "@/db/schema";
-import { getProfessionalByClerkId } from "@/lib/admin-data";
+import { professionals, establishments, serviceOrders, labelApplications } from "@/db/schema";
+import { getProfessionalByClerkId, getLabelApplicationByEstablishmentId } from "@/lib/admin-data";
+
+const OPEN_APPLICATION_STATUSES = ["pending", "info_requested", "visit_scheduled", "on_hold"];
 
 export async function applyAsProfessional(formData: FormData) {
   const user = await currentUser();
@@ -71,6 +73,47 @@ export async function updateOwnEstablishment(formData: FormData) {
         .filter(Boolean),
     })
     .where(and(eq(establishments.id, id), eq(establishments.professionalId, professional.id)));
+
+  revalidatePath("/", "layout");
+}
+
+export async function applyForLabel(formData: FormData) {
+  const user = await currentUser();
+  if (!user) throw new Error("Unauthorized");
+
+  const db = getDb();
+  const professional = await getProfessionalByClerkId(user.id);
+  if (!professional || professional.status !== "validated") throw new Error("Forbidden");
+
+  const establishmentId = Number(formData.get("establishmentId"));
+  const [establishment] = await db.select().from(establishments).where(eq(establishments.id, establishmentId));
+  if (!establishment || establishment.professionalId !== professional.id) throw new Error("Forbidden");
+
+  const existing = await getLabelApplicationByEstablishmentId(establishmentId);
+  if (existing && OPEN_APPLICATION_STATUSES.includes(existing.status)) return;
+
+  if (formData.get("charterAccepted") !== "on") {
+    throw new Error("La charte du label doit être acceptée.");
+  }
+
+  await db.insert(labelApplications).values({
+    professionalId: professional.id,
+    establishmentId,
+    contactName: String(formData.get("contactName") ?? "") || null,
+    phone: String(formData.get("phone") ?? "") || null,
+    email: String(formData.get("email") ?? "") || null,
+    address: String(formData.get("address") ?? "") || null,
+    website: String(formData.get("website") ?? "") || null,
+    socialLinks: String(formData.get("socialLinks") ?? "") || null,
+    activityDescription: String(formData.get("activityDescription") ?? "") || null,
+    images: String(formData.get("images") ?? "")
+      .split(/\r?\n/)
+      .map((s) => s.trim())
+      .filter(Boolean),
+    motivation: String(formData.get("motivation") ?? "") || null,
+    charterAccepted: true,
+    status: "pending",
+  });
 
   revalidatePath("/", "layout");
 }

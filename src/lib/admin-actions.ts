@@ -21,6 +21,7 @@ import {
   emergencyContacts,
   labelEvaluations,
   labelBadges,
+  labelApplications,
 } from "@/db/schema";
 import { can, type Role } from "@/lib/roles";
 import { LABEL_CRITERIA } from "@/lib/label-criteria";
@@ -540,6 +541,22 @@ export async function setLabelStatus(
     await db.update(labelEvaluations).set({ decision: status }).where(eq(labelEvaluations.id, lastEvaluation[0].id));
   }
 
+  // Mirror the decision onto the open application for this establishment, if any.
+  if (status === "approved" || status === "refused") {
+    const openApplications = await db
+      .select()
+      .from(labelApplications)
+      .where(eq(labelApplications.establishmentId, establishmentId))
+      .orderBy(desc(labelApplications.createdAt))
+      .limit(1);
+    if (openApplications[0] && !["approved", "refused"].includes(openApplications[0].status)) {
+      await db
+        .update(labelApplications)
+        .set({ status })
+        .where(eq(labelApplications.id, openApplications[0].id));
+    }
+  }
+
   // The label is awarded per calendar year — maintain the annual badge history.
   const year = new Date().getFullYear();
   const existingBadge = await db
@@ -562,5 +579,15 @@ export async function setLabelStatus(
     await db.update(labelBadges).set({ status: "revoked" }).where(eq(labelBadges.id, existingBadge[0].id));
   }
 
+  revalidatePath("/", "layout");
+}
+
+export async function setLabelApplicationStatus(
+  id: number,
+  status: "info_requested" | "visit_scheduled" | "on_hold" | "refused"
+) {
+  await requireRole("label");
+  const db = getDb();
+  await db.update(labelApplications).set({ status }).where(eq(labelApplications.id, id));
   revalidatePath("/", "layout");
 }

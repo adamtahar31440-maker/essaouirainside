@@ -20,6 +20,7 @@ import {
   emergencyContacts,
   labelEvaluations,
   labelBadges,
+  labelApplications,
 } from "@/db/schema";
 import { desc, eq, count } from "drizzle-orm";
 
@@ -85,6 +86,28 @@ export async function getLabelBadges(establishmentId: number) {
     .from(labelBadges)
     .where(eq(labelBadges.establishmentId, establishmentId))
     .orderBy(labelBadges.year);
+}
+
+export async function adminGetLabelApplications() {
+  const db = getDb();
+  return db.select().from(labelApplications).orderBy(desc(labelApplications.createdAt));
+}
+
+export async function adminGetLabelApplicationById(id: number) {
+  const db = getDb();
+  const rows = await db.select().from(labelApplications).where(eq(labelApplications.id, id));
+  return rows[0] ?? null;
+}
+
+export async function getLabelApplicationByEstablishmentId(establishmentId: number) {
+  const db = getDb();
+  const rows = await db
+    .select()
+    .from(labelApplications)
+    .where(eq(labelApplications.establishmentId, establishmentId))
+    .orderBy(desc(labelApplications.createdAt))
+    .limit(1);
+  return rows[0] ?? null;
 }
 
 export { categories };

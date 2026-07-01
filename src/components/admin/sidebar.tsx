@@ -18,6 +18,7 @@ const SECTIONS: { href: string; label: string; permission?: Permission }[] = [
   { href: "/articles", label: "Articles", permission: "articles" },
   { href: "/pages", label: "Pages", permission: "articles" },
   { href: "/assistance", label: "Assistance & Urgences", permission: "assistance" },
+  { href: "/label-candidatures", label: "Candidatures Label", permission: "label" },
   { href: "/avis", label: "Avis", permission: "reviews" },
   { href: "/publicites", label: "Publicités", permission: "ads" },
   { href: "/abonnements", label: "Abonnements", permission: "subscriptions" },

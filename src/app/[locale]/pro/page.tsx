@@ -6,9 +6,21 @@ import {
   getServiceOrdersByProfessionalId,
   adminGetEstablishments,
   getSubscriptionPlans,
+  getLabelApplicationByEstablishmentId,
+  getLabelBadges,
 } from "@/lib/admin-data";
-import { applyAsProfessional, requestMarketplaceService } from "@/lib/pro-actions";
+import { applyAsProfessional, requestMarketplaceService, applyForLabel } from "@/lib/pro-actions";
 import { SubscriptionPlans } from "@/components/subscription-plans";
+import { LabelBadgeHistory } from "@/components/label-badge-history";
+
+const LABEL_APPLICATION_STATUS_LABELS: Record<string, string> = {
+  pending: "En attente d'évaluation",
+  info_requested: "L'équipe vous a demandé des informations complémentaires",
+  visit_scheduled: "Une visite a été programmée",
+  on_hold: "Dossier en attente",
+};
+
+const OPEN_LABEL_APPLICATION_STATUSES = ["pending", "info_requested", "visit_scheduled", "on_hold"];
 
 const inputClass = "w-full rounded-lg border border-black/10 px-3 py-2 text-sm outline-none focus:border-ocean-dark";
 const labelClass = "mb-1 block text-xs font-semibold text-foreground/60";
@@ -104,6 +116,14 @@ export default async function ProDashboardPage() {
   ]);
   const myEstablishment = allEstablishments.find((e) => e.professionalId === professional.id);
 
+  const [labelApplication, labelBadges] = myEstablishment
+    ? await Promise.all([
+        getLabelApplicationByEstablishmentId(myEstablishment.id),
+        getLabelBadges(myEstablishment.id),
+      ])
+    : [null, []];
+  const labelApplicationOpen = labelApplication && OPEN_LABEL_APPLICATION_STATUSES.includes(labelApplication.status);
+
   return (
     <div className="space-y-10">
       <div>
@@ -137,6 +157,89 @@ export default async function ProDashboardPage() {
           </p>
         )}
       </section>
+
+      {myEstablishment && (
+        <section className="rounded-2xl border border-black/5 bg-white p-6">
+          <h2 className="mb-3 text-sm font-semibold text-ocean-dark">Label Essaouira Inside Approved</h2>
+
+          {labelBadges.length > 0 && (
+            <div className="mb-5">
+              <LabelBadgeHistory badges={labelBadges.filter((b) => b.status === "active")} />
+            </div>
+          )}
+
+          {labelApplicationOpen ? (
+            <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+              <p className="text-sm font-semibold text-amber-800">
+                {LABEL_APPLICATION_STATUS_LABELS[labelApplication!.status]}
+              </p>
+              <p className="mt-1 text-sm text-amber-700">
+                Votre candidature du{" "}
+                {labelApplication!.createdAt
+                  ? new Date(labelApplication!.createdAt).toLocaleDateString("fr-FR")
+                  : ""}{" "}
+                est en cours de traitement par l&apos;équipe Essaouira Inside.
+              </p>
+            </div>
+          ) : (
+            <details className="group">
+              <summary className="cursor-pointer list-none rounded-full bg-terracotta px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 inline-block">
+                Demander le Label Essaouira Inside Approved
+              </summary>
+              <form action={applyForLabel} className="mt-5 max-w-2xl space-y-4">
+                <input type="hidden" name="establishmentId" value={myEstablishment.id} />
+                <div>
+                  <label className={labelClass}>Nom du responsable</label>
+                  <input name="contactName" defaultValue={professional.contactName ?? ""} className={inputClass} />
+                </div>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className={labelClass}>Téléphone</label>
+                    <input name="phone" defaultValue={professional.phone ?? ""} className={inputClass} />
+                  </div>
+                  <div>
+                    <label className={labelClass}>Email</label>
+                    <input name="email" defaultValue={professional.email ?? ""} className={inputClass} />
+                  </div>
+                </div>
+                <div>
+                  <label className={labelClass}>Adresse</label>
+                  <input name="address" defaultValue={myEstablishment.address ?? ""} className={inputClass} />
+                </div>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className={labelClass}>Site internet</label>
+                    <input name="website" defaultValue={professional.website ?? ""} className={inputClass} />
+                  </div>
+                  <div>
+                    <label className={labelClass}>Réseaux sociaux</label>
+                    <input name="socialLinks" className={inputClass} placeholder="Instagram, Facebook..." />
+                  </div>
+                </div>
+                <div>
+                  <label className={labelClass}>Description de l&apos;activité</label>
+                  <textarea name="activityDescription" rows={3} className={inputClass} />
+                </div>
+                <div>
+                  <label className={labelClass}>Galerie photos (une URL par ligne)</label>
+                  <textarea name="images" rows={3} className={inputClass} placeholder="https://..." />
+                </div>
+                <div>
+                  <label className={labelClass}>Pourquoi souhaitez-vous obtenir le label ?</label>
+                  <textarea name="motivation" rows={3} className={inputClass} required />
+                </div>
+                <label className="flex items-start gap-2 text-sm text-foreground/70">
+                  <input type="checkbox" name="charterAccepted" required className="mt-0.5" />
+                  J&apos;ai lu et j&apos;accepte la Charte du Label Essaouira Inside Approved.
+                </label>
+                <button type="submit" className="rounded-full bg-ocean-dark px-6 py-2.5 text-sm font-semibold text-white hover:bg-ocean">
+                  Envoyer ma candidature
+                </button>
+              </form>
+            </details>
+          )}
+        </section>
+      )}
 
       <section className="rounded-2xl border border-black/5 bg-white p-6">
         <h2 className="mb-3 text-sm font-semibold text-ocean-dark">Factures</h2>

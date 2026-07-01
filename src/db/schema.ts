@@ -274,3 +274,24 @@ export const labelBadges = pgTable("label_badges", {
   evaluationId: integer("evaluation_id"),
   awardedAt: timestamp("awarded_at").defaultNow(),
 });
+
+// Professional-submitted candidacy for the label — intake queue ahead of the
+// editorial evaluation (label_evaluations).
+export const labelApplications = pgTable("label_applications", {
+  id: serial("id").primaryKey(),
+  professionalId: integer("professional_id").notNull(),
+  establishmentId: integer("establishment_id").notNull(),
+  contactName: varchar("contact_name", { length: 160 }),
+  phone: varchar("phone", { length: 64 }),
+  email: varchar("email", { length: 255 }),
+  address: varchar("address", { length: 255 }),
+  website: varchar("website", { length: 255 }),
+  socialLinks: varchar("social_links", { length: 255 }),
+  activityDescription: text("activity_description"),
+  images: jsonb("images").$type<string[]>().default([]),
+  motivation: text("motivation"),
+  charterAccepted: boolean("charter_accepted").notNull().default(false),
+  status: varchar("status", { length: 24 }).notNull().default("pending"),
+  // pending | info_requested | visit_scheduled | on_hold | approved | refused
+  createdAt: timestamp("created_at").defaultNow(),
+});
