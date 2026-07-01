@@ -8,13 +8,16 @@ const intlMiddleware = createIntlMiddleware(routing);
 const isProtectedRoute = createRouteMatcher(["/:locale/admin(.*)", "/:locale/pro(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedRoute(req)) {
-    await auth.protect();
-  }
   // API routes need Clerk's auth context (for currentUser()/auth() inside route
-  // handlers) but must never go through next-intl's locale rewriting/redirects.
+  // handlers) but must never go through next-intl's locale rewriting/redirects,
+  // and must never be evaluated against the page-oriented isProtectedRoute
+  // matcher below — "/api/admin/..." otherwise matches "/:locale/admin(.*)"
+  // with "api" mistaken for the locale segment.
   if (req.nextUrl.pathname.startsWith("/api")) {
     return NextResponse.next();
+  }
+  if (isProtectedRoute(req)) {
+    await auth.protect();
   }
   return intlMiddleware(req);
 });
