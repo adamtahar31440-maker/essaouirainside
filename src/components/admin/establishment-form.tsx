@@ -4,6 +4,7 @@ import { LocalizedFieldGroup } from "@/components/admin/localized-field-group";
 import { AutoTranslateButton } from "@/components/admin/auto-translate-button";
 
 type Category = { id: number; type: string; name: Record<string, string> };
+type Professional = { id: number; companyName: string; status: string };
 type Establishment = {
   id: number;
   categoryId: number;
@@ -25,6 +26,7 @@ type Establishment = {
   badge: string | null;
   status: string;
   images: string[] | null;
+  professionalId: number | null;
 };
 
 const inputClass =
@@ -34,10 +36,12 @@ const labelClass = "mb-1 block text-xs font-semibold text-foreground/60";
 export function EstablishmentForm({
   locale,
   categories,
+  professionals,
   establishment,
 }: {
   locale: string;
   categories: Category[];
+  professionals?: Professional[];
   establishment?: Establishment;
 }) {
   return (
@@ -71,6 +75,20 @@ export function EstablishmentForm({
           </select>
         </div>
       </section>
+
+      {professionals && (
+        <section>
+          <label className={labelClass}>Professionnel lié (accès à l&apos;espace pro)</label>
+          <select name="professionalId" defaultValue={establishment?.professionalId ?? ""} className={inputClass}>
+            <option value="">— Aucun —</option>
+            {professionals.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.companyName} ({p.status})
+              </option>
+            ))}
+          </select>
+        </section>
+      )}
 
       <AutoTranslateButton />
 

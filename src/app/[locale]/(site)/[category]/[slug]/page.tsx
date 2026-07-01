@@ -123,6 +123,12 @@ export default async function EstablishmentPage({
           {activeBadges.length > 0 && (
             <div className="mt-5">
               <LabelBadgeHistory badges={activeBadges} />
+              <Link
+                href={`/${locale}/approved/${e.slug}`}
+                className="mt-2 inline-block text-sm font-medium text-terracotta hover:underline"
+              >
+                Voir le certificat officiel →
+              </Link>
             </div>
           )}
 

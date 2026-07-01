@@ -111,6 +111,7 @@ export async function upsertEstablishment(formData: FormData) {
     accessibility: formData.get("accessibility") === "on",
     featured: formData.get("featured") === "on",
     badge: String(formData.get("badge") ?? "") || null,
+    professionalId: formData.get("professionalId") ? Number(formData.get("professionalId")) : null,
     status: (formData.get("status") as "active" | "disabled") ?? "active",
     images: String(formData.get("images") ?? "")
       .split(/\r?\n/)
@@ -573,6 +574,7 @@ export async function setLabelStatus(
         year,
         status: "active",
         evaluationId: lastEvaluation[0]?.id,
+        certificateNumber: `EIA-${year}-${String(establishmentId).padStart(4, "0")}`,
       });
     }
   } else if ((status === "suspended" || status === "revoked") && existingBadge[0]) {

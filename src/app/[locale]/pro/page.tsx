@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { currentUser } from "@clerk/nextjs/server";
 import {
   getProfessionalByClerkId,
@@ -36,7 +37,12 @@ const SERVICES = [
   { key: "marketing", label: "Accompagnement marketing" },
 ];
 
-export default async function ProDashboardPage() {
+export default async function ProDashboardPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
   const user = await currentUser();
   const professional = user ? await getProfessionalByClerkId(user.id) : null;
 
@@ -165,6 +171,36 @@ export default async function ProDashboardPage() {
           {labelBadges.length > 0 && (
             <div className="mb-5">
               <LabelBadgeHistory badges={labelBadges.filter((b) => b.status === "active")} />
+              {(() => {
+                const latestActive = [...labelBadges]
+                  .filter((b) => b.status === "active")
+                  .sort((a, b) => b.year - a.year)[0];
+                if (!latestActive) return null;
+                return (
+                  <div className="mt-3 flex flex-wrap gap-3">
+                    <a
+                      href={`/api/label/certificate/${myEstablishment.id}?year=${latestActive.year}`}
+                      download
+                      className="rounded-full bg-ocean-dark px-4 py-2 text-xs font-semibold text-white hover:bg-ocean"
+                    >
+                      Télécharger le certificat
+                    </a>
+                    <a
+                      href={`/api/label/badge/${myEstablishment.id}?year=${latestActive.year}`}
+                      download
+                      className="rounded-full border border-black/10 px-4 py-2 text-xs font-semibold text-foreground/70 hover:bg-black/5"
+                    >
+                      Télécharger le badge
+                    </a>
+                    <Link
+                      href={`/${locale}/approved/${myEstablishment.slug}`}
+                      className="rounded-full border border-black/10 px-4 py-2 text-xs font-semibold text-foreground/70 hover:bg-black/5"
+                    >
+                      Voir la page officielle
+                    </Link>
+                  </div>
+                );
+              })()}
             </div>
           )}
 

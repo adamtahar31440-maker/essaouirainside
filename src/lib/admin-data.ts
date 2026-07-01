@@ -78,6 +78,12 @@ export async function adminGetLabelEvaluations(establishmentId: number) {
     .orderBy(desc(labelEvaluations.createdAt));
 }
 
+export async function getLabelEvaluationById(id: number) {
+  const db = getDb();
+  const rows = await db.select().from(labelEvaluations).where(eq(labelEvaluations.id, id));
+  return rows[0] ?? null;
+}
+
 // Public multi-year badge history, e.g. "Approved 2026 ✓, 2027 ✓"
 export async function getLabelBadges(establishmentId: number) {
   const db = getDb();

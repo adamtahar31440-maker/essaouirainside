@@ -272,6 +272,7 @@ export const labelBadges = pgTable("label_badges", {
   year: integer("year").notNull(),
   status: varchar("status", { length: 16 }).notNull().default("active"), // active | revoked
   evaluationId: integer("evaluation_id"),
+  certificateNumber: varchar("certificate_number", { length: 32 }),
   awardedAt: timestamp("awarded_at").defaultNow(),
 });
 

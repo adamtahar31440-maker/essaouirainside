@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import {
   adminGetEstablishmentById,
   getAllCategories,
   adminGetLabelEvaluations,
   getLabelBadges,
+  adminGetProfessionals,
 } from "@/lib/admin-data";
 import { setLabelStatus } from "@/lib/admin-actions";
 import { EstablishmentForm } from "@/components/admin/establishment-form";
@@ -30,11 +32,12 @@ export default async function EditEstablishmentPage({
   params: Promise<{ locale: string; id: string }>;
 }) {
   const { locale, id } = await params;
-  const [establishment, categories, evaluations, badges] = await Promise.all([
+  const [establishment, categories, evaluations, badges, professionals] = await Promise.all([
     adminGetEstablishmentById(Number(id)),
     getAllCategories(),
     adminGetLabelEvaluations(Number(id)),
     getLabelBadges(Number(id)),
+    adminGetProfessionals(),
   ]);
   if (!establishment) notFound();
 
@@ -44,7 +47,7 @@ export default async function EditEstablishmentPage({
         <h1 className="mb-6 text-2xl font-semibold text-ocean-dark">
           Modifier : {establishment.name.fr}
         </h1>
-        <EstablishmentForm locale={locale} categories={categories} establishment={establishment} />
+        <EstablishmentForm locale={locale} categories={categories} professionals={professionals} establishment={establishment} />
       </div>
 
       <section className="space-y-6 border-t border-black/10 pt-8">
@@ -85,6 +88,13 @@ export default async function EditEstablishmentPage({
           <div>
             <h3 className="mb-2 text-sm font-semibold text-foreground/60">Historique des badges annuels</h3>
             <LabelBadgeHistory badges={badges} compact />
+            <Link
+              href={`/${locale}/approved/${establishment.slug}`}
+              target="_blank"
+              className="mt-2 inline-block text-sm font-medium text-azur hover:underline"
+            >
+              Voir la page publique →
+            </Link>
           </div>
         )}
 
