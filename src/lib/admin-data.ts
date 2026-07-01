@@ -18,6 +18,7 @@ import {
   siteSettings,
   newsletterSubscribers,
   emergencyContacts,
+  labelEvaluations,
 } from "@/db/schema";
 import { desc, eq, count } from "drizzle-orm";
 
@@ -63,6 +64,16 @@ export async function adminGetEstablishmentById(id: number) {
   const db = getDb();
   const rows = await db.select().from(establishments).where(eq(establishments.id, id));
   return rows[0] ?? null;
+}
+
+// ---- Label evaluations ("Essaouira Inside Approved") ----
+export async function adminGetLabelEvaluations(establishmentId: number) {
+  const db = getDb();
+  return db
+    .select()
+    .from(labelEvaluations)
+    .where(eq(labelEvaluations.establishmentId, establishmentId))
+    .orderBy(desc(labelEvaluations.createdAt));
 }
 
 export { categories };

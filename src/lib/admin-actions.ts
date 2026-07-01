@@ -3,7 +3,7 @@
 import { currentUser, clerkClient } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { getDb } from "@/db";
 import {
   establishments,
@@ -19,8 +19,10 @@ import {
   adCampaigns,
   newsletterSubscribers,
   emergencyContacts,
+  labelEvaluations,
 } from "@/db/schema";
 import { can, type Role } from "@/lib/roles";
+import { LABEL_CRITERIA } from "@/lib/label-criteria";
 
 async function requireRole(section: Parameters<typeof can>[1]) {
   const user = await currentUser();
@@ -483,5 +485,59 @@ export async function toggleEmergencyContactFeatured(id: number, featured: boole
   await requireRole("assistance");
   const db = getDb();
   await db.update(emergencyContacts).set({ featured }).where(eq(emergencyContacts.id, id));
+  revalidatePath("/", "layout");
+}
+
+// ---- Label "Essaouira Inside Approved" ----
+export async function createLabelEvaluation(formData: FormData) {
+  const { user } = await requireRole("label");
+  const db = getDb();
+
+  const establishmentId = Number(formData.get("establishmentId"));
+  const scores = Object.fromEntries(
+    LABEL_CRITERIA.map(({ key }) => [key, Math.max(0, Math.min(10, Number(formData.get(key)) || 0))])
+  ) as Record<(typeof LABEL_CRITERIA)[number]["key"], number>;
+  const totalScore = Object.values(scores).reduce((sum, v) => sum + v, 0);
+
+  await db.insert(labelEvaluations).values({
+    establishmentId,
+    evaluatorClerkUserId: user?.id ?? "unknown",
+    evaluatorName: user ? `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || user.username || undefined : undefined,
+    ...scores,
+    totalScore,
+    comments: String(formData.get("comments") ?? "") || null,
+  });
+
+  await db.update(establishments).set({ labelScore: totalScore }).where(eq(establishments.id, establishmentId));
+
+  revalidatePath("/", "layout");
+  redirect(`/${formData.get("locale")}/admin/establissements/${establishmentId}`);
+}
+
+export async function setLabelStatus(
+  establishmentId: number,
+  status: "approved" | "refused" | "suspended" | "revoked"
+) {
+  await requireRole("label");
+  const db = getDb();
+
+  await db
+    .update(establishments)
+    .set({
+      labelStatus: status === "refused" ? "none" : status,
+      labelAwardedAt: status === "approved" ? new Date() : undefined,
+    })
+    .where(eq(establishments.id, establishmentId));
+
+  const rows = await db
+    .select()
+    .from(labelEvaluations)
+    .where(eq(labelEvaluations.establishmentId, establishmentId))
+    .orderBy(desc(labelEvaluations.createdAt))
+    .limit(1);
+  if (rows[0]) {
+    await db.update(labelEvaluations).set({ decision: status }).where(eq(labelEvaluations.id, rows[0].id));
+  }
+
   revalidatePath("/", "layout");
 }

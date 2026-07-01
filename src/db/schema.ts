@@ -51,6 +51,9 @@ export const establishments = pgTable("establishments", {
   badge: varchar("badge", { length: 64 }),
   status: varchar("status", { length: 16 }).notNull().default("active"), // active | disabled
   professionalId: integer("professional_id"),
+  labelStatus: varchar("label_status", { length: 16 }).notNull().default("none"), // none | approved | suspended | revoked
+  labelScore: integer("label_score"), // latest evaluation score, /100
+  labelAwardedAt: timestamp("label_awarded_at"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -237,4 +240,26 @@ export const emergencyContacts = pgTable("emergency_contacts", {
   country: varchar("country", { length: 100 }), // ambassades only
   featured: boolean("featured").default(false), // shown in the SOS quick panel
   order: integer("order").default(0),
+});
+
+// ---- "Essaouira Inside Approved" label ----
+export const labelEvaluations = pgTable("label_evaluations", {
+  id: serial("id").primaryKey(),
+  establishmentId: integer("establishment_id").notNull(),
+  evaluatorClerkUserId: varchar("evaluator_clerk_user_id", { length: 64 }).notNull(),
+  evaluatorName: varchar("evaluator_name", { length: 160 }),
+  accueil: integer("accueil").notNull(),
+  qualite: integer("qualite").notNull(),
+  proprete: integer("proprete").notNull(),
+  experience: integer("experience").notNull(),
+  rapportQualitePrix: integer("rapport_qualite_prix").notNull(),
+  authenticite: integer("authenticite").notNull(),
+  reputation: integer("reputation").notNull(),
+  presentation: integer("presentation").notNull(),
+  services: integer("services").notNull(),
+  impressionGenerale: integer("impression_generale").notNull(),
+  totalScore: integer("total_score").notNull(), // sum of the 10 criteria, /100
+  comments: text("comments"),
+  decision: varchar("decision", { length: 16 }), // approved | refused | suspended | revoked
+  createdAt: timestamp("created_at").defaultNow(),
 });
