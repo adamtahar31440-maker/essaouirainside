@@ -7,10 +7,12 @@ import { Phone, MessageCircle, Globe, MapPin, Clock, Wifi, Car, Accessibility } 
 import { CATEGORY_PATH_TO_TYPE } from "@/lib/categories";
 import { subcategoryLabel } from "@/lib/labels";
 import { getEstablishmentBySlug, getSimilarEstablishments } from "@/lib/data";
+import { getLabelBadges } from "@/lib/admin-data";
 import { isModuleActive, CATEGORY_MODULE_KEY } from "@/lib/modules";
 import { EstablishmentCard } from "@/components/establishment-card";
 import { Section } from "@/components/section";
 import { MapSection } from "@/components/map-section";
+import { LabelBadgeHistory } from "@/components/label-badge-history";
 
 export async function generateMetadata({
   params,
@@ -52,7 +54,11 @@ export default async function EstablishmentPage({
   if (!e) notFound();
 
   const t = await getTranslations("establishment");
-  const [similar] = await Promise.all([getSimilarEstablishments(e.categoryId, e.slug)]);
+  const [similar, badges] = await Promise.all([
+    getSimilarEstablishments(e.categoryId, e.slug),
+    getLabelBadges(e.id),
+  ]);
+  const activeBadges = badges.filter((b) => b.status === "active");
 
   const name = e.name[locale] ?? e.name.fr;
   const description = e.description[locale] ?? e.description.fr;
@@ -112,6 +118,12 @@ export default async function EstablishmentPage({
             <p className="mt-2 flex items-center gap-1.5 text-foreground/60">
               <MapPin size={16} /> {e.address}
             </p>
+          )}
+
+          {activeBadges.length > 0 && (
+            <div className="mt-5">
+              <LabelBadgeHistory badges={activeBadges} />
+            </div>
           )}
 
           <div className="mt-8">

@@ -19,6 +19,7 @@ import {
   newsletterSubscribers,
   emergencyContacts,
   labelEvaluations,
+  labelBadges,
 } from "@/db/schema";
 import { desc, eq, count } from "drizzle-orm";
 
@@ -74,6 +75,16 @@ export async function adminGetLabelEvaluations(establishmentId: number) {
     .from(labelEvaluations)
     .where(eq(labelEvaluations.establishmentId, establishmentId))
     .orderBy(desc(labelEvaluations.createdAt));
+}
+
+// Public multi-year badge history, e.g. "Approved 2026 ✓, 2027 ✓"
+export async function getLabelBadges(establishmentId: number) {
+  const db = getDb();
+  return db
+    .select()
+    .from(labelBadges)
+    .where(eq(labelBadges.establishmentId, establishmentId))
+    .orderBy(labelBadges.year);
 }
 
 export { categories };

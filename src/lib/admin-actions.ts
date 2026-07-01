@@ -3,7 +3,7 @@
 import { currentUser, clerkClient } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and } from "drizzle-orm";
 import { getDb } from "@/db";
 import {
   establishments,
@@ -20,6 +20,7 @@ import {
   newsletterSubscribers,
   emergencyContacts,
   labelEvaluations,
+  labelBadges,
 } from "@/db/schema";
 import { can, type Role } from "@/lib/roles";
 import { LABEL_CRITERIA } from "@/lib/label-criteria";
@@ -529,14 +530,36 @@ export async function setLabelStatus(
     })
     .where(eq(establishments.id, establishmentId));
 
-  const rows = await db
+  const lastEvaluation = await db
     .select()
     .from(labelEvaluations)
     .where(eq(labelEvaluations.establishmentId, establishmentId))
     .orderBy(desc(labelEvaluations.createdAt))
     .limit(1);
-  if (rows[0]) {
-    await db.update(labelEvaluations).set({ decision: status }).where(eq(labelEvaluations.id, rows[0].id));
+  if (lastEvaluation[0]) {
+    await db.update(labelEvaluations).set({ decision: status }).where(eq(labelEvaluations.id, lastEvaluation[0].id));
+  }
+
+  // The label is awarded per calendar year — maintain the annual badge history.
+  const year = new Date().getFullYear();
+  const existingBadge = await db
+    .select()
+    .from(labelBadges)
+    .where(and(eq(labelBadges.establishmentId, establishmentId), eq(labelBadges.year, year)));
+
+  if (status === "approved") {
+    if (existingBadge[0]) {
+      await db.update(labelBadges).set({ status: "active" }).where(eq(labelBadges.id, existingBadge[0].id));
+    } else {
+      await db.insert(labelBadges).values({
+        establishmentId,
+        year,
+        status: "active",
+        evaluationId: lastEvaluation[0]?.id,
+      });
+    }
+  } else if ((status === "suspended" || status === "revoked") && existingBadge[0]) {
+    await db.update(labelBadges).set({ status: "revoked" }).where(eq(labelBadges.id, existingBadge[0].id));
   }
 
   revalidatePath("/", "layout");

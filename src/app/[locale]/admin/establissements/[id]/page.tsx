@@ -1,8 +1,14 @@
 import { notFound } from "next/navigation";
-import { adminGetEstablishmentById, getAllCategories, adminGetLabelEvaluations } from "@/lib/admin-data";
+import {
+  adminGetEstablishmentById,
+  getAllCategories,
+  adminGetLabelEvaluations,
+  getLabelBadges,
+} from "@/lib/admin-data";
 import { setLabelStatus } from "@/lib/admin-actions";
 import { EstablishmentForm } from "@/components/admin/establishment-form";
 import { LabelEvaluationForm } from "@/components/admin/label-evaluation-form";
+import { LabelBadgeHistory } from "@/components/label-badge-history";
 
 const LABEL_STATUS_LABELS: Record<string, string> = {
   none: "Aucun label",
@@ -24,10 +30,11 @@ export default async function EditEstablishmentPage({
   params: Promise<{ locale: string; id: string }>;
 }) {
   const { locale, id } = await params;
-  const [establishment, categories, evaluations] = await Promise.all([
+  const [establishment, categories, evaluations, badges] = await Promise.all([
     adminGetEstablishmentById(Number(id)),
     getAllCategories(),
     adminGetLabelEvaluations(Number(id)),
+    getLabelBadges(Number(id)),
   ]);
   if (!establishment) notFound();
 
@@ -73,6 +80,13 @@ export default async function EditEstablishmentPage({
             </button>
           </form>
         </div>
+
+        {badges.length > 0 && (
+          <div>
+            <h3 className="mb-2 text-sm font-semibold text-foreground/60">Historique des badges annuels</h3>
+            <LabelBadgeHistory badges={badges} compact />
+          </div>
+        )}
 
         <LabelEvaluationForm locale={locale} establishmentId={establishment.id} />
 

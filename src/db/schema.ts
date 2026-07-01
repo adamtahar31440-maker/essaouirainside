@@ -263,3 +263,14 @@ export const labelEvaluations = pgTable("label_evaluations", {
   decision: varchar("decision", { length: 16 }), // approved | refused | suspended | revoked
   createdAt: timestamp("created_at").defaultNow(),
 });
+
+// One row per calendar year the label was held — powers the public multi-year
+// badge history (e.g. "Approved 2026 ✓, Approved 2027 ✓").
+export const labelBadges = pgTable("label_badges", {
+  id: serial("id").primaryKey(),
+  establishmentId: integer("establishment_id").notNull(),
+  year: integer("year").notNull(),
+  status: varchar("status", { length: 16 }).notNull().default("active"), // active | revoked
+  evaluationId: integer("evaluation_id"),
+  awardedAt: timestamp("awarded_at").defaultNow(),
+});
