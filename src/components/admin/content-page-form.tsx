@@ -1,4 +1,6 @@
 import { upsertContentPage } from "@/lib/admin-actions";
+import { LocalizedFieldGroup } from "@/components/admin/localized-field-group";
+import { AutoTranslateButton } from "@/components/admin/auto-translate-button";
 
 type ContentPage = {
   id: number;
@@ -29,23 +31,10 @@ export function ContentPageForm({ locale, page }: { locale: string; page?: Conte
         </select>
       </div>
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {(["fr", "en", "ar"] as const).map((l) => (
-          <div key={l}>
-            <label className={labelClass}>Titre ({l})</label>
-            <input name={`title_${l}`} defaultValue={page?.title?.[l]} className={inputClass} required={l === "fr"} />
-          </div>
-        ))}
-      </section>
+      <AutoTranslateButton />
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {(["fr", "en", "ar"] as const).map((l) => (
-          <div key={l}>
-            <label className={labelClass}>Contenu ({l})</label>
-            <textarea name={`body_${l}`} defaultValue={page?.body?.[l]} rows={8} className={inputClass} />
-          </div>
-        ))}
-      </section>
+      <LocalizedFieldGroup field="title" label="Titre" values={page?.title} required />
+      <LocalizedFieldGroup field="body" label="Contenu" values={page?.body} multiline rows={8} />
 
       <div>
         <label className={labelClass}>Image de couverture (URL)</label>

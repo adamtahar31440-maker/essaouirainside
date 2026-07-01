@@ -1,5 +1,7 @@
 import { upsertEstablishment } from "@/lib/admin-actions";
 import { CATEGORY_SUBCATEGORIES } from "@/lib/categories";
+import { LocalizedFieldGroup } from "@/components/admin/localized-field-group";
+import { AutoTranslateButton } from "@/components/admin/auto-translate-button";
 
 type Category = { id: number; type: string; name: Record<string, string> };
 type Establishment = {
@@ -70,33 +72,10 @@ export function EstablishmentForm({
         </div>
       </section>
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {(["fr", "en", "ar"] as const).map((l) => (
-          <div key={l}>
-            <label className={labelClass}>Nom ({l})</label>
-            <input
-              name={`name_${l}`}
-              defaultValue={establishment?.name?.[l]}
-              className={inputClass}
-              required={l === "fr"}
-            />
-          </div>
-        ))}
-      </section>
+      <AutoTranslateButton />
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {(["fr", "en", "ar"] as const).map((l) => (
-          <div key={l}>
-            <label className={labelClass}>Description ({l})</label>
-            <textarea
-              name={`description_${l}`}
-              defaultValue={establishment?.description?.[l]}
-              rows={4}
-              className={inputClass}
-            />
-          </div>
-        ))}
-      </section>
+      <LocalizedFieldGroup field="name" label="Nom" values={establishment?.name} required />
+      <LocalizedFieldGroup field="description" label="Description" values={establishment?.description} multiline />
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div>

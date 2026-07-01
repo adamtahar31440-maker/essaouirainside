@@ -1,4 +1,6 @@
 import { upsertRealEstate } from "@/lib/admin-actions";
+import { LocalizedFieldGroup } from "@/components/admin/localized-field-group";
+import { AutoTranslateButton } from "@/components/admin/auto-translate-button";
 
 type Listing = {
   id: number;
@@ -48,23 +50,10 @@ export function RealEstateForm({ locale, listing }: { locale: string; listing?: 
         </div>
       </section>
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {(["fr", "en", "ar"] as const).map((l) => (
-          <div key={l}>
-            <label className={labelClass}>Titre ({l})</label>
-            <input name={`title_${l}`} defaultValue={listing?.title?.[l]} className={inputClass} required={l === "fr"} />
-          </div>
-        ))}
-      </section>
+      <AutoTranslateButton />
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {(["fr", "en", "ar"] as const).map((l) => (
-          <div key={l}>
-            <label className={labelClass}>Description ({l})</label>
-            <textarea name={`description_${l}`} defaultValue={listing?.description?.[l]} rows={4} className={inputClass} />
-          </div>
-        ))}
-      </section>
+      <LocalizedFieldGroup field="title" label="Titre" values={listing?.title} required />
+      <LocalizedFieldGroup field="description" label="Description" values={listing?.description} multiline />
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div>

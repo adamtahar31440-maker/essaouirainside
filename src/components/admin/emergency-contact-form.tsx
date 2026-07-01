@@ -1,4 +1,6 @@
 import { upsertEmergencyContact } from "@/lib/admin-actions";
+import { LocalizedFieldGroup } from "@/components/admin/localized-field-group";
+import { AutoTranslateButton } from "@/components/admin/auto-translate-button";
 
 type Contact = {
   id: number;
@@ -47,14 +49,9 @@ export function EmergencyContactForm({ locale, contact }: { locale: string; cont
         </select>
       </div>
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {(["fr", "en", "ar"] as const).map((l) => (
-          <div key={l}>
-            <label className={labelClass}>Nom ({l})</label>
-            <input name={`name_${l}`} defaultValue={contact?.name?.[l]} className={inputClass} required={l === "fr"} />
-          </div>
-        ))}
-      </section>
+      <AutoTranslateButton />
+
+      <LocalizedFieldGroup field="name" label="Nom" values={contact?.name} required />
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div>
@@ -91,23 +88,8 @@ export function EmergencyContactForm({ locale, contact }: { locale: string; cont
         <input name="country" defaultValue={contact?.country ?? ""} className={inputClass} />
       </div>
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {(["fr", "en", "ar"] as const).map((l) => (
-          <div key={l}>
-            <label className={labelClass}>Horaires ({l})</label>
-            <input name={`hours_${l}`} defaultValue={contact?.hours?.[l]} className={inputClass} placeholder="24h/24" />
-          </div>
-        ))}
-      </section>
-
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {(["fr", "en", "ar"] as const).map((l) => (
-          <div key={l}>
-            <label className={labelClass}>Notes / procédure ({l})</label>
-            <textarea name={`notes_${l}`} defaultValue={contact?.notes?.[l]} rows={3} className={inputClass} />
-          </div>
-        ))}
-      </section>
+      <LocalizedFieldGroup field="hours" label="Horaires" values={contact?.hours ?? undefined} />
+      <LocalizedFieldGroup field="notes" label="Notes / procédure" values={contact?.notes ?? undefined} multiline rows={3} />
 
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" name="featured" defaultChecked={!!contact?.featured} /> Afficher dans le bouton SOS

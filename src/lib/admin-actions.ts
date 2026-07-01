@@ -69,6 +69,19 @@ function slugify(text: string) {
     .replace(/(^-|-$)/g, "");
 }
 
+const ALL_LOCALES = ["fr", "en", "ar", "es", "de", "it", "pt", "ru", "zh", "ko", "tr", "he"];
+
+function readLocalized(formData: FormData, field: string): Record<string, string> {
+  const fr = String(formData.get(`${field}_fr`) ?? "");
+  const result: Record<string, string> = { fr };
+  for (const locale of ALL_LOCALES) {
+    if (locale === "fr") continue;
+    const value = formData.get(`${field}_${locale}`);
+    result[locale] = value ? String(value) : fr;
+  }
+  return result;
+}
+
 export async function upsertEstablishment(formData: FormData) {
   await requireRole("establishments");
   const db = getDb();
@@ -80,16 +93,8 @@ export async function upsertEstablishment(formData: FormData) {
     categoryId: Number(formData.get("categoryId")),
     subcategory: String(formData.get("subcategory") ?? ""),
     slug: id ? String(formData.get("slug")) : slugify(nameFr),
-    name: {
-      fr: nameFr,
-      en: String(formData.get("name_en") ?? nameFr),
-      ar: String(formData.get("name_ar") ?? nameFr),
-    },
-    description: {
-      fr: String(formData.get("description_fr") ?? ""),
-      en: String(formData.get("description_en") ?? ""),
-      ar: String(formData.get("description_ar") ?? ""),
-    },
+    name: readLocalized(formData, "name"),
+    description: readLocalized(formData, "description"),
     address: String(formData.get("address") ?? ""),
     lat: formData.get("lat") ? Number(formData.get("lat")) : null,
     lng: formData.get("lng") ? Number(formData.get("lng")) : null,
@@ -136,21 +141,9 @@ export async function upsertArticle(formData: FormData) {
   const data = {
     category: String(formData.get("category") ?? "guides"),
     slug: id ? String(formData.get("slug")) : slugify(titleFr),
-    title: {
-      fr: titleFr,
-      en: String(formData.get("title_en") ?? titleFr),
-      ar: String(formData.get("title_ar") ?? titleFr),
-    },
-    excerpt: {
-      fr: String(formData.get("excerpt_fr") ?? ""),
-      en: String(formData.get("excerpt_en") ?? ""),
-      ar: String(formData.get("excerpt_ar") ?? ""),
-    },
-    body: {
-      fr: String(formData.get("body_fr") ?? ""),
-      en: String(formData.get("body_en") ?? ""),
-      ar: String(formData.get("body_ar") ?? ""),
-    },
+    title: readLocalized(formData, "title"),
+    excerpt: readLocalized(formData, "excerpt"),
+    body: readLocalized(formData, "body"),
     coverImage: String(formData.get("coverImage") ?? "") || null,
   };
 
@@ -180,16 +173,8 @@ export async function upsertContentPage(formData: FormData) {
   const data = {
     section: String(formData.get("section") ?? "decouvrir"),
     slug: id ? String(formData.get("slug")) : slugify(titleFr),
-    title: {
-      fr: titleFr,
-      en: String(formData.get("title_en") ?? titleFr),
-      ar: String(formData.get("title_ar") ?? titleFr),
-    },
-    body: {
-      fr: String(formData.get("body_fr") ?? ""),
-      en: String(formData.get("body_en") ?? ""),
-      ar: String(formData.get("body_ar") ?? ""),
-    },
+    title: readLocalized(formData, "title"),
+    body: readLocalized(formData, "body"),
     coverImage: String(formData.get("coverImage") ?? "") || null,
   };
 
@@ -219,16 +204,8 @@ export async function upsertEvent(formData: FormData) {
   const data = {
     category: String(formData.get("category") ?? "festivals"),
     slug: id ? String(formData.get("slug")) : slugify(titleFr),
-    title: {
-      fr: titleFr,
-      en: String(formData.get("title_en") ?? titleFr),
-      ar: String(formData.get("title_ar") ?? titleFr),
-    },
-    description: {
-      fr: String(formData.get("description_fr") ?? ""),
-      en: String(formData.get("description_en") ?? ""),
-      ar: String(formData.get("description_ar") ?? ""),
-    },
+    title: readLocalized(formData, "title"),
+    description: readLocalized(formData, "description"),
     startDate: new Date(String(formData.get("startDate"))),
     endDate: formData.get("endDate") ? new Date(String(formData.get("endDate"))) : null,
     location: String(formData.get("location") ?? ""),
@@ -335,16 +312,8 @@ export async function upsertRealEstate(formData: FormData) {
     listingType: String(formData.get("listingType") ?? "vente"),
     category: String(formData.get("category") ?? "villa"),
     slug: id ? String(formData.get("slug")) : slugify(titleFr),
-    title: {
-      fr: titleFr,
-      en: String(formData.get("title_en") ?? titleFr),
-      ar: String(formData.get("title_ar") ?? titleFr),
-    },
-    description: {
-      fr: String(formData.get("description_fr") ?? ""),
-      en: String(formData.get("description_en") ?? ""),
-      ar: String(formData.get("description_ar") ?? ""),
-    },
+    title: readLocalized(formData, "title"),
+    description: readLocalized(formData, "description"),
     priceMad: formData.get("priceMad") ? Number(formData.get("priceMad")) : null,
     surfaceM2: formData.get("surfaceM2") ? Number(formData.get("surfaceM2")) : null,
     rooms: formData.get("rooms") ? Number(formData.get("rooms")) : null,
@@ -478,30 +447,17 @@ export async function upsertEmergencyContact(formData: FormData) {
   await requireRole("assistance");
   const db = getDb();
   const id = formData.get("id") ? Number(formData.get("id")) : null;
-  const nameFr = String(formData.get("name_fr") ?? "");
 
   const data = {
     category: String(formData.get("category") ?? "urgences"),
-    name: {
-      fr: nameFr,
-      en: String(formData.get("name_en") ?? nameFr),
-      ar: String(formData.get("name_ar") ?? nameFr),
-    },
+    name: readLocalized(formData, "name"),
     phone: String(formData.get("phone") ?? "") || null,
     whatsapp: String(formData.get("whatsapp") ?? "") || null,
     address: String(formData.get("address") ?? "") || null,
     lat: formData.get("lat") ? Number(formData.get("lat")) : null,
     lng: formData.get("lng") ? Number(formData.get("lng")) : null,
-    hours: {
-      fr: String(formData.get("hours_fr") ?? ""),
-      en: String(formData.get("hours_en") ?? ""),
-      ar: String(formData.get("hours_ar") ?? ""),
-    },
-    notes: {
-      fr: String(formData.get("notes_fr") ?? ""),
-      en: String(formData.get("notes_en") ?? ""),
-      ar: String(formData.get("notes_ar") ?? ""),
-    },
+    hours: readLocalized(formData, "hours"),
+    notes: readLocalized(formData, "notes"),
     website: String(formData.get("website") ?? "") || null,
     country: String(formData.get("country") ?? "") || null,
     featured: formData.get("featured") === "on",
