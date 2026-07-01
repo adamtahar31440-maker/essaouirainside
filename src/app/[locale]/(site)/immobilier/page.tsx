@@ -1,8 +1,10 @@
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { getPublicRealEstateListings } from "@/lib/admin-data";
+import { isModuleActive } from "@/lib/modules";
 import { Section } from "@/components/section";
 import { cn } from "@/lib/utils";
 
@@ -29,6 +31,8 @@ export default async function RealEstatePage({
   const { locale } = await params;
   const { type } = await searchParams;
   setRequestLocale(locale);
+
+  if (!(await isModuleActive("immobilier"))) notFound();
 
   const listings = await getPublicRealEstateListings(type);
 

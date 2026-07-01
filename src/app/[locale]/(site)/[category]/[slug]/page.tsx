@@ -7,6 +7,7 @@ import { Phone, MessageCircle, Globe, MapPin, Clock, Wifi, Car, Accessibility } 
 import { CATEGORY_PATH_TO_TYPE } from "@/lib/categories";
 import { subcategoryLabel } from "@/lib/labels";
 import { getEstablishmentBySlug, getSimilarEstablishments } from "@/lib/data";
+import { isModuleActive, CATEGORY_MODULE_KEY } from "@/lib/modules";
 import { EstablishmentCard } from "@/components/establishment-card";
 import { Section } from "@/components/section";
 import { MapSection } from "@/components/map-section";
@@ -43,6 +44,9 @@ export default async function EstablishmentPage({
 
   const type = CATEGORY_PATH_TO_TYPE[category];
   if (!type) notFound();
+
+  const moduleKey = CATEGORY_MODULE_KEY[type];
+  if (moduleKey && !(await isModuleActive(moduleKey))) notFound();
 
   const e = await getEstablishmentBySlug(slug);
   if (!e) notFound();

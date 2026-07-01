@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { setRequestLocale } from "next-intl/server";
 import { getRealEstateBySlug } from "@/lib/admin-data";
+import { isModuleActive } from "@/lib/modules";
 import { MapSection } from "@/components/map-section";
 
 export async function generateMetadata({
@@ -28,6 +29,8 @@ export default async function RealEstateDetailPage({
 }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
+
+  if (!(await isModuleActive("immobilier"))) notFound();
 
   const listing = await getRealEstateBySlug(slug);
   if (!listing || listing.status !== "validated") notFound();

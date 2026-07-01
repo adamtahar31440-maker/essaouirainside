@@ -1,23 +1,25 @@
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
 
-export function Footer() {
+export function Footer({ activeModules = [] }: { activeModules?: string[] }) {
   const t = useTranslations("footer");
   const nav = useTranslations("nav");
   const locale = useLocale();
 
   const year = new Date().getFullYear();
+  const isActive = (key?: string) => !key || activeModules.includes(key);
 
   const exploreLinks = [
     { href: "/decouvrir", label: nav("discover") },
     { href: "/hebergements", label: nav("stays") },
-    { href: "/restaurants", label: nav("restaurants") },
-    { href: "/activites", label: nav("activities") },
-    { href: "/shopping", label: nav("shopping") },
+    { href: "/restaurants", label: nav("restaurants"), moduleKey: "restaurants" },
+    { href: "/activites", label: nav("activities"), moduleKey: "activites" },
+    { href: "/shopping", label: nav("shopping"), moduleKey: "shopping" },
+    { href: "/immobilier", label: nav("realEstate"), moduleKey: "immobilier" },
     { href: "/vivre-a-essaouira", label: nav("living") },
-    { href: "/blog", label: nav("blog") },
+    { href: "/blog", label: nav("blog"), moduleKey: "blog" },
     { href: "/agenda", label: nav("agenda") },
-  ];
+  ].filter((l) => isActive(l.moduleKey));
 
   return (
     <footer className="mt-24 border-t border-black/5 bg-ocean-dark text-white">

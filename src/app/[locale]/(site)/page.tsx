@@ -9,6 +9,7 @@ import {
 } from "@/lib/data";
 import { CATEGORY_TYPE_TO_PATH } from "@/lib/categories";
 import { subcategoryLabel } from "@/lib/labels";
+import { getActiveModuleKeys, CATEGORY_MODULE_KEY } from "@/lib/modules";
 import { EstablishmentCard } from "@/components/establishment-card";
 import { ArticleCard } from "@/components/article-card";
 import { Section } from "@/components/section";
@@ -30,16 +31,31 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [t, tCat, categories, establishments, articles, events] = await Promise.all([
+  const [t, tCat, categoriesAll, establishmentsAll, articles, events, activeModules] = await Promise.all([
     getTranslations("home"),
     getTranslations("categories"),
     getCategories(),
-    getEstablishments({ limit: 6 }),
+    getEstablishments({ limit: 12 }),
     getArticles({ limit: 3 }),
     getEvents({ limit: 3 }),
+    getActiveModuleKeys(),
   ]);
 
-  const categoryById = new Map(categories.map((c) => [c.id, c]));
+  const categoryActive = (type: string) => {
+    const key = CATEGORY_MODULE_KEY[type];
+    return !key || activeModules.has(key);
+  };
+
+  const categories = categoriesAll.filter((c) => categoryActive(c.type));
+  const categoryById = new Map(categoriesAll.map((c) => [c.id, c]));
+  const establishments = establishmentsAll
+    .filter((e) => {
+      const cat = categoryById.get(e.categoryId);
+      return cat && categoryActive(cat.type);
+    })
+    .slice(0, 6);
+  const blogActive = activeModules.has("blog");
+  const newsletterActive = activeModules.has("newsletter");
 
   return (
     <div>
@@ -118,27 +134,29 @@ export default async function HomePage({
         </div>
       </Section>
 
-      <Section
-        title={t("latestArticles")}
-        action={
-          <Link href={`/${locale}/blog`} className="text-sm font-semibold text-azur hover:underline">
-            {t("viewAll")}
-          </Link>
-        }
-      >
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {articles.map((a) => (
-            <ArticleCard
-              key={a.id}
-              href={`/${locale}/blog/${a.slug}`}
-              title={a.title[locale] ?? a.title.fr}
-              excerpt={a.excerpt[locale] ?? a.excerpt.fr}
-              image={a.coverImage}
-              category={a.category}
-            />
-          ))}
-        </div>
-      </Section>
+      {blogActive && (
+        <Section
+          title={t("latestArticles")}
+          action={
+            <Link href={`/${locale}/blog`} className="text-sm font-semibold text-azur hover:underline">
+              {t("viewAll")}
+            </Link>
+          }
+        >
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {articles.map((a) => (
+              <ArticleCard
+                key={a.id}
+                href={`/${locale}/blog/${a.slug}`}
+                title={a.title[locale] ?? a.title.fr}
+                excerpt={a.excerpt[locale] ?? a.excerpt.fr}
+                image={a.coverImage}
+                category={a.category}
+              />
+            ))}
+          </div>
+        </Section>
+      )}
 
       {events.length > 0 && (
         <Section
@@ -164,15 +182,17 @@ export default async function HomePage({
         </Section>
       )}
 
-      <section className="bg-ocean-dark py-16 text-white">
-        <div className="mx-auto flex max-w-7xl flex-col items-start gap-6 px-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold">{t("newsletterTitle")}</h2>
-            <p className="mt-2 text-white/70">{t("newsletterSubtitle")}</p>
+      {newsletterActive && (
+        <section className="bg-ocean-dark py-16 text-white">
+          <div className="mx-auto flex max-w-7xl flex-col items-start gap-6 px-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h2 className="text-2xl font-semibold">{t("newsletterTitle")}</h2>
+              <p className="mt-2 text-white/70">{t("newsletterSubtitle")}</p>
+            </div>
+            <NewsletterForm />
           </div>
-          <NewsletterForm />
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 }

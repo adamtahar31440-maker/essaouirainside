@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getArticleBySlug } from "@/lib/data";
+import { isModuleActive } from "@/lib/modules";
 import { ContentDetail } from "@/components/content-detail";
 
 export async function generateMetadata({
@@ -33,6 +34,8 @@ export default async function ArticlePage({
 }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
+
+  if (!(await isModuleActive("blog"))) notFound();
 
   const article = await getArticleBySlug(slug);
   if (!article) notFound();

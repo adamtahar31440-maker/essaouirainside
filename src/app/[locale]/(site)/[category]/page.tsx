@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CATEGORY_PATH_TO_TYPE, CATEGORY_SUBCATEGORIES } from "@/lib/categories";
 import { subcategoryLabel } from "@/lib/labels";
 import { getEstablishments } from "@/lib/data";
+import { isModuleActive, CATEGORY_MODULE_KEY } from "@/lib/modules";
 import { EstablishmentCard } from "@/components/establishment-card";
 import { Section } from "@/components/section";
 import { cn } from "@/lib/utils";
@@ -39,6 +40,9 @@ export default async function CategoryPage({
 
   const type = CATEGORY_PATH_TO_TYPE[category];
   if (!type) notFound();
+
+  const moduleKey = CATEGORY_MODULE_KEY[type];
+  if (moduleKey && !(await isModuleActive(moduleKey))) notFound();
 
   const [t, tCat, establishments] = await Promise.all([
     getTranslations("search"),

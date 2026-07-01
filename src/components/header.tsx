@@ -8,24 +8,26 @@ import { Menu, X, Search } from "lucide-react";
 import { localeNames, routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
-export function Header() {
+export function Header({ activeModules = [] }: { activeModules?: string[] }) {
   const t = useTranslations("nav");
   const locale = useLocale();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
+  const isActive = (key?: string) => !key || activeModules.includes(key);
+
   const links = [
     { href: "/", label: t("home") },
     { href: "/decouvrir", label: t("discover") },
     { href: "/hebergements", label: t("stays") },
-    { href: "/restaurants", label: t("restaurants") },
-    { href: "/activites", label: t("activities") },
-    { href: "/shopping", label: t("shopping") },
-    { href: "/immobilier", label: t("realEstate") },
+    { href: "/restaurants", label: t("restaurants"), moduleKey: "restaurants" },
+    { href: "/activites", label: t("activities"), moduleKey: "activites" },
+    { href: "/shopping", label: t("shopping"), moduleKey: "shopping" },
+    { href: "/immobilier", label: t("realEstate"), moduleKey: "immobilier" },
     { href: "/vivre-a-essaouira", label: t("living") },
-    { href: "/blog", label: t("blog") },
+    { href: "/blog", label: t("blog"), moduleKey: "blog" },
     { href: "/agenda", label: t("agenda") },
-  ];
+  ].filter((link) => isActive(link.moduleKey));
 
   const pathWithoutLocale = pathname.replace(`/${locale}`, "") || "/";
 

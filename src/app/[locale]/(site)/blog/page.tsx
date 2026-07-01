@@ -1,7 +1,9 @@
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getArticles } from "@/lib/data";
+import { isModuleActive } from "@/lib/modules";
 import { ArticleCard } from "@/components/article-card";
 import { Section } from "@/components/section";
 import { cn } from "@/lib/utils";
@@ -31,6 +33,8 @@ export default async function BlogPage({
   const { locale } = await params;
   const { cat } = await searchParams;
   setRequestLocale(locale);
+
+  if (!(await isModuleActive("blog"))) notFound();
 
   const [t, articles] = await Promise.all([
     getTranslations("blog"),
