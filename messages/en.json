@@ -1,0 +1,116 @@
+{
+  "nav": {
+    "home": "Home",
+    "discover": "Discover",
+    "stays": "Stays",
+    "restaurants": "Restaurants",
+    "activities": "Activities",
+    "shopping": "Shopping",
+    "living": "Living in Essaouira",
+    "blog": "Blog",
+    "agenda": "Events",
+    "search": "Search"
+  },
+  "home": {
+    "heroTitle": "Essaouira Inside",
+    "heroSubtitle": "The reference platform to discover, plan and live Essaouira",
+    "searchPlaceholder": "Search a hotel, restaurant, activity...",
+    "categories": "Explore by category",
+    "latestEstablishments": "Latest listings",
+    "latestArticles": "Latest articles",
+    "upcomingEvents": "Upcoming events",
+    "mapTitle": "Explore on the map",
+    "mapCta": "View interactive map",
+    "newsletterTitle": "Never miss Essaouira",
+    "newsletterSubtitle": "Get our best addresses and news straight to your inbox.",
+    "newsletterPlaceholder": "Your email address",
+    "newsletterCta": "Subscribe",
+    "newsletterSuccess": "Thanks! You're subscribed.",
+    "viewAll": "View all"
+  },
+  "categories": {
+    "hebergement": "Stays",
+    "restaurant": "Restaurants",
+    "activite": "Activities",
+    "shopping": "Shopping"
+  },
+  "establishment": {
+    "gallery": "Photo gallery",
+    "about": "About",
+    "address": "Address",
+    "phone": "Phone",
+    "whatsapp": "WhatsApp",
+    "website": "Website",
+    "hours": "Opening hours",
+    "price": "Price",
+    "services": "Services",
+    "parking": "Parking",
+    "wifi": "Wi-Fi",
+    "accessibility": "Accessibility",
+    "ourReview": "Our review",
+    "faq": "FAQ",
+    "similar": "Similar places",
+    "map": "Location",
+    "callNow": "Call now",
+    "getDirections": "Get directions"
+  },
+  "search": {
+    "title": "Search",
+    "resultsFor": "Results for",
+    "filters": "Filters",
+    "category": "Category",
+    "subcategory": "Subcategory",
+    "priceLevel": "Price level",
+    "sortBy": "Sort by",
+    "sortFeatured": "Featured",
+    "sortNameAsc": "Name (A-Z)",
+    "noResults": "No results found",
+    "all": "All"
+  },
+  "blog": {
+    "title": "Blog",
+    "categories": {
+      "guides": "Guides",
+      "actualites": "News",
+      "conseils": "Tips",
+      "interviews": "Interviews",
+      "reportages": "Features"
+    },
+    "readMore": "Read article",
+    "publishedOn": "Published on"
+  },
+  "agenda": {
+    "title": "Events",
+    "categories": {
+      "festivals": "Festivals",
+      "concerts": "Concerts",
+      "marches": "Markets",
+      "expositions": "Exhibitions"
+    },
+    "from": "From",
+    "to": "to"
+  },
+  "discover": {
+    "title": "Discover Essaouira",
+    "subtitle": "History, medina, beaches, culture and crafts"
+  },
+  "living": {
+    "title": "Living in Essaouira",
+    "subtitle": "Everything you need to settle and live in Essaouira"
+  },
+  "footer": {
+    "tagline": "The international reference platform on Essaouira.",
+    "explore": "Explore",
+    "about": "About",
+    "legal": "Legal notice",
+    "privacy": "Privacy",
+    "contact": "Contact",
+    "rights": "All rights reserved."
+  },
+  "common": {
+    "readMore": "Read more",
+    "back": "Back",
+    "loading": "Loading...",
+    "badgePartner": "Partner"
+  }
+}

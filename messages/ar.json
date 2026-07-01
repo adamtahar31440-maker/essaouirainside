@@ -1,0 +1,116 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "discover": "اكتشف",
+    "stays": "الإقامة",
+    "restaurants": "المطاعم",
+    "activities": "الأنشطة",
+    "shopping": "التسوق",
+    "living": "العيش في الصويرة",
+    "blog": "المدونة",
+    "agenda": "الفعاليات",
+    "search": "بحث"
+  },
+  "home": {
+    "heroTitle": "إساويرة إنسايد",
+    "heroSubtitle": "المنصة المرجعية لاكتشاف والتخطيط والعيش في الصويرة",
+    "searchPlaceholder": "ابحث عن فندق، مطعم، نشاط...",
+    "categories": "استكشف حسب الفئة",
+    "latestEstablishments": "أحدث الإضافات",
+    "latestArticles": "أحدث المقالات",
+    "upcomingEvents": "الفعاليات القادمة",
+    "mapTitle": "استكشف على الخريطة",
+    "mapCta": "عرض الخريطة التفاعلية",
+    "newsletterTitle": "لا تفوت أخبار الصويرة",
+    "newsletterSubtitle": "احصل على أفضل العناوين والأخبار في بريدك الإلكتروني.",
+    "newsletterPlaceholder": "بريدك الإلكتروني",
+    "newsletterCta": "اشترك",
+    "newsletterSuccess": "شكراً! تم تسجيل اشتراكك.",
+    "viewAll": "عرض الكل"
+  },
+  "categories": {
+    "hebergement": "الإقامة",
+    "restaurant": "المطاعم",
+    "activite": "الأنشطة",
+    "shopping": "التسوق"
+  },
+  "establishment": {
+    "gallery": "معرض الصور",
+    "about": "الوصف",
+    "address": "العنوان",
+    "phone": "الهاتف",
+    "whatsapp": "واتساب",
+    "website": "الموقع الإلكتروني",
+    "hours": "ساعات العمل",
+    "price": "السعر",
+    "services": "الخدمات",
+    "parking": "موقف السيارات",
+    "wifi": "واي فاي",
+    "accessibility": "إمكانية الوصول",
+    "ourReview": "رأينا",
+    "faq": "الأسئلة الشائعة",
+    "similar": "أماكن مشابهة",
+    "map": "الموقع",
+    "callNow": "اتصل الآن",
+    "getDirections": "احصل على الاتجاهات"
+  },
+  "search": {
+    "title": "بحث",
+    "resultsFor": "نتائج البحث عن",
+    "filters": "التصفية",
+    "category": "الفئة",
+    "subcategory": "الفئة الفرعية",
+    "priceLevel": "مستوى السعر",
+    "sortBy": "ترتيب حسب",
+    "sortFeatured": "مميز",
+    "sortNameAsc": "الاسم (أ-ي)",
+    "noResults": "لا توجد نتائج",
+    "all": "الكل"
+  },
+  "blog": {
+    "title": "المدونة",
+    "categories": {
+      "guides": "أدلة",
+      "actualites": "أخبار",
+      "conseils": "نصائح",
+      "interviews": "مقابلات",
+      "reportages": "تقارير"
+    },
+    "readMore": "اقرأ المقال",
+    "publishedOn": "نُشر في"
+  },
+  "agenda": {
+    "title": "الفعاليات",
+    "categories": {
+      "festivals": "مهرجانات",
+      "concerts": "حفلات",
+      "marches": "أسواق",
+      "expositions": "معارض"
+    },
+    "from": "من",
+    "to": "إلى"
+  },
+  "discover": {
+    "title": "اكتشف الصويرة",
+    "subtitle": "التاريخ، المدينة القديمة، الشواطئ، الثقافة والحرف اليدوية"
+  },
+  "living": {
+    "title": "العيش في الصويرة",
+    "subtitle": "كل ما تحتاج معرفته للاستقرار والعيش في الصويرة"
+  },
+  "footer": {
+    "tagline": "المنصة الدولية المرجعية حول الصويرة.",
+    "explore": "استكشف",
+    "about": "حول",
+    "legal": "إشعار قانوني",
+    "privacy": "الخصوصية",
+    "contact": "اتصل بنا",
+    "rights": "جميع الحقوق محفوظة."
+  },
+  "common": {
+    "readMore": "اقرأ المزيد",
+    "back": "رجوع",
+    "loading": "جارٍ التحميل...",
+    "badgePartner": "شريك"
+  }
+}
