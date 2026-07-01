@@ -3,9 +3,8 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { Inter } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import { routing, rtlLocales } from "@/i18n/routing";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
 import "../globals.css";
 
 const inter = Inter({ variable: "--font-body", subsets: ["latin"] });
@@ -57,11 +56,9 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={dir} className={`${inter.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
-        <NextIntlClientProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </NextIntlClientProvider>
+        <ClerkProvider>
+          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

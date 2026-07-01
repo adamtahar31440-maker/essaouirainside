@@ -21,6 +21,7 @@ export function Header() {
     { href: "/restaurants", label: t("restaurants") },
     { href: "/activites", label: t("activities") },
     { href: "/shopping", label: t("shopping") },
+    { href: "/immobilier", label: t("realEstate") },
     { href: "/vivre-a-essaouira", label: t("living") },
     { href: "/blog", label: t("blog") },
     { href: "/agenda", label: t("agenda") },

@@ -40,10 +40,12 @@ export async function getEstablishments(opts: {
     conditions.push(eq(establishments.featured, true));
   }
 
+  conditions.push(eq(establishments.status, "active"));
+
   const query = db
     .select()
     .from(establishments)
-    .where(conditions.length ? and(...conditions) : undefined)
+    .where(and(...conditions))
     .orderBy(desc(establishments.featured), desc(establishments.createdAt));
 
   if (opts.limit) return query.limit(opts.limit);
@@ -52,7 +54,10 @@ export async function getEstablishments(opts: {
 
 export async function getEstablishmentBySlug(slug: string) {
   const db = getDb();
-  const rows = await db.select().from(establishments).where(eq(establishments.slug, slug));
+  const rows = await db
+    .select()
+    .from(establishments)
+    .where(and(eq(establishments.slug, slug), eq(establishments.status, "active")));
   return rows[0] ?? null;
 }
 
@@ -68,7 +73,11 @@ export async function getSimilarEstablishments(categoryId: number, excludeSlug: 
 
 export async function getAllEstablishments() {
   const db = getDb();
-  return db.select().from(establishments).orderBy(desc(establishments.createdAt));
+  return db
+    .select()
+    .from(establishments)
+    .where(eq(establishments.status, "active"))
+    .orderBy(desc(establishments.createdAt));
 }
 
 export async function getArticles(opts: { category?: string; limit?: number } = {}) {
