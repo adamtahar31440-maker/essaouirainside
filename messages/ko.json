@@ -1,0 +1,141 @@
+{
+  "nav": {
+    "home": "홈",
+    "discover": "둘러보기",
+    "stays": "숙소",
+    "restaurants": "레스토랑",
+    "activities": "액티비티",
+    "shopping": "쇼핑",
+    "realEstate": "부동산",
+    "pricing": "사업자 및 요금제",
+    "assistance": "긴급 지원",
+    "living": "에사우이라에서 살기",
+    "blog": "블로그",
+    "agenda": "행사",
+    "search": "검색"
+  },
+  "home": {
+    "heroTitle": "Essaouira Inside",
+    "heroSubtitle": "에사우이라를 탐색하고 준비하고 살아가기 위한 대표 플랫폼",
+    "searchPlaceholder": "호텔, 레스토랑, 액티비티 검색...",
+    "categories": "카테고리별로 둘러보기",
+    "latestEstablishments": "새로 등록된 업체",
+    "latestArticles": "최신 기사",
+    "upcomingEvents": "다가오는 행사",
+    "mapTitle": "지도에서 둘러보기",
+    "mapCta": "인터랙티브 지도 보기",
+    "newsletterTitle": "에사우이라 소식을 놓치지 마세요",
+    "newsletterSubtitle": "엄선된 정보와 최신 소식을 이메일로 받아보세요.",
+    "newsletterPlaceholder": "이메일 주소",
+    "newsletterCta": "구독하기",
+    "newsletterSuccess": "감사합니다! 구독이 완료되었습니다.",
+    "viewAll": "전체 보기"
+  },
+  "categories": {
+    "hebergement": "숙소",
+    "restaurant": "레스토랑",
+    "activite": "액티비티",
+    "shopping": "쇼핑"
+  },
+  "establishment": {
+    "gallery": "사진 갤러리",
+    "about": "소개",
+    "address": "주소",
+    "phone": "전화번호",
+    "whatsapp": "왓츠앱",
+    "website": "웹사이트",
+    "hours": "영업시간",
+    "price": "가격",
+    "services": "서비스",
+    "parking": "주차",
+    "wifi": "와이파이",
+    "accessibility": "접근성",
+    "ourReview": "저희 리뷰",
+    "faq": "자주 묻는 질문",
+    "similar": "유사한 업체",
+    "map": "위치",
+    "callNow": "전화하기",
+    "getDirections": "길찾기"
+  },
+  "search": {
+    "title": "검색",
+    "resultsFor": "검색 결과:",
+    "filters": "필터",
+    "category": "카테고리",
+    "subcategory": "하위 카테고리",
+    "priceLevel": "가격대",
+    "sortBy": "정렬 기준",
+    "sortFeatured": "추천순",
+    "sortNameAsc": "이름순 (A-Z)",
+    "noResults": "결과가 없습니다",
+    "all": "전체"
+  },
+  "blog": {
+    "title": "블로그",
+    "categories": {
+      "guides": "가이드",
+      "actualites": "뉴스",
+      "conseils": "팁",
+      "interviews": "인터뷰",
+      "reportages": "르포"
+    },
+    "readMore": "기사 읽기",
+    "publishedOn": "게시일"
+  },
+  "agenda": {
+    "title": "행사",
+    "categories": {
+      "festivals": "축제",
+      "concerts": "콘서트",
+      "marches": "시장",
+      "expositions": "전시회"
+    },
+    "from": "부터",
+    "to": "까지"
+  },
+  "discover": {
+    "title": "에사우이라 둘러보기",
+    "subtitle": "역사, 메디나, 해변, 문화, 공예"
+  },
+  "living": {
+    "title": "에사우이라에서 살기",
+    "subtitle": "에사우이라에 정착하고 생활하는 데 필요한 모든 정보"
+  },
+  "assistance": {
+    "title": "긴급 지원",
+    "subtitle": "에사우이라에서 안심하고 여행할 수 있도록 유용한 연락처, 대사관 정보, 실용 가이드를 제공합니다",
+    "sos": "SOS",
+    "sosTitle": "즉각적인 도움이 필요하신가요?",
+    "myLocation": "내 위치",
+    "call": "전화하기",
+    "guides": "어려움에 처했어요",
+    "guidesSubtitle": "긴급 상황을 위한 실용 가이드",
+    "mapTitle": "긴급 연락처 지도",
+    "categories": {
+      "urgences": "긴급상황",
+      "sante": "건강",
+      "securite": "치안",
+      "ambassade": "대사관 및 영사관",
+      "depannage": "긴급 수리",
+      "argent": "환전/은행",
+      "transport": "교통",
+      "telephone": "통신",
+      "info_utile": "유용한 정보"
+    }
+  },
+  "footer": {
+    "tagline": "에사우이라에 관한 국제적인 대표 플랫폼입니다.",
+    "explore": "둘러보기",
+    "about": "소개",
+    "legal": "법적 고지",
+    "privacy": "개인정보처리방침",
+    "contact": "문의하기",
+    "rights": "모든 권리 보유."
+  },
+  "common": {
+    "readMore": "더 알아보기",
+    "back": "뒤로",
+    "loading": "로딩 중...",
+    "badgePartner": "파트너"
+  }
+}

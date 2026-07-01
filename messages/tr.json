@@ -1,0 +1,141 @@
+{
+  "nav": {
+    "home": "Ana Sayfa",
+    "discover": "Keşfet",
+    "stays": "Konaklama",
+    "restaurants": "Restoranlar",
+    "activities": "Aktiviteler",
+    "shopping": "Alışveriş",
+    "realEstate": "Emlak",
+    "pricing": "Profesyoneller ve Fiyatlar",
+    "assistance": "Yardım ve Acil Durumlar",
+    "living": "Essaouira'da Yaşam",
+    "blog": "Blog",
+    "agenda": "Etkinlikler",
+    "search": "Ara"
+  },
+  "home": {
+    "heroTitle": "Essaouira Inside",
+    "heroSubtitle": "Essaouira'yı keşfetmek, planlamak ve yaşamak için referans platform",
+    "searchPlaceholder": "Otel, restoran veya aktivite ara...",
+    "categories": "Kategoriye göre keşfet",
+    "latestEstablishments": "Son eklenen adresler",
+    "latestArticles": "Son makaleler",
+    "upcomingEvents": "Yaklaşan etkinlikler",
+    "mapTitle": "Haritada keşfet",
+    "mapCta": "İnteraktif haritayı gör",
+    "newsletterTitle": "Essaouira'dan hiçbir şeyi kaçırmayın",
+    "newsletterSubtitle": "En iyi adreslerimizi ve haberlerimizi doğrudan e-postanıza alın.",
+    "newsletterPlaceholder": "E-posta adresiniz",
+    "newsletterCta": "Abone Ol",
+    "newsletterSuccess": "Teşekkürler! Abone oldunuz.",
+    "viewAll": "Tümünü Gör"
+  },
+  "categories": {
+    "hebergement": "Konaklama",
+    "restaurant": "Restoranlar",
+    "activite": "Aktiviteler",
+    "shopping": "Alışveriş"
+  },
+  "establishment": {
+    "gallery": "Fotoğraf Galerisi",
+    "about": "Açıklama",
+    "address": "Adres",
+    "phone": "Telefon",
+    "whatsapp": "WhatsApp",
+    "website": "Web Sitesi",
+    "hours": "Çalışma Saatleri",
+    "price": "Fiyat",
+    "services": "Hizmetler",
+    "parking": "Otopark",
+    "wifi": "Wi-Fi",
+    "accessibility": "Erişilebilirlik",
+    "ourReview": "Görüşümüz",
+    "faq": "Sıkça Sorulan Sorular",
+    "similar": "Benzer Mekânlar",
+    "map": "Konum",
+    "callNow": "Ara",
+    "getDirections": "Yol Tarifi"
+  },
+  "search": {
+    "title": "Arama",
+    "resultsFor": "Arama sonuçları:",
+    "filters": "Filtreler",
+    "category": "Kategori",
+    "subcategory": "Alt Kategori",
+    "priceLevel": "Fiyat Seviyesi",
+    "sortBy": "Sırala",
+    "sortFeatured": "Önerilenler",
+    "sortNameAsc": "İsim (A-Z)",
+    "noResults": "Sonuç bulunamadı",
+    "all": "Tümü"
+  },
+  "blog": {
+    "title": "Blog",
+    "categories": {
+      "guides": "Rehberler",
+      "actualites": "Haberler",
+      "conseils": "Tavsiyeler",
+      "interviews": "Röportajlar",
+      "reportages": "Röportaj Yazıları"
+    },
+    "readMore": "Makaleyi Oku",
+    "publishedOn": "Yayın tarihi"
+  },
+  "agenda": {
+    "title": "Etkinlikler",
+    "categories": {
+      "festivals": "Festivaller",
+      "concerts": "Konserler",
+      "marches": "Pazarlar",
+      "expositions": "Sergiler"
+    },
+    "from": "Başlangıç",
+    "to": "Bitiş"
+  },
+  "discover": {
+    "title": "Essaouira'yı Keşfet",
+    "subtitle": "Tarih, medine, plajlar, kültür ve el sanatları"
+  },
+  "living": {
+    "title": "Essaouira'da Yaşam",
+    "subtitle": "Essaouira'ya yerleşmek ve yaşamak için bilmeniz gereken her şey"
+  },
+  "assistance": {
+    "title": "Yardım ve Acil Durumlar",
+    "subtitle": "Essaouira'da huzur içinde seyahat etmeniz için faydalı numaralar, büyükelçilikler ve pratik rehberler",
+    "sos": "SOS",
+    "sosTitle": "Acil yardıma mı ihtiyacınız var?",
+    "myLocation": "Konumum",
+    "call": "Ara",
+    "guides": "Zor durumdayım",
+    "guidesSubtitle": "Acil durumlar için pratik rehberler",
+    "mapTitle": "Acil durum kişileri haritası",
+    "categories": {
+      "urgences": "Acil Durumlar",
+      "sante": "Sağlık",
+      "securite": "Güvenlik",
+      "ambassade": "Büyükelçilikler ve Konsolosluklar",
+      "depannage": "Yol Yardımı",
+      "argent": "Para",
+      "transport": "Ulaşım",
+      "telephone": "Telefon",
+      "info_utile": "Faydalı Bilgiler"
+    }
+  },
+  "footer": {
+    "tagline": "Essaouira hakkında uluslararası referans platform.",
+    "explore": "Keşfet",
+    "about": "Hakkımızda",
+    "legal": "Yasal Bilgiler",
+    "privacy": "Gizlilik",
+    "contact": "İletişim",
+    "rights": "Tüm hakları saklıdır."
+  },
+  "common": {
+    "readMore": "Daha fazla bilgi",
+    "back": "Geri",
+    "loading": "Yükleniyor...",
+    "badgePartner": "Ortak"
+  }
+}

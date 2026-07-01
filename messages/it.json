@@ -1,0 +1,141 @@
+{
+  "nav": {
+    "home": "Home",
+    "discover": "Scoprire",
+    "stays": "Alloggi",
+    "restaurants": "Ristoranti",
+    "activities": "Attività",
+    "shopping": "Shopping",
+    "realEstate": "Immobiliare",
+    "pricing": "Professionisti e Prezzi",
+    "assistance": "Assistenza ed Emergenze",
+    "living": "Vivere a Essaouira",
+    "blog": "Blog",
+    "agenda": "Eventi",
+    "search": "Cerca"
+  },
+  "home": {
+    "heroTitle": "Essaouira Inside",
+    "heroSubtitle": "La piattaforma di riferimento per scoprire, organizzare e vivere Essaouira",
+    "searchPlaceholder": "Cerca un hotel, un ristorante, un'attività...",
+    "categories": "Esplora per categoria",
+    "latestEstablishments": "Ultimi indirizzi aggiunti",
+    "latestArticles": "Ultimi articoli",
+    "upcomingEvents": "Prossimi eventi",
+    "mapTitle": "Esplora sulla mappa",
+    "mapCta": "Vedi la mappa interattiva",
+    "newsletterTitle": "Non perderti nulla di Essaouira",
+    "newsletterSubtitle": "Ricevi i nostri migliori indirizzi e le ultime notizie via email.",
+    "newsletterPlaceholder": "Il tuo indirizzo email",
+    "newsletterCta": "Iscriviti",
+    "newsletterSuccess": "Grazie! Sei iscritto/a.",
+    "viewAll": "Vedi tutto"
+  },
+  "categories": {
+    "hebergement": "Alloggi",
+    "restaurant": "Ristoranti",
+    "activite": "Attività",
+    "shopping": "Shopping"
+  },
+  "establishment": {
+    "gallery": "Galleria fotografica",
+    "about": "Descrizione",
+    "address": "Indirizzo",
+    "phone": "Telefono",
+    "whatsapp": "WhatsApp",
+    "website": "Sito web",
+    "hours": "Orari",
+    "price": "Prezzo",
+    "services": "Servizi",
+    "parking": "Parcheggio",
+    "wifi": "Wi-Fi",
+    "accessibility": "Accessibilità",
+    "ourReview": "La nostra opinione",
+    "faq": "Domande frequenti",
+    "similar": "Strutture simili",
+    "map": "Posizione",
+    "callNow": "Chiama",
+    "getDirections": "Indicazioni"
+  },
+  "search": {
+    "title": "Ricerca",
+    "resultsFor": "Risultati per",
+    "filters": "Filtri",
+    "category": "Categoria",
+    "subcategory": "Sottocategoria",
+    "priceLevel": "Fascia di prezzo",
+    "sortBy": "Ordina per",
+    "sortFeatured": "Consigliati",
+    "sortNameAsc": "Nome (A-Z)",
+    "noResults": "Nessun risultato trovato",
+    "all": "Tutti"
+  },
+  "blog": {
+    "title": "Blog",
+    "categories": {
+      "guides": "Guide",
+      "actualites": "Notizie",
+      "conseils": "Consigli",
+      "interviews": "Interviste",
+      "reportages": "Reportage"
+    },
+    "readMore": "Leggi l'articolo",
+    "publishedOn": "Pubblicato il"
+  },
+  "agenda": {
+    "title": "Eventi",
+    "categories": {
+      "festivals": "Festival",
+      "concerts": "Concerti",
+      "marches": "Mercati",
+      "expositions": "Mostre"
+    },
+    "from": "Dal",
+    "to": "al"
+  },
+  "discover": {
+    "title": "Scoprire Essaouira",
+    "subtitle": "Storia, medina, spiagge, cultura e artigianato"
+  },
+  "living": {
+    "title": "Vivere a Essaouira",
+    "subtitle": "Tutto quello che c'è da sapere per trasferirsi e vivere a Essaouira"
+  },
+  "assistance": {
+    "title": "Assistenza ed Emergenze",
+    "subtitle": "Numeri utili, ambasciate e guide pratiche per viaggiare sereni a Essaouira",
+    "sos": "SOS",
+    "sosTitle": "Hai bisogno di aiuto immediato?",
+    "myLocation": "La mia posizione",
+    "call": "Chiama",
+    "guides": "Sono in difficoltà",
+    "guidesSubtitle": "Guide pratiche per le situazioni di emergenza",
+    "mapTitle": "Mappa dei contatti di emergenza",
+    "categories": {
+      "urgences": "Emergenze",
+      "sante": "Salute",
+      "securite": "Sicurezza",
+      "ambassade": "Ambasciate e Consolati",
+      "depannage": "Soccorso stradale",
+      "argent": "Denaro",
+      "transport": "Trasporti",
+      "telephone": "Telefono",
+      "info_utile": "Informazioni utili"
+    }
+  },
+  "footer": {
+    "tagline": "La piattaforma internazionale di riferimento su Essaouira.",
+    "explore": "Esplora",
+    "about": "Chi siamo",
+    "legal": "Note legali",
+    "privacy": "Privacy",
+    "contact": "Contatto",
+    "rights": "Tutti i diritti riservati."
+  },
+  "common": {
+    "readMore": "Scopri di più",
+    "back": "Indietro",
+    "loading": "Caricamento...",
+    "badgePartner": "Partner"
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "discover": "Entdecken",
+    "stays": "Unterkünfte",
+    "restaurants": "Restaurants",
+    "activities": "Aktivitäten",
+    "shopping": "Shopping",
+    "realEstate": "Immobilien",
+    "pricing": "Für Profis & Preise",
+    "assistance": "Hilfe & Notfälle",
+    "living": "Leben in Essaouira",
+    "blog": "Blog",
+    "agenda": "Veranstaltungen",
+    "search": "Suchen"
+  },
+  "home": {
+    "heroTitle": "Essaouira Inside",
+    "heroSubtitle": "Die Referenzplattform, um Essaouira zu entdecken, zu planen und zu erleben",
+    "searchPlaceholder": "Hotel, Restaurant oder Aktivität suchen...",
+    "categories": "Nach Kategorie entdecken",
+    "latestEstablishments": "Neu hinzugefügte Adressen",
+    "latestArticles": "Neueste Artikel",
+    "upcomingEvents": "Kommende Veranstaltungen",
+    "mapTitle": "Auf der Karte entdecken",
+    "mapCta": "Interaktive Karte ansehen",
+    "newsletterTitle": "Verpassen Sie nichts aus Essaouira",
+    "newsletterSubtitle": "Erhalten Sie unsere besten Adressen und Neuigkeiten direkt per E-Mail.",
+    "newsletterPlaceholder": "Ihre E-Mail-Adresse",
+    "newsletterCta": "Anmelden",
+    "newsletterSuccess": "Danke! Sie sind angemeldet.",
+    "viewAll": "Alle anzeigen"
+  },
+  "categories": {
+    "hebergement": "Unterkünfte",
+    "restaurant": "Restaurants",
+    "activite": "Aktivitäten",
+    "shopping": "Shopping"
+  },
+  "establishment": {
+    "gallery": "Fotogalerie",
+    "about": "Beschreibung",
+    "address": "Adresse",
+    "phone": "Telefon",
+    "whatsapp": "WhatsApp",
+    "website": "Webseite",
+    "hours": "Öffnungszeiten",
+    "price": "Preis",
+    "services": "Leistungen",
+    "parking": "Parkplatz",
+    "wifi": "WLAN",
+    "accessibility": "Barrierefreiheit",
+    "ourReview": "Unsere Meinung",
+    "faq": "Häufig gestellte Fragen",
+    "similar": "Ähnliche Orte",
+    "map": "Standort",
+    "callNow": "Anrufen",
+    "getDirections": "Route anzeigen"
+  },
+  "search": {
+    "title": "Suche",
+    "resultsFor": "Ergebnisse für",
+    "filters": "Filter",
+    "category": "Kategorie",
+    "subcategory": "Unterkategorie",
+    "priceLevel": "Preisniveau",
+    "sortBy": "Sortieren nach",
+    "sortFeatured": "Empfohlen",
+    "sortNameAsc": "Name (A-Z)",
+    "noResults": "Keine Ergebnisse gefunden",
+    "all": "Alle"
+  },
+  "blog": {
+    "title": "Blog",
+    "categories": {
+      "guides": "Reiseführer",
+      "actualites": "Aktuelles",
+      "conseils": "Tipps",
+      "interviews": "Interviews",
+      "reportages": "Reportagen"
+    },
+    "readMore": "Artikel lesen",
+    "publishedOn": "Veröffentlicht am"
+  },
+  "agenda": {
+    "title": "Veranstaltungen",
+    "categories": {
+      "festivals": "Festivals",
+      "concerts": "Konzerte",
+      "marches": "Märkte",
+      "expositions": "Ausstellungen"
+    },
+    "from": "Vom",
+    "to": "bis"
+  },
+  "discover": {
+    "title": "Essaouira entdecken",
+    "subtitle": "Geschichte, Medina, Strände, Kultur und Handwerk"
+  },
+  "living": {
+    "title": "Leben in Essaouira",
+    "subtitle": "Alles, was Sie wissen müssen, um sich in Essaouira niederzulassen"
+  },
+  "assistance": {
+    "title": "Hilfe & Notfälle",
+    "subtitle": "Nützliche Nummern, Botschaften und praktische Ratgeber für eine sorgenfreie Reise in Essaouira",
+    "sos": "SOS",
+    "sosTitle": "Sofortige Hilfe benötigt?",
+    "myLocation": "Mein Standort",
+    "call": "Anrufen",
+    "guides": "Ich habe ein Problem",
+    "guidesSubtitle": "Praktische Ratgeber für Notfallsituationen",
+    "mapTitle": "Karte der Notfallkontakte",
+    "categories": {
+      "urgences": "Notfälle",
+      "sante": "Gesundheit",
+      "securite": "Sicherheit",
+      "ambassade": "Botschaften & Konsulate",
+      "depannage": "Pannenhilfe",
+      "argent": "Geld",
+      "transport": "Transport",
+      "telephone": "Telefon",
+      "info_utile": "Nützliche Infos"
+    }
+  },
+  "footer": {
+    "tagline": "Die internationale Referenzplattform für Essaouira.",
+    "explore": "Entdecken",
+    "about": "Über uns",
+    "legal": "Impressum",
+    "privacy": "Datenschutz",
+    "contact": "Kontakt",
+    "rights": "Alle Rechte vorbehalten."
+  },
+  "common": {
+    "readMore": "Mehr erfahren",
+    "back": "Zurück",
+    "loading": "Wird geladen...",
+    "badgePartner": "Partner"
+  }
+}

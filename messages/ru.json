@@ -1,0 +1,141 @@
+{
+  "nav": {
+    "home": "Главная",
+    "discover": "Открыть для себя",
+    "stays": "Проживание",
+    "restaurants": "Рестораны",
+    "activities": "Развлечения",
+    "shopping": "Шопинг",
+    "realEstate": "Недвижимость",
+    "pricing": "Для профессионалов и цены",
+    "assistance": "Помощь и экстренные службы",
+    "living": "Жизнь в Эс-Сувейре",
+    "blog": "Блог",
+    "agenda": "События",
+    "search": "Поиск"
+  },
+  "home": {
+    "heroTitle": "Essaouira Inside",
+    "heroSubtitle": "Главная платформа для знакомства, планирования поездки и жизни в Эс-Сувейре",
+    "searchPlaceholder": "Поиск отеля, ресторана, развлечения...",
+    "categories": "Изучить по категориям",
+    "latestEstablishments": "Последние добавленные заведения",
+    "latestArticles": "Последние статьи",
+    "upcomingEvents": "Предстоящие события",
+    "mapTitle": "Изучить на карте",
+    "mapCta": "Открыть интерактивную карту",
+    "newsletterTitle": "Не пропустите новости Эс-Сувейры",
+    "newsletterSubtitle": "Получайте лучшие адреса и новости прямо на почту.",
+    "newsletterPlaceholder": "Ваш email",
+    "newsletterCta": "Подписаться",
+    "newsletterSuccess": "Спасибо! Вы подписаны.",
+    "viewAll": "Смотреть всё"
+  },
+  "categories": {
+    "hebergement": "Проживание",
+    "restaurant": "Рестораны",
+    "activite": "Активности",
+    "shopping": "Шопинг"
+  },
+  "establishment": {
+    "gallery": "Фотогалерея",
+    "about": "Описание",
+    "address": "Адрес",
+    "phone": "Телефон",
+    "whatsapp": "WhatsApp",
+    "website": "Веб-сайт",
+    "hours": "Часы работы",
+    "price": "Цена",
+    "services": "Услуги",
+    "parking": "Парковка",
+    "wifi": "Wi-Fi",
+    "accessibility": "Доступность",
+    "ourReview": "Наш отзыв",
+    "faq": "Частые вопросы",
+    "similar": "Похожие места",
+    "map": "Расположение",
+    "callNow": "Позвонить",
+    "getDirections": "Маршрут"
+  },
+  "search": {
+    "title": "Поиск",
+    "resultsFor": "Результаты по запросу",
+    "filters": "Фильтры",
+    "category": "Категория",
+    "subcategory": "Подкатегория",
+    "priceLevel": "Уровень цен",
+    "sortBy": "Сортировать по",
+    "sortFeatured": "Рекомендуемые",
+    "sortNameAsc": "Название (А-Я)",
+    "noResults": "Результатов не найдено",
+    "all": "Все"
+  },
+  "blog": {
+    "title": "Блог",
+    "categories": {
+      "guides": "Гиды",
+      "actualites": "Новости",
+      "conseils": "Советы",
+      "interviews": "Интервью",
+      "reportages": "Репортажи"
+    },
+    "readMore": "Читать статью",
+    "publishedOn": "Опубликовано"
+  },
+  "agenda": {
+    "title": "События",
+    "categories": {
+      "festivals": "Фестивали",
+      "concerts": "Концерты",
+      "marches": "Рынки",
+      "expositions": "Выставки"
+    },
+    "from": "С",
+    "to": "по"
+  },
+  "discover": {
+    "title": "Открыть для себя Эс-Сувейру",
+    "subtitle": "История, медина, пляжи, культура и ремёсла"
+  },
+  "living": {
+    "title": "Жизнь в Эс-Сувейре",
+    "subtitle": "Всё, что нужно знать, чтобы обосноваться и жить в Эс-Сувейре"
+  },
+  "assistance": {
+    "title": "Помощь и экстренные службы",
+    "subtitle": "Полезные номера, посольства и практические советы для спокойного путешествия по Эс-Сувейре",
+    "sos": "SOS",
+    "sosTitle": "Нужна срочная помощь?",
+    "myLocation": "Моё местоположение",
+    "call": "Позвонить",
+    "guides": "У меня проблема",
+    "guidesSubtitle": "Практические руководства для экстренных ситуаций",
+    "mapTitle": "Карта экстренных контактов",
+    "categories": {
+      "urgences": "Экстренные службы",
+      "sante": "Здоровье",
+      "securite": "Безопасность",
+      "ambassade": "Посольства и консульства",
+      "depannage": "Техпомощь",
+      "argent": "Деньги",
+      "transport": "Транспорт",
+      "telephone": "Телефон",
+      "info_utile": "Полезная информация"
+    }
+  },
+  "footer": {
+    "tagline": "Международная эталонная платформа об Эс-Сувейре.",
+    "explore": "Изучить",
+    "about": "О нас",
+    "legal": "Правовая информация",
+    "privacy": "Конфиденциальность",
+    "contact": "Контакты",
+    "rights": "Все права защищены."
+  },
+  "common": {
+    "readMore": "Узнать больше",
+    "back": "Назад",
+    "loading": "Загрузка...",
+    "badgePartner": "Партнёр"
+  }
+}

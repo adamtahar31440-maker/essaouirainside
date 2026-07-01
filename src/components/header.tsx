@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Menu, X, Search } from "lucide-react";
+import { Menu, X, Search, Globe, ChevronDown } from "lucide-react";
 import { localeNames, routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
@@ -99,13 +99,13 @@ export function Header({ activeModules = [] }: { activeModules?: string[] }) {
               {t("search")}
             </Link>
           </nav>
-          <div className="mt-3 flex gap-2">
+          <div className="mt-3 grid grid-cols-3 gap-2">
             {routing.locales.map((l) => (
               <Link
                 key={l}
                 href={`/${l}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`}
                 className={cn(
-                  "rounded-full border px-3 py-1 text-xs font-medium",
+                  "rounded-full border px-3 py-1.5 text-center text-xs font-medium",
                   l === locale ? "border-ocean-dark bg-ocean-dark text-white" : "border-black/10"
                 )}
               >
@@ -121,20 +121,39 @@ export function Header({ activeModules = [] }: { activeModules?: string[] }) {
 
 function LocaleSwitcher({ pathWithoutLocale }: { pathWithoutLocale: string }) {
   const locale = useLocale();
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="flex items-center gap-1 rounded-full border border-black/10 p-1 text-xs">
-      {routing.locales.map((l) => (
-        <Link
-          key={l}
-          href={`/${l}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`}
-          className={cn(
-            "rounded-full px-2.5 py-1 font-medium transition",
-            l === locale ? "bg-ocean-dark text-white" : "text-foreground/60 hover:bg-sand/60"
-          )}
-        >
-          {l.toUpperCase()}
-        </Link>
-      ))}
+    <div className="relative">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="flex items-center gap-1.5 rounded-full border border-black/10 px-3 py-1.5 text-xs font-medium text-foreground/70 hover:bg-sand/60"
+      >
+        <Globe size={14} />
+        {localeNames[locale]}
+        <ChevronDown size={12} />
+      </button>
+
+      {open && (
+        <>
+          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
+          <div className="absolute right-0 z-20 mt-2 grid max-h-80 w-48 grid-cols-1 gap-0.5 overflow-y-auto rounded-xl border border-black/10 bg-white p-2 shadow-lg rtl:right-auto rtl:left-0">
+            {routing.locales.map((l) => (
+              <Link
+                key={l}
+                href={`/${l}${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`}
+                onClick={() => setOpen(false)}
+                className={cn(
+                  "rounded-lg px-3 py-1.5 text-sm font-medium",
+                  l === locale ? "bg-ocean-dark text-white" : "text-foreground/70 hover:bg-sand/50"
+                )}
+              >
+                {localeNames[l]}
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

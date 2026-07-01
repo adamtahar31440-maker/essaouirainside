@@ -1,0 +1,141 @@
+{
+  "nav": {
+    "home": "בית",
+    "discover": "גילוי",
+    "stays": "לינה",
+    "restaurants": "מסעדות",
+    "activities": "פעילויות",
+    "shopping": "קניות",
+    "realEstate": "נדל\"ן",
+    "pricing": "לבעלי עסקים ומחירים",
+    "assistance": "סיוע וחירום",
+    "living": "לחיות באסווירה",
+    "blog": "בלוג",
+    "agenda": "אירועים",
+    "search": "חיפוש"
+  },
+  "home": {
+    "heroTitle": "Essaouira Inside",
+    "heroSubtitle": "הפלטפורמה המובילה לגילוי, תכנון וחיים באסווירה",
+    "searchPlaceholder": "חפשו מלון, מסעדה, פעילות...",
+    "categories": "גלו לפי קטגוריה",
+    "latestEstablishments": "כתובות שנוספו לאחרונה",
+    "latestArticles": "מאמרים אחרונים",
+    "upcomingEvents": "אירועים קרובים",
+    "mapTitle": "גלו במפה",
+    "mapCta": "צפו במפה האינטראקטיבית",
+    "newsletterTitle": "אל תפספסו כלום מאסווירה",
+    "newsletterSubtitle": "קבלו את הכתובות והחדשות הטובות ביותר שלנו ישירות במייל.",
+    "newsletterPlaceholder": "כתובת המייל שלכם",
+    "newsletterCta": "הרשמה",
+    "newsletterSuccess": "תודה! נרשמתם בהצלחה.",
+    "viewAll": "צפו בהכול"
+  },
+  "categories": {
+    "hebergement": "לינה",
+    "restaurant": "מסעדות",
+    "activite": "פעילויות",
+    "shopping": "קניות"
+  },
+  "establishment": {
+    "gallery": "גלריית תמונות",
+    "about": "תיאור",
+    "address": "כתובת",
+    "phone": "טלפון",
+    "whatsapp": "וואטסאפ",
+    "website": "אתר אינטרנט",
+    "hours": "שעות פתיחה",
+    "price": "מחיר",
+    "services": "שירותים",
+    "parking": "חניה",
+    "wifi": "אינטרנט אלחוטי",
+    "accessibility": "נגישות",
+    "ourReview": "הביקורת שלנו",
+    "faq": "שאלות נפוצות",
+    "similar": "מקומות דומים",
+    "map": "מיקום",
+    "callNow": "התקשרו",
+    "getDirections": "קבלו הנחיות"
+  },
+  "search": {
+    "title": "חיפוש",
+    "resultsFor": "תוצאות עבור",
+    "filters": "מסננים",
+    "category": "קטגוריה",
+    "subcategory": "תת-קטגוריה",
+    "priceLevel": "רמת מחיר",
+    "sortBy": "מיין לפי",
+    "sortFeatured": "מומלצים",
+    "sortNameAsc": "שם (א-ת)",
+    "noResults": "לא נמצאו תוצאות",
+    "all": "הכול"
+  },
+  "blog": {
+    "title": "בלוג",
+    "categories": {
+      "guides": "מדריכים",
+      "actualites": "חדשות",
+      "conseils": "טיפים",
+      "interviews": "ראיונות",
+      "reportages": "כתבות"
+    },
+    "readMore": "קראו את המאמר",
+    "publishedOn": "פורסם בתאריך"
+  },
+  "agenda": {
+    "title": "אירועים",
+    "categories": {
+      "festivals": "פסטיבלים",
+      "concerts": "הופעות",
+      "marches": "שווקים",
+      "expositions": "תערוכות"
+    },
+    "from": "מ",
+    "to": "עד"
+  },
+  "discover": {
+    "title": "גלו את אסווירה",
+    "subtitle": "היסטוריה, המדינה העתיקה, חופים, תרבות ומלאכת יד"
+  },
+  "living": {
+    "title": "לחיות באסווירה",
+    "subtitle": "כל מה שצריך לדעת כדי להתגורר ולחיות באסווירה"
+  },
+  "assistance": {
+    "title": "סיוע וחירום",
+    "subtitle": "מספרים שימושיים, שגרירויות ומדריכים מעשיים לטיול רגוע באסווירה",
+    "sos": "SOS",
+    "sosTitle": "צריכים עזרה מיידית?",
+    "myLocation": "המיקום שלי",
+    "call": "התקשרו",
+    "guides": "אני בצרה",
+    "guidesSubtitle": "מדריכים מעשיים למצבי חירום",
+    "mapTitle": "מפת אנשי קשר לשעת חירום",
+    "categories": {
+      "urgences": "חירום",
+      "sante": "בריאות",
+      "securite": "ביטחון",
+      "ambassade": "שגרירויות וקונסוליות",
+      "depannage": "עזרה טכנית",
+      "argent": "כסף",
+      "transport": "תחבורה",
+      "telephone": "טלפון",
+      "info_utile": "מידע שימושי"
+    }
+  },
+  "footer": {
+    "tagline": "הפלטפורמה הבינלאומית המובילה על אסווירה.",
+    "explore": "גילוי",
+    "about": "אודות",
+    "legal": "מידע משפטי",
+    "privacy": "פרטיות",
+    "contact": "צור קשר",
+    "rights": "כל הזכויות שמורות."
+  },
+  "common": {
+    "readMore": "למידע נוסף",
+    "back": "חזרה",
+    "loading": "טוען...",
+    "badgePartner": "שותף"
+  }
+}

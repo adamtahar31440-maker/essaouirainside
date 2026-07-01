@@ -1,0 +1,141 @@
+{
+  "nav": {
+    "home": "首页",
+    "discover": "探索",
+    "stays": "住宿",
+    "restaurants": "餐厅",
+    "activities": "活动",
+    "shopping": "购物",
+    "realEstate": "房地产",
+    "pricing": "商家与价格",
+    "assistance": "紧急援助",
+    "living": "在索维拉生活",
+    "blog": "博客",
+    "agenda": "活动日历",
+    "search": "搜索"
+  },
+  "home": {
+    "heroTitle": "Essaouira Inside",
+    "heroSubtitle": "探索、规划并体验索维拉的权威平台",
+    "searchPlaceholder": "搜索酒店、餐厅或活动...",
+    "categories": "按类别探索",
+    "latestEstablishments": "最新添加的商家",
+    "latestArticles": "最新文章",
+    "upcomingEvents": "即将举行的活动",
+    "mapTitle": "在地图上探索",
+    "mapCta": "查看互动地图",
+    "newsletterTitle": "不错过索维拉的任何资讯",
+    "newsletterSubtitle": "直接通过邮件获取我们精选的地址和最新消息。",
+    "newsletterPlaceholder": "您的电子邮箱",
+    "newsletterCta": "订阅",
+    "newsletterSuccess": "谢谢！您已成功订阅。",
+    "viewAll": "查看全部"
+  },
+  "categories": {
+    "hebergement": "住宿",
+    "restaurant": "餐厅",
+    "activite": "活动",
+    "shopping": "购物"
+  },
+  "establishment": {
+    "gallery": "照片库",
+    "about": "简介",
+    "address": "地址",
+    "phone": "电话",
+    "whatsapp": "WhatsApp",
+    "website": "网站",
+    "hours": "营业时间",
+    "price": "价格",
+    "services": "服务",
+    "parking": "停车场",
+    "wifi": "无线网络",
+    "accessibility": "无障碍设施",
+    "ourReview": "我们的评价",
+    "faq": "常见问题",
+    "similar": "类似商家",
+    "map": "位置",
+    "callNow": "拨打电话",
+    "getDirections": "路线导航"
+  },
+  "search": {
+    "title": "搜索",
+    "resultsFor": "搜索结果：",
+    "filters": "筛选",
+    "category": "类别",
+    "subcategory": "子类别",
+    "priceLevel": "价格等级",
+    "sortBy": "排序方式",
+    "sortFeatured": "推荐",
+    "sortNameAsc": "名称（A-Z）",
+    "noResults": "未找到结果",
+    "all": "全部"
+  },
+  "blog": {
+    "title": "博客",
+    "categories": {
+      "guides": "指南",
+      "actualites": "新闻",
+      "conseils": "建议",
+      "interviews": "访谈",
+      "reportages": "专题报道"
+    },
+    "readMore": "阅读文章",
+    "publishedOn": "发布于"
+  },
+  "agenda": {
+    "title": "活动日历",
+    "categories": {
+      "festivals": "节日",
+      "concerts": "音乐会",
+      "marches": "集市",
+      "expositions": "展览"
+    },
+    "from": "从",
+    "to": "至"
+  },
+  "discover": {
+    "title": "探索索维拉",
+    "subtitle": "历史、麦地那老城、海滩、文化与手工艺"
+  },
+  "living": {
+    "title": "在索维拉生活",
+    "subtitle": "在索维拉定居生活所需了解的一切"
+  },
+  "assistance": {
+    "title": "紧急援助",
+    "subtitle": "实用电话、大使馆信息及实用指南，让您在索维拉安心旅行",
+    "sos": "紧急求助",
+    "sosTitle": "需要紧急帮助吗？",
+    "myLocation": "我的位置",
+    "call": "拨打电话",
+    "guides": "我遇到困难",
+    "guidesSubtitle": "应对紧急情况的实用指南",
+    "mapTitle": "紧急联系地图",
+    "categories": {
+      "urgences": "紧急情况",
+      "sante": "医疗健康",
+      "securite": "安全",
+      "ambassade": "大使馆与领事馆",
+      "depannage": "维修救援",
+      "argent": "货币",
+      "transport": "交通",
+      "telephone": "电话通讯",
+      "info_utile": "实用信息"
+    }
+  },
+  "footer": {
+    "tagline": "关于索维拉的国际权威平台。",
+    "explore": "探索",
+    "about": "关于我们",
+    "legal": "法律声明",
+    "privacy": "隐私政策",
+    "contact": "联系我们",
+    "rights": "版权所有。"
+  },
+  "common": {
+    "readMore": "了解更多",
+    "back": "返回",
+    "loading": "加载中...",
+    "badgePartner": "合作伙伴"
+  }
+}
