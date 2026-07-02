@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { PHONE_COUNTRY_CODES } from "@/lib/phone-country-codes";
 
 export function PhoneField({
   name,
@@ -11,9 +12,13 @@ export function PhoneField({
   defaultValue?: string;
   dir?: "ltr" | "rtl";
 }) {
-  const [local, setLocal] = useState(defaultValue?.replace(/^\+?212\s?/, "") ?? "");
+  const matched = defaultValue
+    ? PHONE_COUNTRY_CODES.find((c) => defaultValue.startsWith(c.code))
+    : undefined;
+  const [countryCode, setCountryCode] = useState(matched?.code ?? "+212");
+  const [local, setLocal] = useState(matched ? defaultValue!.slice(matched.code.length).trim() : defaultValue ?? "");
   const digits = local.replace(/\D/g, "").replace(/^0+/, "");
-  const full = digits ? `+212${digits}` : "";
+  const full = digits ? `${countryCode}${digits}` : "";
 
   return (
     <div>
@@ -21,7 +26,17 @@ export function PhoneField({
         className="flex overflow-hidden rounded-lg border border-black/10 focus-within:border-ocean-dark"
         dir="ltr"
       >
-        <span className="flex items-center bg-sand px-3 text-sm font-medium text-foreground/70">+212</span>
+        <select
+          value={countryCode}
+          onChange={(e) => setCountryCode(e.target.value)}
+          className="border-r border-black/10 bg-sand px-2 text-sm font-medium text-foreground/70 outline-none"
+        >
+          {PHONE_COUNTRY_CODES.map((c) => (
+            <option key={c.code} value={c.code}>
+              {c.label}
+            </option>
+          ))}
+        </select>
         <input
           type="tel"
           value={local}
