@@ -122,6 +122,7 @@ export function ProApplicationForm({
               </option>
             ))}
           </select>
+          <p className="mt-1 text-xs text-foreground/50">{t.priceLevelHint}</p>
         </div>
 
         <div>

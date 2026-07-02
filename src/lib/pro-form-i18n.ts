@@ -16,6 +16,7 @@ export type ProFormStrings = {
   whatsapp: string;
   website: string;
   priceLevel: string;
+  priceLevelHint: string;
   images: string;
   submit: string;
 };
@@ -41,6 +42,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     whatsapp: "WhatsApp",
     website: "Site internet",
     priceLevel: "Niveau de prix",
+    priceLevelHint:
+      "Dh = économique, Dh Dh = prix moyen, Dh Dh Dh = haut de gamme. Choisissez la catégorie qui correspond le mieux à votre établissement.",
     images: "Photos (une URL par ligne)",
     submit: "Envoyer ma demande",
   },
@@ -64,6 +67,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     whatsapp: "WhatsApp",
     website: "Website",
     priceLevel: "Price level",
+    priceLevelHint:
+      "Dh = budget-friendly, Dh Dh = mid-range, Dh Dh Dh = high-end. Choose the tier that best fits your business.",
     images: "Photos (one URL per line)",
     submit: "Submit my application",
   },
@@ -87,6 +92,7 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     whatsapp: "واتساب",
     website: "الموقع الإلكتروني",
     priceLevel: "مستوى السعر",
+    priceLevelHint: "Dh = اقتصادي، Dh Dh = متوسط السعر، Dh Dh Dh = فئة راقية. اختر الفئة الأنسب لمنشأتك.",
     images: "الصور (رابط واحد في كل سطر)",
     submit: "إرسال طلبي",
   },
@@ -110,6 +116,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     whatsapp: "WhatsApp",
     website: "Sitio web",
     priceLevel: "Nivel de precio",
+    priceLevelHint:
+      "Dh = económico, Dh Dh = precio medio, Dh Dh Dh = alta gama. Elige la categoría que mejor se ajuste a tu negocio.",
     images: "Fotos (una URL por línea)",
     submit: "Enviar mi solicitud",
   },
@@ -133,6 +141,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     whatsapp: "WhatsApp",
     website: "Webseite",
     priceLevel: "Preisniveau",
+    priceLevelHint:
+      "Dh = preisgünstig, Dh Dh = mittlere Preisklasse, Dh Dh Dh = gehoben. Wählen Sie die Stufe, die am besten zu Ihrem Betrieb passt.",
     images: "Fotos (eine URL pro Zeile)",
     submit: "Antrag senden",
   },
@@ -156,6 +166,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     whatsapp: "WhatsApp",
     website: "Sito web",
     priceLevel: "Fascia di prezzo",
+    priceLevelHint:
+      "Dh = economico, Dh Dh = fascia media, Dh Dh Dh = alta gamma. Scegli la fascia più adatta alla tua attività.",
     images: "Foto (un URL per riga)",
     submit: "Invia la mia richiesta",
   },
@@ -179,6 +191,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     whatsapp: "WhatsApp",
     website: "Site",
     priceLevel: "Nível de preço",
+    priceLevelHint:
+      "Dh = econômico, Dh Dh = preço médio, Dh Dh Dh = alto padrão. Escolha a categoria que melhor combina com seu estabelecimento.",
     images: "Fotos (uma URL por linha)",
     submit: "Enviar minha solicitação",
   },
@@ -202,6 +216,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     whatsapp: "WhatsApp",
     website: "Веб-сайт",
     priceLevel: "Уровень цен",
+    priceLevelHint:
+      "Dh = бюджетный, Dh Dh = средний ценовой сегмент, Dh Dh Dh = премиум. Выберите уровень, который лучше всего подходит вашему заведению.",
     images: "Фото (один URL на строку)",
     submit: "Отправить заявку",
   },
@@ -225,6 +241,7 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     whatsapp: "WhatsApp",
     website: "网站",
     priceLevel: "价格等级",
+    priceLevelHint: "Dh = 经济实惠，Dh Dh = 中等价位，Dh Dh Dh = 高端。请选择最符合您商户的等级。",
     images: "照片（每行一个网址）",
     submit: "提交申请",
   },
@@ -248,6 +265,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     whatsapp: "WhatsApp",
     website: "웹사이트",
     priceLevel: "가격대",
+    priceLevelHint:
+      "Dh = 저렴한 가격, Dh Dh = 중간 가격대, Dh Dh Dh = 고급. 업체에 가장 적합한 등급을 선택하세요.",
     images: "사진 (한 줄에 하나의 URL)",
     submit: "신청서 제출",
   },
@@ -271,6 +290,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     whatsapp: "WhatsApp",
     website: "Web sitesi",
     priceLevel: "Fiyat seviyesi",
+    priceLevelHint:
+      "Dh = ekonomik, Dh Dh = orta seviye fiyat, Dh Dh Dh = üst düzey. İşletmenize en uygun seviyeyi seçin.",
     images: "Fotoğraflar (satır başına bir URL)",
     submit: "Başvurumu gönder",
   },
@@ -294,6 +315,7 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     whatsapp: "וואטסאפ",
     website: "אתר אינטרנט",
     priceLevel: "רמת מחיר",
+    priceLevelHint: "Dh = כלכלי, Dh Dh = מחיר בינוני, Dh Dh Dh = יוקרתי. בחרו את הרמה המתאימה ביותר לעסק שלכם.",
     images: "תמונות (כתובת URL אחת בכל שורה)",
     submit: "שליחת הבקשה",
   },
