@@ -7,6 +7,8 @@ import { CATEGORY_SUBCATEGORIES } from "@/lib/categories";
 import { subcategoryLabel, PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
 import { AddressLocationPicker } from "@/components/address-location-picker";
 import { ImageUploader } from "@/components/image-uploader";
+import { PhoneField } from "@/components/phone-field";
+import { SubmitButton } from "@/components/submit-button";
 
 const RTL_LOCALES = ["ar", "he"];
 
@@ -102,11 +104,11 @@ export function ProApplicationForm({
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div>
             <label className={labelClass}>{t.phone}</label>
-            <input name="phone" className={inputClass} />
+            <PhoneField name="phone" dir={dir} />
           </div>
           <div>
             <label className={labelClass}>{t.whatsapp}</label>
-            <input name="whatsapp" className={inputClass} />
+            <PhoneField name="whatsapp" dir={dir} />
           </div>
           <div>
             <label className={labelClass}>{t.website}</label>
@@ -128,9 +130,7 @@ export function ProApplicationForm({
 
         <ImageUploader label={t.images} hint={t.imagesHint} />
 
-        <button type="submit" className="rounded-full bg-ocean-dark px-6 py-2.5 text-sm font-semibold text-white hover:bg-ocean">
-          {t.submit}
-        </button>
+        <SubmitButton label={t.submit} pendingLabel={t.submitPending} />
       </form>
     </div>
   );

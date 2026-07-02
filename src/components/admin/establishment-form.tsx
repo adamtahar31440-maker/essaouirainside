@@ -168,6 +168,23 @@ export function EstablishmentForm({
 
       <section>
         <label className={labelClass}>Photos (une URL par ligne)</label>
+        {establishment?.images && establishment.images.length > 0 && (
+          <div className="mb-3 grid grid-cols-3 gap-2 sm:grid-cols-4">
+            {establishment.images.map((url, i) => (
+              <a
+                key={i}
+                href={url}
+                target="_blank"
+                rel="noreferrer"
+                className="block aspect-square overflow-hidden rounded-lg border border-black/10 bg-sand"
+                title="Ouvrir en taille réelle"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={url} alt="" className="h-full w-full object-cover" />
+              </a>
+            ))}
+          </div>
+        )}
         <textarea
           name="images"
           defaultValue={establishment?.images?.join("\n") ?? ""}
