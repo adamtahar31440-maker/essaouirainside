@@ -18,6 +18,7 @@ export type ProFormStrings = {
   priceLevel: string;
   priceLevelHint: string;
   images: string;
+  imagesHint: string;
   submit: string;
 };
 
@@ -44,7 +45,9 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "Niveau de prix",
     priceLevelHint:
       "Dh = économique, Dh Dh = prix moyen, Dh Dh Dh = haut de gamme. Choisissez la catégorie qui correspond le mieux à votre établissement.",
-    images: "Photos (une URL par ligne)",
+    images: "Photos",
+    imagesHint:
+      "Ajoutez au moins une photo de la devanture/façade de votre commerce : elle nous permet de vérifier que l'établissement existe réellement avant de valider votre demande. Vous pouvez prendre une photo avec votre téléphone ou en choisir une depuis votre ordinateur.",
     submit: "Envoyer ma demande",
   },
   en: {
@@ -69,7 +72,9 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "Price level",
     priceLevelHint:
       "Dh = budget-friendly, Dh Dh = mid-range, Dh Dh Dh = high-end. Choose the tier that best fits your business.",
-    images: "Photos (one URL per line)",
+    images: "Photos",
+    imagesHint:
+      "Add at least one photo of your business's storefront/façade — it lets us verify the business really exists before approving your application. You can take a photo with your phone or choose one from your computer.",
     submit: "Submit my application",
   },
   ar: {
@@ -93,7 +98,9 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     website: "الموقع الإلكتروني",
     priceLevel: "مستوى السعر",
     priceLevelHint: "Dh = اقتصادي، Dh Dh = متوسط السعر، Dh Dh Dh = فئة راقية. اختر الفئة الأنسب لمنشأتك.",
-    images: "الصور (رابط واحد في كل سطر)",
+    images: "الصور",
+    imagesHint:
+      "أضف صورة واحدة على الأقل لواجهة محلك التجاري: تتيح لنا التحقق من وجود المنشأة فعليًا قبل الموافقة على طلبك. يمكنك التقاط صورة بهاتفك أو اختيار واحدة من حاسوبك.",
     submit: "إرسال طلبي",
   },
   es: {
@@ -118,7 +125,9 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "Nivel de precio",
     priceLevelHint:
       "Dh = económico, Dh Dh = precio medio, Dh Dh Dh = alta gama. Elige la categoría que mejor se ajuste a tu negocio.",
-    images: "Fotos (una URL por línea)",
+    images: "Fotos",
+    imagesHint:
+      "Añade al menos una foto de la fachada de tu negocio: nos permite verificar que el establecimiento existe realmente antes de aprobar tu solicitud. Puedes tomar una foto con tu teléfono o elegir una desde tu ordenador.",
     submit: "Enviar mi solicitud",
   },
   de: {
@@ -143,7 +152,9 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "Preisniveau",
     priceLevelHint:
       "Dh = preisgünstig, Dh Dh = mittlere Preisklasse, Dh Dh Dh = gehoben. Wählen Sie die Stufe, die am besten zu Ihrem Betrieb passt.",
-    images: "Fotos (eine URL pro Zeile)",
+    images: "Fotos",
+    imagesHint:
+      "Fügen Sie mindestens ein Foto der Fassade/des Eingangs Ihres Betriebs hinzu — so können wir prüfen, ob der Betrieb tatsächlich existiert, bevor wir Ihren Antrag genehmigen. Sie können ein Foto mit Ihrem Telefon aufnehmen oder eines von Ihrem Computer auswählen.",
     submit: "Antrag senden",
   },
   it: {
@@ -168,7 +179,9 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "Fascia di prezzo",
     priceLevelHint:
       "Dh = economico, Dh Dh = fascia media, Dh Dh Dh = alta gamma. Scegli la fascia più adatta alla tua attività.",
-    images: "Foto (un URL per riga)",
+    images: "Foto",
+    imagesHint:
+      "Aggiungi almeno una foto della facciata/vetrina della tua attività: ci permette di verificare che l'attività esista realmente prima di approvare la tua richiesta. Puoi scattare una foto con il telefono o sceglierne una dal computer.",
     submit: "Invia la mia richiesta",
   },
   pt: {
@@ -193,7 +206,9 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "Nível de preço",
     priceLevelHint:
       "Dh = econômico, Dh Dh = preço médio, Dh Dh Dh = alto padrão. Escolha a categoria que melhor combina com seu estabelecimento.",
-    images: "Fotos (uma URL por linha)",
+    images: "Fotos",
+    imagesHint:
+      "Adicione pelo menos uma foto da fachada do seu estabelecimento: isso nos permite verificar que o negócio realmente existe antes de aprovar sua solicitação. Você pode tirar uma foto com o celular ou escolher uma do computador.",
     submit: "Enviar minha solicitação",
   },
   ru: {
@@ -218,7 +233,9 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "Уровень цен",
     priceLevelHint:
       "Dh = бюджетный, Dh Dh = средний ценовой сегмент, Dh Dh Dh = премиум. Выберите уровень, который лучше всего подходит вашему заведению.",
-    images: "Фото (один URL на строку)",
+    images: "Фото",
+    imagesHint:
+      "Добавьте хотя бы одну фотографию фасада вашего заведения — это позволит нам убедиться, что заведение действительно существует, прежде чем одобрить заявку. Вы можете сделать фото на телефон или выбрать его с компьютера.",
     submit: "Отправить заявку",
   },
   zh: {
@@ -242,7 +259,9 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     website: "网站",
     priceLevel: "价格等级",
     priceLevelHint: "Dh = 经济实惠，Dh Dh = 中等价位，Dh Dh Dh = 高端。请选择最符合您商户的等级。",
-    images: "照片（每行一个网址）",
+    images: "照片",
+    imagesHint:
+      "请至少添加一张商户门面/外观的照片：这样我们才能在批准您的申请前核实商户确实存在。您可以用手机拍照，或从电脑中选择一张。",
     submit: "提交申请",
   },
   ko: {
@@ -267,7 +286,9 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "가격대",
     priceLevelHint:
       "Dh = 저렴한 가격, Dh Dh = 중간 가격대, Dh Dh Dh = 고급. 업체에 가장 적합한 등급을 선택하세요.",
-    images: "사진 (한 줄에 하나의 URL)",
+    images: "사진",
+    imagesHint:
+      "업체의 정면/외관 사진을 최소 한 장 추가해 주세요. 신청을 승인하기 전에 업체가 실제로 존재하는지 확인하는 데 사용됩니다. 휴대폰으로 직접 촬영하거나 컴퓨터에서 사진을 선택할 수 있습니다.",
     submit: "신청서 제출",
   },
   tr: {
@@ -292,7 +313,9 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "Fiyat seviyesi",
     priceLevelHint:
       "Dh = ekonomik, Dh Dh = orta seviye fiyat, Dh Dh Dh = üst düzey. İşletmenize en uygun seviyeyi seçin.",
-    images: "Fotoğraflar (satır başına bir URL)",
+    images: "Fotoğraflar",
+    imagesHint:
+      "İşletmenizin vitrininin/cephesinin en az bir fotoğrafını ekleyin: başvurunuzu onaylamadan önce işletmenin gerçekten var olduğunu doğrulamamızı sağlar. Telefonunuzla fotoğraf çekebilir veya bilgisayarınızdan bir fotoğraf seçebilirsiniz.",
     submit: "Başvurumu gönder",
   },
   he: {
@@ -316,7 +339,9 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     website: "אתר אינטרנט",
     priceLevel: "רמת מחיר",
     priceLevelHint: "Dh = כלכלי, Dh Dh = מחיר בינוני, Dh Dh Dh = יוקרתי. בחרו את הרמה המתאימה ביותר לעסק שלכם.",
-    images: "תמונות (כתובת URL אחת בכל שורה)",
+    images: "תמונות",
+    imagesHint:
+      "הוסיפו לפחות תמונה אחת של חזית העסק שלכם: היא מאפשרת לנו לוודא שהעסק אכן קיים לפני אישור הבקשה שלכם. תוכלו לצלם תמונה בטלפון או לבחור אחת מהמחשב.",
     submit: "שליחת הבקשה",
   },
 };

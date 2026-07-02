@@ -6,6 +6,7 @@ import { PRO_FORM_STRINGS } from "@/lib/pro-form-i18n";
 import { CATEGORY_SUBCATEGORIES } from "@/lib/categories";
 import { subcategoryLabel, PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
 import { AddressLocationPicker } from "@/components/address-location-picker";
+import { ImageUploader } from "@/components/image-uploader";
 
 const RTL_LOCALES = ["ar", "he"];
 
@@ -125,10 +126,7 @@ export function ProApplicationForm({
           <p className="mt-1 text-xs text-foreground/50">{t.priceLevelHint}</p>
         </div>
 
-        <div>
-          <label className={labelClass}>{t.images}</label>
-          <textarea name="images" rows={4} className={inputClass} placeholder="https://..." />
-        </div>
+        <ImageUploader label={t.images} hint={t.imagesHint} />
 
         <button type="submit" className="rounded-full bg-ocean-dark px-6 py-2.5 text-sm font-semibold text-white hover:bg-ocean">
           {t.submit}
