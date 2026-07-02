@@ -23,13 +23,13 @@ export function PhoneField({
   return (
     <div>
       <div
-        className="flex overflow-hidden rounded-lg border border-black/10 focus-within:border-ocean-dark"
+        className="flex items-stretch rounded-lg border border-black/10 focus-within:border-ocean-dark"
         dir="ltr"
       >
         <select
           value={countryCode}
           onChange={(e) => setCountryCode(e.target.value)}
-          className="border-r border-black/10 bg-sand px-2 text-sm font-medium text-foreground/70 outline-none"
+          className="w-24 shrink-0 truncate rounded-l-lg border-r border-black/10 bg-sand px-2 text-sm font-medium text-foreground/70 outline-none"
         >
           {PHONE_COUNTRY_CODES.map((c) => (
             <option key={c.code} value={c.code}>
@@ -41,7 +41,7 @@ export function PhoneField({
           type="tel"
           value={local}
           onChange={(e) => setLocal(e.target.value)}
-          className="w-full px-3 py-2 text-sm outline-none"
+          className="min-w-0 flex-1 rounded-r-lg px-3 py-2 text-sm outline-none"
           placeholder="6XX XXX XXX"
           dir={dir}
         />
