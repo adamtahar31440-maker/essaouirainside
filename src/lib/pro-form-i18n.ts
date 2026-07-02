@@ -9,6 +9,7 @@ export type ProFormStrings = {
   name: string;
   description: string;
   address: string;
+  addressHint: string;
   lat: string;
   lng: string;
   phone: string;
@@ -33,6 +34,7 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     name: "Nom de l'établissement",
     description: "Description",
     address: "Adresse",
+    addressHint: "Tapez pour rechercher une adresse existante à Essaouira.",
     lat: "Latitude",
     lng: "Longitude",
     phone: "Téléphone",
@@ -55,6 +57,7 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     name: "Business name",
     description: "Description",
     address: "Address",
+    addressHint: "Type to search for an existing address in Essaouira.",
     lat: "Latitude",
     lng: "Longitude",
     phone: "Phone",
@@ -77,6 +80,7 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     name: "اسم المنشأة",
     description: "الوصف",
     address: "العنوان",
+    addressHint: "اكتب للبحث عن عنوان موجود في الصويرة.",
     lat: "خط العرض",
     lng: "خط الطول",
     phone: "الهاتف",
@@ -99,6 +103,7 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     name: "Nombre del establecimiento",
     description: "Descripción",
     address: "Dirección",
+    addressHint: "Escribe para buscar una dirección existente en Essaouira.",
     lat: "Latitud",
     lng: "Longitud",
     phone: "Teléfono",
@@ -121,6 +126,7 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     name: "Name des Betriebs",
     description: "Beschreibung",
     address: "Adresse",
+    addressHint: "Tippen Sie, um nach einer bestehenden Adresse in Essaouira zu suchen.",
     lat: "Breitengrad",
     lng: "Längengrad",
     phone: "Telefon",
@@ -143,6 +149,7 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     name: "Nome dell'attività",
     description: "Descrizione",
     address: "Indirizzo",
+    addressHint: "Digita per cercare un indirizzo esistente a Essaouira.",
     lat: "Latitudine",
     lng: "Longitudine",
     phone: "Telefono",
@@ -165,6 +172,7 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     name: "Nome do estabelecimento",
     description: "Descrição",
     address: "Endereço",
+    addressHint: "Digite para buscar um endereço existente em Essaouira.",
     lat: "Latitude",
     lng: "Longitude",
     phone: "Telefone",
@@ -187,6 +195,7 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     name: "Название заведения",
     description: "Описание",
     address: "Адрес",
+    addressHint: "Введите текст, чтобы найти существующий адрес в Эс-Сувейре.",
     lat: "Широта",
     lng: "Долгота",
     phone: "Телефон",
@@ -209,6 +218,7 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     name: "商户名称",
     description: "描述",
     address: "地址",
+    addressHint: "输入以搜索索维拉现有的地址。",
     lat: "纬度",
     lng: "经度",
     phone: "电话",
@@ -231,6 +241,7 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     name: "업체명",
     description: "설명",
     address: "주소",
+    addressHint: "에사우이라의 기존 주소를 검색하려면 입력하세요.",
     lat: "위도",
     lng: "경도",
     phone: "전화번호",
@@ -253,6 +264,7 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     name: "İşletme adı",
     description: "Açıklama",
     address: "Adres",
+    addressHint: "Essaouira'da mevcut bir adresi aramak için yazın.",
     lat: "Enlem",
     lng: "Boylam",
     phone: "Telefon",
@@ -275,6 +287,7 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     name: "שם העסק",
     description: "תיאור",
     address: "כתובת",
+    addressHint: "הקלידו כדי לחפש כתובת קיימת באסאווירה.",
     lat: "קו רוחב",
     lng: "קו אורך",
     phone: "טלפון",
