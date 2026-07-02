@@ -5,7 +5,7 @@ import { ALL_LOCALES, LOCALE_LABELS } from "@/lib/localized-form";
 import { PRO_FORM_STRINGS } from "@/lib/pro-form-i18n";
 import { CATEGORY_SUBCATEGORIES } from "@/lib/categories";
 import { subcategoryLabel, PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
-import { AddressAutocomplete } from "@/components/address-autocomplete";
+import { AddressLocationPicker } from "@/components/address-location-picker";
 
 const RTL_LOCALES = ["ar", "he"];
 
@@ -94,18 +94,8 @@ export function ProApplicationForm({
 
         <div>
           <label className={labelClass}>{t.address}</label>
-          <AddressAutocomplete className={inputClass} dir={dir} />
+          <AddressLocationPicker className={inputClass} dir={dir} />
           <p className="mt-1 text-xs text-foreground/50">{t.addressHint}</p>
-        </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div>
-            <label className={labelClass}>{t.lat}</label>
-            <input name="lat" type="number" step="any" className={inputClass} />
-          </div>
-          <div>
-            <label className={labelClass}>{t.lng}</label>
-            <input name="lng" type="number" step="any" className={inputClass} />
-          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
