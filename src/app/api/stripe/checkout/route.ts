@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { currentUser } from "@clerk/nextjs/server";
+import { safeCurrentUser as currentUser } from "@/lib/auth";
 import { getStripe, STRIPE_CURRENCY } from "@/lib/stripe";
 import { getProfessionalByClerkId, getSubscriptionPlans } from "@/lib/admin-data";
 

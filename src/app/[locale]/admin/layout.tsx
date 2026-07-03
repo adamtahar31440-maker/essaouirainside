@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { currentUser } from "@clerk/nextjs/server";
+import { safeCurrentUser as currentUser } from "@/lib/auth";
 import { ADMIN_ROLES, type Role } from "@/lib/roles";
 import { AdminSidebar } from "@/components/admin/sidebar";
 

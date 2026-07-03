@@ -1,6 +1,7 @@
 "use server";
 
-import { currentUser, clerkClient } from "@clerk/nextjs/server";
+import { clerkClient } from "@clerk/nextjs/server";
+import { safeCurrentUser as currentUser } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { eq, desc, and } from "drizzle-orm";

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { currentUser } from "@clerk/nextjs/server";
+import { safeCurrentUser as currentUser } from "@/lib/auth";
 import { ADMIN_ROLES, type Role } from "@/lib/roles";
 import { translateFields } from "@/lib/translate";
 

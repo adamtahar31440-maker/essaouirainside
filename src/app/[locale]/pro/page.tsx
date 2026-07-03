@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { currentUser } from "@clerk/nextjs/server";
+import { safeCurrentUser } from "@/lib/auth";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import {
   getProfessionalByClerkId,
@@ -40,7 +40,7 @@ export default async function ProDashboardPage({
   const { updated } = await searchParams;
   setRequestLocale(locale);
   const t = await getTranslations("dashboard");
-  const user = await currentUser();
+  const user = await safeCurrentUser();
   const professional = user ? await getProfessionalByClerkId(user.id) : null;
 
   if (!professional) {

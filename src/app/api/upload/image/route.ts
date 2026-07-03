@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { currentUser } from "@clerk/nextjs/server";
+import { safeCurrentUser as currentUser } from "@/lib/auth";
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 
 export async function POST(request: Request): Promise<NextResponse> {
