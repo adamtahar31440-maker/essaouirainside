@@ -169,7 +169,7 @@ function NavDropdown({
   }
 
   return (
-    <div className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+    <div className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
         className="flex items-center gap-1 text-sm font-medium text-foreground/80 transition hover:text-ocean-dark"
@@ -179,26 +179,29 @@ function NavDropdown({
       </button>
 
       {open && (
-        <div className="absolute left-0 z-20 mt-2 w-56 rounded-xl border border-black/10 bg-white p-2 shadow-lg rtl:left-auto rtl:right-0">
-          <Link
-            href={`/${locale}${href}`}
-            onClick={() => setOpen(false)}
-            className="block rounded-lg px-3 py-2 text-sm font-semibold text-ocean-dark hover:bg-sand/50"
-          >
-            {label}
-          </Link>
-          <div className="my-1 h-px bg-black/5" />
-          {items.map((item) => (
+        <>
+          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
+          <div className="absolute left-0 z-20 mt-2 w-56 rounded-xl border border-black/10 bg-white p-2 shadow-lg rtl:left-auto rtl:right-0">
             <Link
-              key={item.href}
-              href={`/${locale}${item.href}`}
+              href={`/${locale}${href}`}
               onClick={() => setOpen(false)}
-              className="block rounded-lg px-3 py-2 text-sm text-foreground/80 hover:bg-sand/50"
+              className="block rounded-lg px-3 py-2 text-sm font-semibold text-ocean-dark hover:bg-sand/50"
             >
-              {item.label}
+              {label}
             </Link>
-          ))}
-        </div>
+            <div className="my-1 h-px bg-black/5" />
+            {items.map((item) => (
+              <Link
+                key={item.href}
+                href={`/${locale}${item.href}`}
+                onClick={() => setOpen(false)}
+                className="block rounded-lg px-3 py-2 text-sm text-foreground/80 hover:bg-sand/50"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
