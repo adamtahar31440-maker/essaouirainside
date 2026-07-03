@@ -167,6 +167,8 @@ export async function updateOwnEstablishment(formData: FormData) {
       name: { fr: name, ...translations.name },
       description: { fr: description, ...translations.description },
       address: String(formData.get("address") ?? ""),
+      lat: formData.get("lat") ? Number(formData.get("lat")) : establishment.lat,
+      lng: formData.get("lng") ? Number(formData.get("lng")) : establishment.lng,
       phone: String(formData.get("phone") ?? ""),
       whatsapp: String(formData.get("whatsapp") ?? ""),
       website: String(formData.get("website") ?? ""),

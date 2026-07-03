@@ -26,6 +26,7 @@ import { AiDescriptionField } from "@/components/ai-description-field";
 import { ALL_LOCALES } from "@/lib/localized-form";
 import { localeNames } from "@/i18n/routing";
 import { ProFicheForm } from "@/components/pro-fiche-form";
+import { AddressLocationPicker } from "@/components/address-location-picker";
 
 const TRANSLATING_LOCALES = ALL_LOCALES.filter((l) => l !== "fr").map((l) => ({
   code: l,
@@ -215,7 +216,12 @@ export default async function ProDashboardPage({
 
             <div>
               <label className={labelClass}>{t("fieldAddress")}</label>
-              <input name="address" defaultValue={myEstablishment.address ?? ""} className={inputClass} />
+              <AddressLocationPicker
+                className={inputClass}
+                defaultAddress={myEstablishment.address ?? ""}
+                defaultLat={myEstablishment.lat}
+                defaultLng={myEstablishment.lng}
+              />
             </div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div>
