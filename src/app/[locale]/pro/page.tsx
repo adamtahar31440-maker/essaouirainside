@@ -19,6 +19,7 @@ import { ProApplicationForm } from "@/components/pro-application-form";
 import { DashboardLangSwitcher } from "@/components/dashboard-lang-switcher";
 import { SubmitButton } from "@/components/submit-button";
 import { ImageUploader } from "@/components/image-uploader";
+import { HoursEditor } from "@/components/hours-editor";
 import { PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
 
 const OPEN_LABEL_APPLICATION_STATUSES = ["pending", "info_requested", "visit_scheduled", "on_hold"];
@@ -162,7 +163,21 @@ export default async function ProDashboardPage({
             </div>
             <div>
               <label className={labelClass}>{t("fieldHours")}</label>
-              <input name="hours" defaultValue={myEstablishment.hours?.fr ?? ""} className={inputClass} />
+              <HoursEditor
+                name="hours"
+                defaultValue={myEstablishment.hours?.fr ?? ""}
+                dayLabels={[
+                  t("dayMon"),
+                  t("dayTue"),
+                  t("dayWed"),
+                  t("dayThu"),
+                  t("dayFri"),
+                  t("daySat"),
+                  t("daySun"),
+                ]}
+                copyLabel={t("hoursCopyPrevious")}
+                placeholder={t("hoursPlaceholder")}
+              />
             </div>
 
             <div>
