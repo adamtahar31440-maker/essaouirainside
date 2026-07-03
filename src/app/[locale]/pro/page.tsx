@@ -177,7 +177,9 @@ export default async function ProDashboardPage({
                   t("daySun"),
                 ]}
                 copyLabel={t("hoursCopyPrevious")}
-                placeholder={t("hoursPlaceholder")}
+                closedLabel={t("hoursClosed")}
+                openLabel={t("hoursOpenDay")}
+                addRangeLabel={t("hoursAddRange")}
               />
             </div>
 
