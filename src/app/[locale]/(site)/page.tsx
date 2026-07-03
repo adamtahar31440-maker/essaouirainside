@@ -15,6 +15,7 @@ import { ArticleCard } from "@/components/article-card";
 import { Section } from "@/components/section";
 import { SearchBar } from "@/components/search-bar";
 import { NewsletterForm } from "@/components/newsletter-form";
+import { MapSection } from "@/components/map-section";
 
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   hebergement: <Bed size={26} />,
@@ -54,6 +55,18 @@ export default async function HomePage({
       return cat && categoryActive(cat.type);
     })
     .slice(0, 6);
+  const mapPoints = establishments
+    .filter((e) => e.lat && e.lng)
+    .map((e) => {
+      const cat = categoryById.get(e.categoryId);
+      const path = cat ? CATEGORY_TYPE_TO_PATH[cat.type] : "";
+      return {
+        lat: e.lat as number,
+        lng: e.lng as number,
+        label: e.name[locale] ?? e.name.fr,
+        href: `/${locale}/${path}/${e.slug}`,
+      };
+    });
   const blogActive = activeModules.has("blog");
   const newsletterActive = activeModules.has("newsletter");
 
@@ -117,19 +130,27 @@ export default async function HomePage({
       </Section>
 
       <Section className="bg-sand/40 max-w-none px-0 py-16">
-        <div className="mx-auto flex max-w-7xl flex-col items-start gap-6 px-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex items-center gap-4">
-            <MapPinned size={32} className="text-ocean-dark" />
-            <div>
-              <h2 className="text-2xl font-semibold text-ocean-dark">{t("mapTitle")}</h2>
+        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 sm:px-6">
+          <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-center gap-4">
+              <MapPinned size={32} className="text-ocean-dark" />
+              <div>
+                <h2 className="text-2xl font-semibold text-ocean-dark">{t("mapTitle")}</h2>
+                <p className="text-sm text-foreground/60">{t("mapSubtitle")}</p>
+              </div>
             </div>
+            <Link
+              href={`/${locale}/recherche`}
+              className="rounded-full bg-ocean-dark px-6 py-3 text-sm font-semibold text-white transition hover:bg-ocean"
+            >
+              {t("mapCta")}
+            </Link>
           </div>
-          <Link
-            href={`/${locale}/recherche`}
-            className="rounded-full bg-ocean-dark px-6 py-3 text-sm font-semibold text-white transition hover:bg-ocean"
-          >
-            {t("mapCta")}
-          </Link>
+          {mapPoints.length > 0 && (
+            <div className="h-72 overflow-hidden rounded-2xl border border-black/5 shadow-sm sm:h-96">
+              <MapSection points={mapPoints} zoom={13} />
+            </div>
+          )}
         </div>
       </Section>
 

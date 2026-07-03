@@ -13,6 +13,7 @@ import { EstablishmentCard } from "@/components/establishment-card";
 import { Section } from "@/components/section";
 import { MapSection } from "@/components/map-section";
 import { LabelBadgeHistory } from "@/components/label-badge-history";
+import { DirectionsButton } from "@/components/directions-button";
 
 export async function generateMetadata({
   params,
@@ -288,7 +289,7 @@ export default async function EstablishmentPage({
                 href={`tel:${e.phone}`}
                 className="flex items-center justify-center gap-2 rounded-full bg-ocean-dark px-4 py-2.5 text-sm font-semibold text-white hover:bg-ocean"
               >
-                <Phone size={16} /> {t("callNow")}
+                <Phone size={16} /> {e.phone}
               </a>
             )}
             {e.whatsapp && (
@@ -312,14 +313,7 @@ export default async function EstablishmentPage({
               </a>
             )}
             {e.lat && e.lng && (
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${e.lat},${e.lng}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-full border border-black/10 px-4 py-2.5 text-sm font-semibold text-foreground/80 hover:bg-sand/40"
-              >
-                <MapPin size={16} /> {t("getDirections")}
-              </a>
+              <DirectionsButton lat={e.lat} lng={e.lng} label={t("getDirections")} />
             )}
           </div>
         </aside>

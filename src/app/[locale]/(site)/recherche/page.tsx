@@ -154,7 +154,7 @@ export default async function SearchPage({
           </div>
 
           {points.length > 0 && (
-            <div className="hidden h-64 overflow-hidden rounded-2xl border border-black/5 lg:block">
+            <div className="h-64 overflow-hidden rounded-2xl border border-black/5">
               <MapSection points={points} zoom={12} />
             </div>
           )}
