@@ -1,6 +1,9 @@
 import { upsertEmergencyContact } from "@/lib/admin-actions";
 import { SubmitButton } from "@/components/submit-button";
 import { AddressLocationPicker } from "@/components/address-location-picker";
+import { HoursEditor } from "@/components/hours-editor";
+
+const DAY_LABELS = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
 
 type Contact = {
   id: number;
@@ -90,7 +93,15 @@ export function EmergencyContactForm({ locale, contact }: { locale: string; cont
 
       <div>
         <label className={labelClass}>Horaires</label>
-        <input name="hours" defaultValue={contact?.hours?.fr ?? ""} className={inputClass} />
+        <HoursEditor
+          name="hours"
+          defaultValue={contact?.hours?.fr ?? ""}
+          dayLabels={DAY_LABELS}
+          closedLabel="Fermé"
+          openLabel="Ouvert"
+          copyLabel="Copier la veille"
+          addRangeLabel="Ajouter une plage (pause)"
+        />
       </div>
       <div>
         <label className={labelClass}>Notes / procédure</label>

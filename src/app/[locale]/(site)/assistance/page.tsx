@@ -7,6 +7,7 @@ import { getEmergencyContacts, getContentPages } from "@/lib/data";
 import { isModuleActive } from "@/lib/modules";
 import { Section } from "@/components/section";
 import { MapSection } from "@/components/map-section";
+import { HoursDisplay } from "@/components/hours-display";
 
 const CATEGORY_ORDER = [
   "urgences",
@@ -44,8 +45,10 @@ export default async function AssistancePage({
 
   if (!(await isModuleActive("assistance"))) notFound();
 
-  const [t, contacts, guides] = await Promise.all([
+  const [t, tDash, tEst, contacts, guides] = await Promise.all([
     getTranslations("assistance"),
+    getTranslations("dashboard"),
+    getTranslations("establishment"),
     getEmergencyContacts(),
     getContentPages("assistance-guides"),
   ]);
@@ -107,7 +110,22 @@ export default async function AssistancePage({
                   </p>
                 )}
                 {c.hours && (c.hours[locale] ?? c.hours.fr) && (
-                  <p className="mt-1 text-xs text-foreground/50">{c.hours[locale] ?? c.hours.fr}</p>
+                  <div className="mt-1 text-xs text-foreground/50">
+                    <HoursDisplay
+                      value={c.hours[locale] ?? c.hours.fr}
+                      dayLabels={[
+                        tDash("dayMon"),
+                        tDash("dayTue"),
+                        tDash("dayWed"),
+                        tDash("dayThu"),
+                        tDash("dayFri"),
+                        tDash("daySat"),
+                        tDash("daySun"),
+                      ]}
+                      closedLabel={tDash("hoursClosed")}
+                      todayLabel={tEst("today")}
+                    />
+                  </div>
                 )}
                 {c.notes && (c.notes[locale] ?? c.notes.fr) && (
                   <p className="mt-2 text-xs text-amber-700">{c.notes[locale] ?? c.notes.fr}</p>
