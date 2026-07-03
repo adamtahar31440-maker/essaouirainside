@@ -9,7 +9,10 @@ export function UpdateSuccessBanner({ message }: { message: string }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    router.replace(pathname, { scroll: false });
+    const timeout = setTimeout(() => {
+      router.replace(pathname, { scroll: false });
+    }, 5000);
+    return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
