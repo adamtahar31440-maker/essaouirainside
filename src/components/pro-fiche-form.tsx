@@ -86,6 +86,11 @@ export function ProFicheForm({
     // resolves, and surface a real error instead of hanging if it throws.
     try {
       await action(formData);
+      // Navigating to the same route (just adding ?updated=1) doesn't necessarily
+      // remount this component, so its local "saving" state must be reset explicitly
+      // here — it was previously only reset in the catch branch, leaving the button
+      // stuck on "saving" forever even though the save had already succeeded.
+      setSaving(false);
       router.push(`/${locale}/pro?updated=1`);
       router.refresh();
     } catch (err) {
