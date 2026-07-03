@@ -128,6 +128,30 @@ export function ProApplicationForm({
           <p className="mt-1 text-xs text-foreground/50">{t.priceLevelHint}</p>
         </div>
 
+        <div>
+          <label className={labelClass}>{t.fieldAmenities}</label>
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            <label className="flex items-center gap-2 text-sm text-foreground/80">
+              <input type="checkbox" name="wifi" /> {t.amenityWifi}
+            </label>
+            <label className="flex items-center gap-2 text-sm text-foreground/80">
+              <input type="checkbox" name="parking" /> {t.amenityParking}
+            </label>
+            <label className="flex items-center gap-2 text-sm text-foreground/80">
+              <input type="checkbox" name="pool" /> {t.amenityPool}
+            </label>
+            <label className="flex items-center gap-2 text-sm text-foreground/80">
+              <input type="checkbox" name="airConditioning" /> {t.amenityAirConditioning}
+            </label>
+            <label className="flex items-center gap-2 text-sm text-foreground/80">
+              <input type="checkbox" name="accessibility" /> {t.amenityAccessibility}
+            </label>
+            <label className="flex items-center gap-2 text-sm text-foreground/80">
+              <input type="checkbox" name="petsAllowed" /> {t.amenityPetsAllowed}
+            </label>
+          </div>
+        </div>
+
         <ImageUploader label={t.images} hint={t.imagesHint} />
 
         <SubmitButton label={t.submit} pendingLabel={t.submitPending} />

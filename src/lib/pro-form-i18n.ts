@@ -17,6 +17,13 @@ export type ProFormStrings = {
   website: string;
   priceLevel: string;
   priceLevelHint: string;
+  fieldAmenities: string;
+  amenityWifi: string;
+  amenityParking: string;
+  amenityPool: string;
+  amenityAirConditioning: string;
+  amenityAccessibility: string;
+  amenityPetsAllowed: string;
   images: string;
   imagesHint: string;
   submit: string;
@@ -46,6 +53,13 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "Niveau de prix",
     priceLevelHint:
       "Dh = économique, Dh Dh = prix moyen, Dh Dh Dh = haut de gamme. Choisissez la catégorie qui correspond le mieux à votre établissement.",
+    fieldAmenities: "Équipements & Services",
+    amenityWifi: "Wi-Fi",
+    amenityParking: "Parking",
+    amenityPool: "Piscine",
+    amenityAirConditioning: "Climatisation",
+    amenityAccessibility: "Accessibilité PMR",
+    amenityPetsAllowed: "Animaux acceptés",
     images: "Photos",
     imagesHint:
       "Ajoutez au moins une photo de la devanture/façade de votre commerce : elle nous permet de vérifier que l'établissement existe réellement avant de valider votre demande. Vous pouvez prendre une photo avec votre téléphone ou en choisir une depuis votre ordinateur.",
@@ -74,6 +88,13 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "Price level",
     priceLevelHint:
       "Dh = budget-friendly, Dh Dh = mid-range, Dh Dh Dh = high-end. Choose the tier that best fits your business.",
+    fieldAmenities: "Amenities & Services",
+    amenityWifi: "Wi-Fi",
+    amenityParking: "Parking",
+    amenityPool: "Swimming pool",
+    amenityAirConditioning: "Air conditioning",
+    amenityAccessibility: "Wheelchair accessible",
+    amenityPetsAllowed: "Pets allowed",
     images: "Photos",
     imagesHint:
       "Add at least one photo of your business's storefront/façade — it lets us verify the business really exists before approving your application. You can take a photo with your phone or choose one from your computer.",
@@ -101,6 +122,13 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     website: "الموقع الإلكتروني",
     priceLevel: "مستوى السعر",
     priceLevelHint: "Dh = اقتصادي، Dh Dh = متوسط السعر، Dh Dh Dh = فئة راقية. اختر الفئة الأنسب لمنشأتك.",
+    fieldAmenities: "المرافق والخدمات",
+    amenityWifi: "Wi-Fi",
+    amenityParking: "موقف سيارات",
+    amenityPool: "مسبح",
+    amenityAirConditioning: "تكييف الهواء",
+    amenityAccessibility: "إمكانية الوصول لذوي الاحتياجات الخاصة",
+    amenityPetsAllowed: "يُسمح بالحيوانات الأليفة",
     images: "الصور",
     imagesHint:
       "أضف صورة واحدة على الأقل لواجهة محلك التجاري: تتيح لنا التحقق من وجود المنشأة فعليًا قبل الموافقة على طلبك. يمكنك التقاط صورة بهاتفك أو اختيار واحدة من حاسوبك.",
@@ -129,6 +157,13 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "Nivel de precio",
     priceLevelHint:
       "Dh = económico, Dh Dh = precio medio, Dh Dh Dh = alta gama. Elige la categoría que mejor se ajuste a tu negocio.",
+    fieldAmenities: "Servicios y comodidades",
+    amenityWifi: "Wi-Fi",
+    amenityParking: "Aparcamiento",
+    amenityPool: "Piscina",
+    amenityAirConditioning: "Aire acondicionado",
+    amenityAccessibility: "Acceso para personas con movilidad reducida",
+    amenityPetsAllowed: "Se admiten mascotas",
     images: "Fotos",
     imagesHint:
       "Añade al menos una foto de la fachada de tu negocio: nos permite verificar que el establecimiento existe realmente antes de aprobar tu solicitud. Puedes tomar una foto con tu teléfono o elegir una desde tu ordenador.",
@@ -157,6 +192,13 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "Preisniveau",
     priceLevelHint:
       "Dh = preisgünstig, Dh Dh = mittlere Preisklasse, Dh Dh Dh = gehoben. Wählen Sie die Stufe, die am besten zu Ihrem Betrieb passt.",
+    fieldAmenities: "Ausstattung & Services",
+    amenityWifi: "Wi-Fi",
+    amenityParking: "Parkplatz",
+    amenityPool: "Schwimmbad",
+    amenityAirConditioning: "Klimaanlage",
+    amenityAccessibility: "Barrierefrei",
+    amenityPetsAllowed: "Haustiere erlaubt",
     images: "Fotos",
     imagesHint:
       "Fügen Sie mindestens ein Foto der Fassade/des Eingangs Ihres Betriebs hinzu — so können wir prüfen, ob der Betrieb tatsächlich existiert, bevor wir Ihren Antrag genehmigen. Sie können ein Foto mit Ihrem Telefon aufnehmen oder eines von Ihrem Computer auswählen.",
@@ -185,6 +227,13 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "Fascia di prezzo",
     priceLevelHint:
       "Dh = economico, Dh Dh = fascia media, Dh Dh Dh = alta gamma. Scegli la fascia più adatta alla tua attività.",
+    fieldAmenities: "Servizi e comfort",
+    amenityWifi: "Wi-Fi",
+    amenityParking: "Parcheggio",
+    amenityPool: "Piscina",
+    amenityAirConditioning: "Aria condizionata",
+    amenityAccessibility: "Accessibile ai disabili",
+    amenityPetsAllowed: "Animali ammessi",
     images: "Foto",
     imagesHint:
       "Aggiungi almeno una foto della facciata/vetrina della tua attività: ci permette di verificare che l'attività esista realmente prima di approvare la tua richiesta. Puoi scattare una foto con il telefono o sceglierne una dal computer.",
@@ -213,6 +262,13 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "Nível de preço",
     priceLevelHint:
       "Dh = econômico, Dh Dh = preço médio, Dh Dh Dh = alto padrão. Escolha a categoria que melhor combina com seu estabelecimento.",
+    fieldAmenities: "Comodidades e serviços",
+    amenityWifi: "Wi-Fi",
+    amenityParking: "Estacionamento",
+    amenityPool: "Piscina",
+    amenityAirConditioning: "Ar condicionado",
+    amenityAccessibility: "Acessível para cadeirantes",
+    amenityPetsAllowed: "Animais permitidos",
     images: "Fotos",
     imagesHint:
       "Adicione pelo menos uma foto da fachada do seu estabelecimento: isso nos permite verificar que o negócio realmente existe antes de aprovar sua solicitação. Você pode tirar uma foto com o celular ou escolher uma do computador.",
@@ -241,6 +297,13 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "Уровень цен",
     priceLevelHint:
       "Dh = бюджетный, Dh Dh = средний ценовой сегмент, Dh Dh Dh = премиум. Выберите уровень, который лучше всего подходит вашему заведению.",
+    fieldAmenities: "Удобства и услуги",
+    amenityWifi: "Wi-Fi",
+    amenityParking: "Парковка",
+    amenityPool: "Бассейн",
+    amenityAirConditioning: "Кондиционер",
+    amenityAccessibility: "Доступно для инвалидных колясок",
+    amenityPetsAllowed: "Разрешено с животными",
     images: "Фото",
     imagesHint:
       "Добавьте хотя бы одну фотографию фасада вашего заведения — это позволит нам убедиться, что заведение действительно существует, прежде чем одобрить заявку. Вы можете сделать фото на телефон или выбрать его с компьютера.",
@@ -268,6 +331,13 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     website: "网站",
     priceLevel: "价格等级",
     priceLevelHint: "Dh = 经济实惠，Dh Dh = 中等价位，Dh Dh Dh = 高端。请选择最符合您商户的等级。",
+    fieldAmenities: "设施与服务",
+    amenityWifi: "Wi-Fi",
+    amenityParking: "停车场",
+    amenityPool: "游泳池",
+    amenityAirConditioning: "空调",
+    amenityAccessibility: "无障碍设施",
+    amenityPetsAllowed: "允许携带宠物",
     images: "照片",
     imagesHint:
       "请至少添加一张商户门面/外观的照片：这样我们才能在批准您的申请前核实商户确实存在。您可以用手机拍照，或从电脑中选择一张。",
@@ -296,6 +366,13 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "가격대",
     priceLevelHint:
       "Dh = 저렴한 가격, Dh Dh = 중간 가격대, Dh Dh Dh = 고급. 업체에 가장 적합한 등급을 선택하세요.",
+    fieldAmenities: "편의시설 및 서비스",
+    amenityWifi: "Wi-Fi",
+    amenityParking: "주차 공간",
+    amenityPool: "수영장",
+    amenityAirConditioning: "에어컨",
+    amenityAccessibility: "휠체어 접근 가능",
+    amenityPetsAllowed: "반려동물 동반 가능",
     images: "사진",
     imagesHint:
       "업체의 정면/외관 사진을 최소 한 장 추가해 주세요. 신청을 승인하기 전에 업체가 실제로 존재하는지 확인하는 데 사용됩니다. 휴대폰으로 직접 촬영하거나 컴퓨터에서 사진을 선택할 수 있습니다.",
@@ -324,6 +401,13 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     priceLevel: "Fiyat seviyesi",
     priceLevelHint:
       "Dh = ekonomik, Dh Dh = orta seviye fiyat, Dh Dh Dh = üst düzey. İşletmenize en uygun seviyeyi seçin.",
+    fieldAmenities: "Olanaklar ve Hizmetler",
+    amenityWifi: "Wi-Fi",
+    amenityParking: "Otopark",
+    amenityPool: "Havuz",
+    amenityAirConditioning: "Klima",
+    amenityAccessibility: "Engelli erişimi",
+    amenityPetsAllowed: "Evcil hayvanlara izin verilir",
     images: "Fotoğraflar",
     imagesHint:
       "İşletmenizin vitrininin/cephesinin en az bir fotoğrafını ekleyin: başvurunuzu onaylamadan önce işletmenin gerçekten var olduğunu doğrulamamızı sağlar. Telefonunuzla fotoğraf çekebilir veya bilgisayarınızdan bir fotoğraf seçebilirsiniz.",
@@ -351,6 +435,13 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     website: "אתר אינטרנט",
     priceLevel: "רמת מחיר",
     priceLevelHint: "Dh = כלכלי, Dh Dh = מחיר בינוני, Dh Dh Dh = יוקרתי. בחרו את הרמה המתאימה ביותר לעסק שלכם.",
+    fieldAmenities: "מתקנים ושירותים",
+    amenityWifi: "Wi-Fi",
+    amenityParking: "חניה",
+    amenityPool: "בריכת שחייה",
+    amenityAirConditioning: "מיזוג אוויר",
+    amenityAccessibility: "נגישות לנכים",
+    amenityPetsAllowed: "בעלי חיים מותרים",
     images: "תמונות",
     imagesHint:
       "הוסיפו לפחות תמונה אחת של חזית העסק שלכם: היא מאפשרת לנו לוודא שהעסק אכן קיים לפני אישור הבקשה שלכם. תוכלו לצלם תמונה בטלפון או לבחור אחת מהמחשב.",

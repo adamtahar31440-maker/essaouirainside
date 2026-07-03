@@ -75,6 +75,12 @@ export async function applyAsProfessional(formData: FormData) {
       .split(/\r?\n/)
       .map((s) => s.trim())
       .filter(Boolean),
+    wifi: formData.get("wifi") === "on",
+    parking: formData.get("parking") === "on",
+    pool: formData.get("pool") === "on",
+    airConditioning: formData.get("airConditioning") === "on",
+    accessibility: formData.get("accessibility") === "on",
+    petsAllowed: formData.get("petsAllowed") === "on",
     status: "pending",
     professionalId: professional.id,
   });
