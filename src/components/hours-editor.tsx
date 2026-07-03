@@ -6,14 +6,21 @@ import { Plus, X } from "lucide-react";
 type TimeRange = { open: string; close: string };
 type DayState = { closed: boolean; ranges: TimeRange[] };
 
-function parseExisting(value: string, dayLabels: string[], closedLabel: string): DayState[] {
+// The stored value (hours.fr) is always written and read in French,
+// regardless of which language the dashboard is currently displayed in —
+// otherwise switching the dashboard language would fail to match the days
+// against the saved data and silently wipe the entered hours.
+const FR_DAY_LABELS = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
+const FR_CLOSED = "Fermé";
+
+function parseExisting(value: string): DayState[] {
   const lines = value.split("\n");
-  return dayLabels.map((label) => {
+  return FR_DAY_LABELS.map((label) => {
     const line = lines.find((l) => l.trim().toLowerCase().startsWith(label.toLowerCase()));
     if (!line) return { closed: false, ranges: [{ open: "", close: "" }] };
     const idx = line.indexOf(":");
     const rest = idx >= 0 ? line.slice(idx + 1).trim() : "";
-    if (!rest || rest.toLowerCase() === closedLabel.toLowerCase()) {
+    if (!rest || rest.toLowerCase() === FR_CLOSED.toLowerCase()) {
       return { closed: true, ranges: [] };
     }
     const ranges = rest
@@ -45,9 +52,7 @@ export function HoursEditor({
   copyLabel: string;
 }) {
   const [days, setDays] = useState<DayState[]>(() =>
-    defaultValue
-      ? parseExisting(defaultValue, dayLabels, closedLabel)
-      : dayLabels.map(() => ({ closed: false, ranges: [{ open: "", close: "" }] }))
+    defaultValue ? parseExisting(defaultValue) : FR_DAY_LABELS.map(() => ({ closed: false, ranges: [{ open: "", close: "" }] }))
   );
 
   function setClosed(i: number, closed: boolean) {
@@ -78,14 +83,15 @@ export function HoursEditor({
     setDays((prev) => prev.map((d, idx) => (idx === i ? JSON.parse(JSON.stringify(prev[i - 1])) : d)));
   }
 
-  const serialized = dayLabels
-    .map((label, i) => {
-      const day = days[i];
-      if (day.closed) return `${label}: ${closedLabel}`;
-      const ranges = day.ranges.filter((r) => r.open && r.close).map((r) => `${r.open}–${r.close}`);
-      if (ranges.length === 0) return null;
-      return `${label}: ${ranges.join(", ")}`;
-    })
+  // Always serialized in French — this string becomes hours.fr, the
+  // canonical source text that translateFields later translates from.
+  const serialized = FR_DAY_LABELS.map((label, i) => {
+    const day = days[i];
+    if (day.closed) return `${label}: ${FR_CLOSED}`;
+    const ranges = day.ranges.filter((r) => r.open && r.close).map((r) => `${r.open}–${r.close}`);
+    if (ranges.length === 0) return null;
+    return `${label}: ${ranges.join(", ")}`;
+  })
     .filter(Boolean)
     .join("\n");
 
