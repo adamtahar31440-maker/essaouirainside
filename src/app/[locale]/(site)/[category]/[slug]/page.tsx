@@ -14,6 +14,9 @@ import {
   ChevronRight,
   Link2,
   ExternalLink,
+  Waves,
+  Snowflake,
+  PawPrint,
 } from "lucide-react";
 import { CATEGORY_PATH_TO_TYPE } from "@/lib/categories";
 import { subcategoryLabel, priceLevelLabel } from "@/lib/labels";
@@ -210,8 +213,15 @@ export default async function EstablishmentPage({
           <div className="mt-8 flex flex-wrap gap-4 text-sm text-foreground/70">
             {e.wifi && <span className="flex items-center gap-1.5"><Wifi size={16} /> {t("wifi")}</span>}
             {e.parking && <span className="flex items-center gap-1.5"><Car size={16} /> {t("parking")}</span>}
+            {e.pool && <span className="flex items-center gap-1.5"><Waves size={16} /> {t("pool")}</span>}
+            {e.airConditioning && (
+              <span className="flex items-center gap-1.5"><Snowflake size={16} /> {t("airConditioning")}</span>
+            )}
             {e.accessibility && (
               <span className="flex items-center gap-1.5"><Accessibility size={16} /> {t("accessibility")}</span>
+            )}
+            {e.petsAllowed && (
+              <span className="flex items-center gap-1.5"><PawPrint size={16} /> {t("petsAllowed")}</span>
             )}
           </div>
 

@@ -23,6 +23,9 @@ type Establishment = {
   parking: boolean | null;
   wifi: boolean | null;
   accessibility: boolean | null;
+  pool: boolean | null;
+  airConditioning: boolean | null;
+  petsAllowed: boolean | null;
   featured: boolean | null;
   badge: string | null;
   status: string;
@@ -159,7 +162,16 @@ export function EstablishmentForm({
           <input type="checkbox" name="parking" defaultChecked={!!establishment?.parking} /> Parking
         </label>
         <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" name="pool" defaultChecked={!!establishment?.pool} /> Piscine
+        </label>
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" name="airConditioning" defaultChecked={!!establishment?.airConditioning} /> Climatisation
+        </label>
+        <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" name="accessibility" defaultChecked={!!establishment?.accessibility} /> Accessibilité
+        </label>
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" name="petsAllowed" defaultChecked={!!establishment?.petsAllowed} /> Animaux acceptés
         </label>
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" name="featured" defaultChecked={!!establishment?.featured} /> Mis en avant

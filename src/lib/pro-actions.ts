@@ -147,6 +147,12 @@ export async function updateOwnEstablishment(formData: FormData) {
       priceLevel: String(formData.get("priceLevel") ?? establishment.priceLevel ?? "€€"),
       images,
       products,
+      wifi: formData.get("wifi") === "on",
+      parking: formData.get("parking") === "on",
+      accessibility: formData.get("accessibility") === "on",
+      pool: formData.get("pool") === "on",
+      airConditioning: formData.get("airConditioning") === "on",
+      petsAllowed: formData.get("petsAllowed") === "on",
     })
     .where(and(eq(establishments.id, id), eq(establishments.professionalId, professional.id)));
 

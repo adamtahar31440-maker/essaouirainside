@@ -278,6 +278,33 @@ export default async function ProDashboardPage({
               />
             </div>
 
+            <div>
+              <label className={labelClass}>{t("fieldAmenities")}</label>
+              <div className="flex flex-wrap gap-x-6 gap-y-2">
+                <label className="flex items-center gap-2 text-sm text-foreground/80">
+                  <input type="checkbox" name="wifi" defaultChecked={!!myEstablishment.wifi} /> {t("amenityWifi")}
+                </label>
+                <label className="flex items-center gap-2 text-sm text-foreground/80">
+                  <input type="checkbox" name="parking" defaultChecked={!!myEstablishment.parking} /> {t("amenityParking")}
+                </label>
+                <label className="flex items-center gap-2 text-sm text-foreground/80">
+                  <input type="checkbox" name="pool" defaultChecked={!!myEstablishment.pool} /> {t("amenityPool")}
+                </label>
+                <label className="flex items-center gap-2 text-sm text-foreground/80">
+                  <input type="checkbox" name="airConditioning" defaultChecked={!!myEstablishment.airConditioning} />{" "}
+                  {t("amenityAirConditioning")}
+                </label>
+                <label className="flex items-center gap-2 text-sm text-foreground/80">
+                  <input type="checkbox" name="accessibility" defaultChecked={!!myEstablishment.accessibility} />{" "}
+                  {t("amenityAccessibility")}
+                </label>
+                <label className="flex items-center gap-2 text-sm text-foreground/80">
+                  <input type="checkbox" name="petsAllowed" defaultChecked={!!myEstablishment.petsAllowed} />{" "}
+                  {t("amenityPetsAllowed")}
+                </label>
+              </div>
+            </div>
+
             <ImageUploader
               label={t("fieldImages")}
               defaultImages={myEstablishment.images ?? []}
