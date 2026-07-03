@@ -1,12 +1,20 @@
 import { clerkClient } from "@clerk/nextjs/server";
 import { setUserBanned, deleteUser } from "@/lib/admin-actions";
+import { adminGetProfessionals } from "@/lib/admin-data";
 import { RoleSelectForm } from "@/components/admin/role-select-form";
 import { ConfirmSubmitButton } from "@/components/admin/confirm-button";
 import type { Role } from "@/lib/roles";
 
 export default async function AdminUsersPage() {
   const client = await clerkClient();
-  const { data: users } = await client.users.getUserList({ limit: 100 });
+  const [{ data: allUsers }, professionals] = await Promise.all([
+    client.users.getUserList({ limit: 100 }),
+    adminGetProfessionals(),
+  ]);
+  // Professionals (applicants and validated partners alike) are managed
+  // exclusively from the "Professionnels" page, not mixed in here.
+  const professionalClerkIds = new Set(professionals.map((p) => p.clerkUserId));
+  const users = allUsers.filter((u) => !professionalClerkIds.has(u.id));
 
   return (
     <div>

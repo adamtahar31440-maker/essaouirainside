@@ -12,8 +12,11 @@ import {
   events,
   professionals,
   subscriptions,
+  invoices,
+  serviceOrders,
   realEstateListings,
   reviews,
+  favorites,
   modules,
   siteSettings,
   adCampaigns,
@@ -242,7 +245,32 @@ export async function setProfessionalStatus(
 export async function deleteProfessional(id: number) {
   await requireRole("professionals");
   const db = getDb();
+
+  const [professional] = await db.select().from(professionals).where(eq(professionals.id, id));
+  if (!professional) return;
+
+  const linkedEstablishments = await db.select().from(establishments).where(eq(establishments.professionalId, id));
+  for (const est of linkedEstablishments) {
+    await db.delete(reviews).where(eq(reviews.establishmentId, est.id));
+    await db.delete(favorites).where(eq(favorites.establishmentId, est.id));
+    await db.delete(labelEvaluations).where(eq(labelEvaluations.establishmentId, est.id));
+    await db.delete(labelBadges).where(eq(labelBadges.establishmentId, est.id));
+  }
+
+  await db.delete(labelApplications).where(eq(labelApplications.professionalId, id));
+  await db.delete(establishments).where(eq(establishments.professionalId, id));
+  await db.delete(subscriptions).where(eq(subscriptions.professionalId, id));
+  await db.delete(invoices).where(eq(invoices.professionalId, id));
+  await db.delete(serviceOrders).where(eq(serviceOrders.professionalId, id));
   await db.delete(professionals).where(eq(professionals.id, id));
+
+  try {
+    const client = await clerkClient();
+    await client.users.deleteUser(professional.clerkUserId);
+  } catch {
+    // DB cleanup already succeeded; the Clerk account may already be gone.
+  }
+
   revalidatePath("/", "layout");
 }
 
