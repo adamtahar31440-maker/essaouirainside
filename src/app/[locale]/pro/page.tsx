@@ -20,6 +20,7 @@ import { DashboardLangSwitcher } from "@/components/dashboard-lang-switcher";
 import { SubmitButton } from "@/components/submit-button";
 import { ImageUploader } from "@/components/image-uploader";
 import { HoursEditor } from "@/components/hours-editor";
+import { ProductsEditor } from "@/components/products-editor";
 import { PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
 
 const OPEN_LABEL_APPLICATION_STATUSES = ["pending", "info_requested", "visit_scheduled", "on_hold"];
@@ -208,6 +209,18 @@ export default async function ProDashboardPage({
                 ))}
               </select>
             </div>
+            <div>
+              <label className={labelClass}>{t("fieldProducts")}</label>
+              <p className="mb-2 text-xs text-foreground/50">{t("productsHint")}</p>
+              <ProductsEditor
+                name="products"
+                defaultProducts={(myEstablishment.products ?? []).map((p) => ({ name: p.name.fr, price: p.price }))}
+                namePlaceholder={t("productNamePlaceholder")}
+                pricePlaceholder={t("productPricePlaceholder")}
+                addLabel={t("addProduct")}
+              />
+            </div>
+
             <ImageUploader
               label={t("fieldImages")}
               defaultImages={myEstablishment.images ?? []}

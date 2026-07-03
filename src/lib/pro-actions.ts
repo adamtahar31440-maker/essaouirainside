@@ -98,8 +98,24 @@ export async function updateOwnEstablishment(formData: FormData) {
   const description = String(formData.get("description") ?? "");
   const hours = String(formData.get("hours") ?? "");
 
+  let productsInput: { name: string; price: number | null }[] = [];
+  try {
+    productsInput = JSON.parse(String(formData.get("products") ?? "[]"));
+  } catch {
+    productsInput = [];
+  }
+
   const targetLocales = ALL_LOCALES.filter((l) => l !== "fr");
-  const translations = await translateFields({ name, description, hours }, targetLocales, "fr");
+  const translationFields: Record<string, string> = { name, description, hours };
+  productsInput.forEach((p, i) => {
+    translationFields[`product_${i}`] = p.name;
+  });
+  const translations = await translateFields(translationFields, targetLocales, "fr");
+
+  const products = productsInput.map((p, i) => ({
+    name: { fr: p.name, ...translations[`product_${i}`] },
+    price: p.price,
+  }));
 
   const [subscription, plans] = await Promise.all([
     getSubscriptionByProfessionalId(professional.id),
@@ -126,6 +142,7 @@ export async function updateOwnEstablishment(formData: FormData) {
       hours: { fr: hours, ...translations.hours },
       priceLevel: String(formData.get("priceLevel") ?? establishment.priceLevel ?? "€€"),
       images,
+      products,
     })
     .where(and(eq(establishments.id, id), eq(establishments.professionalId, professional.id)));
 

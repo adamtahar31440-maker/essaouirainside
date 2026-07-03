@@ -69,6 +69,7 @@ export default async function EstablishmentPage({
   const description = e.description[locale] ?? e.description.fr;
   const images = e.images ?? [];
   const services = e.services?.[locale] ?? e.services?.fr ?? [];
+  const products = e.products ?? [];
   const review = e.ourReview?.[locale] ?? e.ourReview?.fr;
   const hours = e.hours?.[locale] ?? e.hours?.fr;
   const faq = e.faq ?? [];
@@ -181,6 +182,22 @@ export default async function EstablishmentPage({
             <div className="mt-8 rounded-2xl bg-sand/40 p-6">
               <h2 className="text-lg font-semibold text-ocean-dark">{t("ourReview")}</h2>
               <p className="mt-2 leading-relaxed text-foreground/80">{review}</p>
+            </div>
+          )}
+
+          {products.length > 0 && (
+            <div className="mt-8">
+              <h2 className="text-lg font-semibold text-ocean-dark">{t("productsTitle")}</h2>
+              <div className="mt-3 divide-y divide-black/5 rounded-2xl border border-black/5">
+                {products.map((p, i) => (
+                  <div key={i} className="flex items-center justify-between gap-4 px-4 py-3">
+                    <span className="text-sm text-foreground/80">{p.name[locale] ?? p.name.fr}</span>
+                    {p.price != null && (
+                      <span className="shrink-0 text-sm font-semibold text-ocean-dark">{p.price} MAD</span>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
