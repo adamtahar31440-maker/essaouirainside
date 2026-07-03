@@ -196,6 +196,7 @@
     "productsHint": "Необязательно. Добавьте свои блюда, товары или услуги, при желании указав цену.",
     "productNamePlaceholder": "Название товара или услуги",
     "productPricePlaceholder": "Цена (MAD)",
+    "productCategoryPlaceholder": "Категория (напр. Закуски)",
     "addProduct": "Добавить товар",
     "scanDocument": "Сканировать меню или прайс-лист (фото)",
     "scanning": "Анализ фото...",

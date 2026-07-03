@@ -196,6 +196,7 @@
     "productsHint": "可选。添加您的菜品、产品或服务，如需要可附上价格。",
     "productNamePlaceholder": "产品或服务名称",
     "productPricePlaceholder": "价格（迪拉姆）",
+    "productCategoryPlaceholder": "类别（例如：前菜）",
     "addProduct": "添加产品",
     "scanDocument": "扫描菜单或价目表（照片）",
     "scanning": "正在分析照片...",

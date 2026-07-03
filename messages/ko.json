@@ -196,6 +196,7 @@
     "productsHint": "선택 사항입니다. 원하시면 가격과 함께 메뉴, 제품 또는 서비스를 추가하세요.",
     "productNamePlaceholder": "제품 또는 서비스 이름",
     "productPricePlaceholder": "가격 (MAD)",
+    "productCategoryPlaceholder": "카테고리 (예: 애피타이저)",
     "addProduct": "제품 추가",
     "scanDocument": "메뉴 또는 가격표 스캔 (사진)",
     "scanning": "사진 분석 중...",

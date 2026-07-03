@@ -8,7 +8,7 @@ function getClient() {
   return _client;
 }
 
-export type ExtractedProduct = { name: string; price: number | null };
+export type ExtractedProduct = { name: string; price: number | null; category: string | null };
 
 export async function extractProductsFromImages(
   images: { mediaType: "image/jpeg" | "image/png" | "image/webp" | "image/gif"; base64: string }[]
@@ -24,7 +24,12 @@ export async function extractProductsFromImages(
       "Morocco tourism business directory. Read every item name and its price if visible. Extract the " +
       "numeric price exactly as written (no currency conversion). If a price isn't shown for an item, " +
       "use null. Keep item names in the language they're written in. Ignore headers, decorative text, " +
-      "addresses, phone numbers, and anything that isn't an actual product/service/price entry.",
+      "addresses, phone numbers, and anything that isn't an actual product/service/price entry. " +
+      "The document is usually organized into sections with a heading (e.g. Entrées/Plats/Desserts for " +
+      "a restaurant menu, or Coupe/Coloration/Soins for a hairdresser price list). For every item, set " +
+      "category to the exact section heading it appears under, written exactly as it appears on the " +
+      "document (same language, same wording). If the document has no section headings at all, set " +
+      "category to null for every item — do not invent categories that aren't written on the document.",
     messages: [
       {
         role: "user",
@@ -35,7 +40,7 @@ export async function extractProductsFromImages(
           })),
           {
             type: "text" as const,
-            text: "Extract every product/service and its price from these document photos.",
+            text: "Extract every product/service, its price, and its section/category heading (if any) from these document photos.",
           },
         ],
       },
@@ -53,8 +58,9 @@ export async function extractProductsFromImages(
                 properties: {
                   name: { type: "string" },
                   price: { type: ["number", "null"] },
+                  category: { type: ["string", "null"] },
                 },
-                required: ["name", "price"],
+                required: ["name", "price", "category"],
                 additionalProperties: false,
               },
             },

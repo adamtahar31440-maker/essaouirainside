@@ -49,7 +49,9 @@ export const establishments = pgTable("establishments", {
   // Merchant-editable product/service list — name is translated like other
   // content, price is optional (MAD, whole units) since not every listing
   // (e.g. a boutique with variable pricing) wants to publish fixed prices.
-  products: jsonb("products").$type<{ name: Localized; price: number | null }[]>().default([]),
+  // category groups items on the public page (e.g. Entrées/Plats/Desserts)
+  // and is null for items with no detected/entered grouping.
+  products: jsonb("products").$type<{ name: Localized; price: number | null; category: Localized | null }[]>().default([]),
   parking: boolean("parking").default(false),
   wifi: boolean("wifi").default(false),
   accessibility: boolean("accessibility").default(false),

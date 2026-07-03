@@ -87,6 +87,13 @@ export default async function EstablishmentPage({
   const images = e.images ?? [];
   const services = e.services?.[locale] ?? e.services?.fr ?? [];
   const products = e.products ?? [];
+  const productGroups = products.reduce<{ category: string | null; items: typeof products }[]>((groups, p) => {
+    const categoryLabel = p.category ? p.category[locale] ?? p.category.fr : null;
+    const existing = groups.find((g) => g.category === categoryLabel);
+    if (existing) existing.items.push(p);
+    else groups.push({ category: categoryLabel, items: [p] });
+    return groups;
+  }, []);
   const review = e.ourReview?.[locale] ?? e.ourReview?.fr;
   const hours = e.hours?.[locale] ?? e.hours?.fr;
   const faq = e.faq ?? [];
@@ -203,13 +210,24 @@ export default async function EstablishmentPage({
           {products.length > 0 && (
             <div className="mt-8">
               <h2 className="text-lg font-semibold text-ocean-dark">{t("productsTitle")}</h2>
-              <div className="mt-3 divide-y divide-black/5 rounded-2xl border border-black/5">
-                {products.map((p, i) => (
-                  <div key={i} className="flex items-center justify-between gap-4 px-4 py-3">
-                    <span className="text-sm text-foreground/80">{p.name[locale] ?? p.name.fr}</span>
-                    {p.price != null && (
-                      <span className="shrink-0 text-sm font-semibold text-ocean-dark">{p.price} MAD</span>
+              <div className="mt-3 space-y-5">
+                {productGroups.map((group, gi) => (
+                  <div key={gi}>
+                    {group.category && (
+                      <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-azur">
+                        {group.category}
+                      </h3>
                     )}
+                    <div className="divide-y divide-black/5 rounded-2xl border border-black/5">
+                      {group.items.map((p, i) => (
+                        <div key={i} className="flex items-center justify-between gap-4 px-4 py-3">
+                          <span className="text-sm text-foreground/80">{p.name[locale] ?? p.name.fr}</span>
+                          {p.price != null && (
+                            <span className="shrink-0 text-sm font-semibold text-ocean-dark">{p.price} MAD</span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </div>

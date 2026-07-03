@@ -196,6 +196,7 @@
     "productsHint": "Optional. Add your dishes, products or services, with a price if you'd like.",
     "productNamePlaceholder": "Product or service name",
     "productPricePlaceholder": "Price (MAD)",
+    "productCategoryPlaceholder": "Category (e.g. Starters)",
     "addProduct": "Add a product",
     "scanDocument": "Scan a menu or price list (photo)",
     "scanning": "Analyzing photo...",

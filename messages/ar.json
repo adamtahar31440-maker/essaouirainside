@@ -196,6 +196,7 @@
     "productsHint": "اختياري. أضف أطباقك أو منتجاتك أو خدماتك، مع سعر إذا رغبت.",
     "productNamePlaceholder": "اسم المنتج أو الخدمة",
     "productPricePlaceholder": "السعر (درهم)",
+    "productCategoryPlaceholder": "الفئة (مثال: المقبلات)",
     "addProduct": "إضافة منتج",
     "scanDocument": "مسح قائمة الطعام أو قائمة الأسعار (صورة)",
     "scanning": "جارٍ تحليل الصورة...",

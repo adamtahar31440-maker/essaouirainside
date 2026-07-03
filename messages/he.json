@@ -196,6 +196,7 @@
     "productsHint": "אופציונלי. הוסיפו את המנות, המוצרים או השירותים שלכם, עם מחיר אם תרצו.",
     "productNamePlaceholder": "שם המוצר או השירות",
     "productPricePlaceholder": "מחיר (דירהם)",
+    "productCategoryPlaceholder": "קטגוריה (לדוגמה: מנות ראשונות)",
     "addProduct": "הוספת מוצר",
     "scanDocument": "סריקת תפריט או רשימת מחירים (תמונה)",
     "scanning": "מנתח את התמונה...",

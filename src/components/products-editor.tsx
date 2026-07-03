@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Plus, X, Camera, Loader2 } from "lucide-react";
 
-type ProductInput = { name: string; price: string };
+type ProductInput = { name: string; price: string; category: string };
 
 function fileToBase64(file: File): Promise<{ mediaType: string; base64: string }> {
   return new Promise((resolve, reject) => {
@@ -24,6 +24,7 @@ export function ProductsEditor({
   defaultProducts = [],
   namePlaceholder,
   pricePlaceholder,
+  categoryPlaceholder,
   addLabel,
   scanLabel,
   scanningLabel,
@@ -32,9 +33,10 @@ export function ProductsEditor({
   scanSuccessTemplate,
 }: {
   name: string;
-  defaultProducts?: { name: string; price: number | null }[];
+  defaultProducts?: { name: string; price: number | null; category?: string | null }[];
   namePlaceholder: string;
   pricePlaceholder: string;
+  categoryPlaceholder: string;
   addLabel: string;
   scanLabel: string;
   scanningLabel: string;
@@ -43,16 +45,20 @@ export function ProductsEditor({
   scanSuccessTemplate: string;
 }) {
   const [items, setItems] = useState<ProductInput[]>(
-    defaultProducts.map((p) => ({ name: p.name, price: p.price != null ? String(p.price) : "" }))
+    defaultProducts.map((p) => ({
+      name: p.name,
+      price: p.price != null ? String(p.price) : "",
+      category: p.category ?? "",
+    }))
   );
   const [scanning, setScanning] = useState(false);
   const [scanError, setScanError] = useState(false);
   const [scanSuccessCount, setScanSuccessCount] = useState<number | null>(null);
 
   function addItem() {
-    setItems((prev) => [...prev, { name: "", price: "" }]);
+    setItems((prev) => [...prev, { name: "", price: "", category: "" }]);
   }
-  function updateItem(i: number, field: "name" | "price", value: string) {
+  function updateItem(i: number, field: "name" | "price" | "category", value: string) {
     setItems((prev) => prev.map((it, idx) => (idx === i ? { ...it, [field]: value } : it)));
   }
   function removeItem(i: number) {
@@ -73,10 +79,13 @@ export function ProductsEditor({
         body: JSON.stringify({ images }),
       });
       if (!res.ok) throw new Error("extraction failed");
-      const data = (await res.json()) as { items: { name: string; price: number | null }[] };
+      const data = (await res.json()) as {
+        items: { name: string; price: number | null; category: string | null }[];
+      };
       const extracted = (data.items ?? []).map((it) => ({
         name: it.name,
         price: it.price != null ? String(it.price) : "",
+        category: it.category ?? "",
       }));
       setItems((prev) => [...prev, ...extracted]);
       setScanSuccessCount(extracted.length);
@@ -90,7 +99,11 @@ export function ProductsEditor({
   const serialized = JSON.stringify(
     items
       .filter((it) => it.name.trim())
-      .map((it) => ({ name: it.name.trim(), price: it.price.trim() ? Number(it.price) : null }))
+      .map((it) => ({
+        name: it.name.trim(),
+        price: it.price.trim() ? Number(it.price) : null,
+        category: it.category.trim() || null,
+      }))
   );
 
   return (
@@ -103,6 +116,12 @@ export function ProductsEditor({
               onChange={(e) => updateItem(i, "name", e.target.value)}
               placeholder={namePlaceholder}
               className="flex-1 rounded-lg border border-black/10 px-3 py-1.5 text-sm outline-none focus:border-ocean-dark"
+            />
+            <input
+              value={it.category}
+              onChange={(e) => updateItem(i, "category", e.target.value)}
+              placeholder={categoryPlaceholder}
+              className="w-32 shrink-0 rounded-lg border border-black/10 px-3 py-1.5 text-sm outline-none focus:border-ocean-dark"
             />
             <input
               value={it.price}

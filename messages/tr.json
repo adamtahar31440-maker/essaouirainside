@@ -196,6 +196,7 @@
     "productsHint": "İsteğe bağlı. Yemeklerinizi, ürünlerinizi veya hizmetlerinizi, isterseniz fiyatıyla birlikte ekleyin.",
     "productNamePlaceholder": "Ürün veya hizmet adı",
     "productPricePlaceholder": "Fiyat (MAD)",
+    "productCategoryPlaceholder": "Kategori (örn. Başlangıçlar)",
     "addProduct": "Ürün ekle",
     "scanDocument": "Menü veya fiyat listesi tarayın (fotoğraf)",
     "scanning": "Fotoğraf analiz ediliyor...",

@@ -266,9 +266,14 @@ export default async function ProDashboardPage({
               <p className="mb-2 text-xs text-foreground/50">{t("productsHint")}</p>
               <ProductsEditor
                 name="products"
-                defaultProducts={(myEstablishment.products ?? []).map((p) => ({ name: p.name.fr, price: p.price }))}
+                defaultProducts={(myEstablishment.products ?? []).map((p) => ({
+                  name: p.name.fr,
+                  price: p.price,
+                  category: p.category?.fr ?? null,
+                }))}
                 namePlaceholder={t("productNamePlaceholder")}
                 pricePlaceholder={t("productPricePlaceholder")}
+                categoryPlaceholder={t("productCategoryPlaceholder")}
                 addLabel={t("addProduct")}
                 scanLabel={t("scanDocument")}
                 scanningLabel={t("scanning")}

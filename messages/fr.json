@@ -196,6 +196,7 @@
     "productsHint": "Facultatif. Ajoutez vos plats, produits ou prestations avec un prix si vous le souhaitez.",
     "productNamePlaceholder": "Nom du produit ou service",
     "productPricePlaceholder": "Prix (MAD)",
+    "productCategoryPlaceholder": "Catégorie (ex : Entrées)",
     "addProduct": "Ajouter un produit",
     "scanDocument": "Scanner un menu ou une carte de prix (photo)",
     "scanning": "Analyse de la photo en cours...",

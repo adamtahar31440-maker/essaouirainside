@@ -104,7 +104,7 @@ export async function updateOwnEstablishment(formData: FormData) {
   const description = String(formData.get("description") ?? "");
   const hours = String(formData.get("hours") ?? "");
 
-  let productsInput: { name: string; price: number | null }[] = [];
+  let productsInput: { name: string; price: number | null; category: string | null }[] = [];
   try {
     productsInput = JSON.parse(String(formData.get("products") ?? "[]"));
   } catch {
@@ -115,12 +115,14 @@ export async function updateOwnEstablishment(formData: FormData) {
   const translationFields: Record<string, string> = { name, description, hours };
   productsInput.forEach((p, i) => {
     translationFields[`product_${i}`] = p.name;
+    if (p.category) translationFields[`category_${i}`] = p.category;
   });
   const translations = await translateFields(translationFields, targetLocales, "fr");
 
   const products = productsInput.map((p, i) => ({
     name: { fr: p.name, ...translations[`product_${i}`] },
     price: p.price,
+    category: p.category ? { fr: p.category, ...translations[`category_${i}`] } : null,
   }));
 
   const [subscription, plans] = await Promise.all([

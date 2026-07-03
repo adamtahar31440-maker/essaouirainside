@@ -196,6 +196,7 @@
     "productsHint": "Opcional. Adicione os seus pratos, produtos ou serviços, com um preço se desejar.",
     "productNamePlaceholder": "Nome do produto ou serviço",
     "productPricePlaceholder": "Preço (MAD)",
+    "productCategoryPlaceholder": "Categoria (ex.: Entradas)",
     "addProduct": "Adicionar um produto",
     "scanDocument": "Digitalizar um menu ou lista de preços (foto)",
     "scanning": "A analisar a foto...",

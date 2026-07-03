@@ -196,6 +196,7 @@
     "productsHint": "Optional. Fügen Sie Ihre Gerichte, Produkte oder Leistungen hinzu, mit Preis, wenn gewünscht.",
     "productNamePlaceholder": "Name des Produkts oder der Leistung",
     "productPricePlaceholder": "Preis (MAD)",
+    "productCategoryPlaceholder": "Kategorie (z. B. Vorspeisen)",
     "addProduct": "Produkt hinzufügen",
     "scanDocument": "Speisekarte oder Preisliste scannen (Foto)",
     "scanning": "Foto wird analysiert...",
