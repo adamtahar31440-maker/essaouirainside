@@ -112,23 +112,29 @@ export default async function EstablishmentPage({
       </div>
 
       {images.length > 0 && (
-        <div className="mt-4 grid grid-cols-2 gap-1 sm:h-[420px] sm:grid-cols-4 sm:grid-rows-2">
-          <div className="relative col-span-2 row-span-2 aspect-[4/3] overflow-hidden bg-sand sm:aspect-auto">
-            <Image src={images[0]} alt={name} fill className="object-cover" priority sizes="50vw" />
+        <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-6">
+          <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-4 md:grid-cols-6">
+            {images.slice(0, 6).map((img, i) => {
+              const isLastVisible = i === 5 && images.length > 6;
+              return (
+                <div key={i} className="relative aspect-square overflow-hidden rounded-lg bg-sand">
+                  <Image
+                    src={img}
+                    alt={`${name} ${i + 1}`}
+                    fill
+                    className="object-cover"
+                    priority={i === 0}
+                    sizes="(max-width: 640px) 33vw, (max-width: 768px) 25vw, 16vw"
+                  />
+                  {isLastVisible && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-sm font-semibold text-white">
+                      {t("morePhotos", { count: images.length - 6 })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
-          {images.slice(1, 5).map((img, i) => {
-            const isLastVisible = i === 3 && images.length > 5;
-            return (
-              <div key={i} className="relative hidden aspect-square overflow-hidden bg-sand sm:block">
-                <Image src={img} alt={`${name} ${i + 2}`} fill className="object-cover" sizes="25vw" />
-                {isLastVisible && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-sm font-semibold text-white">
-                    {t("morePhotos", { count: images.length - 5 })}
-                  </div>
-                )}
-              </div>
-            );
-          })}
         </div>
       )}
 
