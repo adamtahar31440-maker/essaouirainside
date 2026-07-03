@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import {
@@ -27,6 +26,7 @@ import { Section } from "@/components/section";
 import { MapSection } from "@/components/map-section";
 import { LabelBadgeHistory } from "@/components/label-badge-history";
 import { DirectionsButton } from "@/components/directions-button";
+import { PhotoGallery } from "@/components/photo-gallery";
 
 export async function generateMetadata({
   params,
@@ -128,28 +128,7 @@ export default async function EstablishmentPage({
 
       {images.length > 0 && (
         <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-6">
-          <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-4 md:grid-cols-6">
-            {images.slice(0, 6).map((img, i) => {
-              const isLastVisible = i === 5 && images.length > 6;
-              return (
-                <div key={i} className="relative aspect-square overflow-hidden rounded-lg bg-sand">
-                  <Image
-                    src={img}
-                    alt={`${name} ${i + 1}`}
-                    fill
-                    className="object-cover"
-                    priority={i === 0}
-                    sizes="(max-width: 640px) 33vw, (max-width: 768px) 25vw, 16vw"
-                  />
-                  {isLastVisible && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-sm font-semibold text-white">
-                      {t("morePhotos", { count: images.length - 6 })}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+          <PhotoGallery images={images} name={name} moreLabel={t("morePhotos", { count: images.length - 6 })} />
         </div>
       )}
 
