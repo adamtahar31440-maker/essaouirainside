@@ -23,6 +23,11 @@ function getClient() {
   return _client;
 }
 
+// Anthropic rejects overly large strict json_schema grammars ("compiled grammar is
+// too large"). Field count grows unboundedly with the number of products a pro adds,
+// so we cap how many fields go into a single request and merge the chunked results.
+const MAX_FIELDS_PER_CALL = 6;
+
 export async function translateFields(
   fields: Record<string, string>,
   targetLocales: string[],
@@ -34,6 +39,23 @@ export async function translateFields(
   const locales = targetLocales.filter((l) => l !== sourceLocale && LANGUAGE_NAMES[l]);
   if (locales.length === 0) return {};
 
+  const chunks: [string, string][][] = [];
+  for (let i = 0; i < entries.length; i += MAX_FIELDS_PER_CALL) {
+    chunks.push(entries.slice(i, i + MAX_FIELDS_PER_CALL));
+  }
+
+  const results = await Promise.all(
+    chunks.map((chunk) => translateChunk(chunk, locales, sourceLocale))
+  );
+
+  return Object.assign({}, ...results);
+}
+
+async function translateChunk(
+  entries: [string, string][],
+  locales: string[],
+  sourceLocale: string
+): Promise<Record<string, Record<string, string>>> {
   const properties: Record<string, unknown> = {};
   for (const [field] of entries) {
     properties[field] = {
