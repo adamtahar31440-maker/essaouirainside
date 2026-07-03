@@ -21,7 +21,8 @@ import { ImageUploader } from "@/components/image-uploader";
 import { HoursEditor } from "@/components/hours-editor";
 import { ProductsEditor } from "@/components/products-editor";
 import { UpdateSuccessBanner } from "@/components/update-success-banner";
-import { PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
+import { PRICE_LEVELS, priceLevelLabel, subcategoryLabel } from "@/lib/labels";
+import { AiDescriptionField } from "@/components/ai-description-field";
 import { ALL_LOCALES } from "@/lib/localized-form";
 import { localeNames } from "@/i18n/routing";
 import { ProFicheForm } from "@/components/pro-fiche-form";
@@ -177,10 +178,20 @@ export default async function ProDashboardPage({
               <label className={labelClass}>{t("fieldName")}</label>
               <input name="name" defaultValue={myEstablishment.name.fr} className={inputClass} required />
             </div>
-            <div>
-              <label className={labelClass}>{t("fieldDescription")}</label>
-              <textarea name="description" defaultValue={myEstablishment.description.fr} rows={4} className={inputClass} />
-            </div>
+            <AiDescriptionField
+              label={t("fieldDescription")}
+              defaultValue={myEstablishment.description.fr}
+              locale={locale}
+              businessName={myEstablishment.name.fr}
+              category={subcategoryLabel(myEstablishment.subcategory, locale)}
+              generateLabel={t("generateDescriptionButton")}
+              generatePendingLabel={t("generateDescriptionButtonPending")}
+              emptyErrorText={t("generateDescriptionEmptyError")}
+              errorText={t("generateDescriptionError")}
+              placeholder={t("generateDescriptionPlaceholder")}
+              labelClassName={labelClass}
+              inputClassName={inputClass}
+            />
             <div>
               <label className={labelClass}>{t("fieldHours")}</label>
               <HoursEditor
