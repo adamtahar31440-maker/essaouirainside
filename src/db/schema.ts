@@ -38,6 +38,11 @@ export const establishments = pgTable("establishments", {
   website: varchar("website", { length: 255 }),
   instagram: varchar("instagram", { length: 255 }),
   facebook: varchar("facebook", { length: 255 }),
+  // Links out to the merchant's existing profiles on trusted review
+  // platforms — shown alongside our own on-site reviews, not fetched
+  // via API (no scraping/ToS issues, no extra cost).
+  googleReviewsUrl: varchar("google_reviews_url", { length: 255 }),
+  tripadvisorUrl: varchar("tripadvisor_url", { length: 255 }),
   hours: jsonb("hours").$type<Localized>(),
   priceLevel: varchar("price_level", { length: 8 }), // €, €€, €€€
   services: jsonb("services").$type<LocalizedList>(),

@@ -3,7 +3,20 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Phone, MessageCircle, Globe, MapPin, Clock, Wifi, Car, Accessibility, Star, ChevronRight } from "lucide-react";
+import {
+  Phone,
+  MessageCircle,
+  Globe,
+  MapPin,
+  Clock,
+  Wifi,
+  Car,
+  Accessibility,
+  Star,
+  ChevronRight,
+  Link2,
+  ExternalLink,
+} from "lucide-react";
 import { CATEGORY_PATH_TO_TYPE } from "@/lib/categories";
 import { subcategoryLabel, priceLevelLabel } from "@/lib/labels";
 import { getEstablishmentBySlug, getSimilarEstablishments } from "@/lib/data";
@@ -248,6 +261,52 @@ export default async function EstablishmentPage({
                 </span>
               )}
             </h2>
+
+            {(e.instagram || e.facebook || e.googleReviewsUrl || e.tripadvisorUrl) && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {e.instagram && (
+                  <a
+                    href={e.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 rounded-full border border-black/10 px-3 py-1.5 text-xs font-medium text-foreground/70 hover:bg-sand/40"
+                  >
+                    <Link2 size={14} /> Instagram
+                  </a>
+                )}
+                {e.facebook && (
+                  <a
+                    href={e.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 rounded-full border border-black/10 px-3 py-1.5 text-xs font-medium text-foreground/70 hover:bg-sand/40"
+                  >
+                    <Link2 size={14} /> Facebook
+                  </a>
+                )}
+                {e.googleReviewsUrl && (
+                  <a
+                    href={e.googleReviewsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 rounded-full border border-black/10 px-3 py-1.5 text-xs font-medium text-foreground/70 hover:bg-sand/40"
+                  >
+                    <ExternalLink size={14} /> {t("googleReviewsLabel")}
+                  </a>
+                )}
+                {e.tripadvisorUrl && (
+                  <a
+                    href={e.tripadvisorUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 rounded-full border border-black/10 px-3 py-1.5 text-xs font-medium text-foreground/70 hover:bg-sand/40"
+                  >
+                    <ExternalLink size={14} /> {t("tripadvisorLabel")}
+                  </a>
+                )}
+              </div>
+            )}
+
             {reviews.length === 0 ? (
               <p className="mt-3 text-sm text-foreground/60">{t("noReviews")}</p>
             ) : (

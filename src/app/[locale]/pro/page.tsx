@@ -201,6 +201,50 @@ export default async function ProDashboardPage({
                 <input name="website" defaultValue={myEstablishment.website ?? ""} className={inputClass} />
               </div>
             </div>
+
+            <div>
+              <label className={labelClass}>{t("fieldSocialReviews")}</label>
+              <p className="mb-2 text-xs text-foreground/50">{t("socialReviewsHint")}</p>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className={labelClass}>Instagram</label>
+                  <input
+                    name="instagram"
+                    defaultValue={myEstablishment.instagram ?? ""}
+                    placeholder="https://instagram.com/..."
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>Facebook</label>
+                  <input
+                    name="facebook"
+                    defaultValue={myEstablishment.facebook ?? ""}
+                    placeholder="https://facebook.com/..."
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>{t("googleReviewsLabel")}</label>
+                  <input
+                    name="googleReviewsUrl"
+                    defaultValue={myEstablishment.googleReviewsUrl ?? ""}
+                    placeholder="https://g.page/r/..."
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>{t("tripadvisorLabel")}</label>
+                  <input
+                    name="tripadvisorUrl"
+                    defaultValue={myEstablishment.tripadvisorUrl ?? ""}
+                    placeholder="https://tripadvisor.com/..."
+                    className={inputClass}
+                  />
+                </div>
+              </div>
+            </div>
+
             <div>
               <label className={labelClass}>{t("fieldPriceLevel")}</label>
               <select name="priceLevel" defaultValue={myEstablishment.priceLevel ?? "€€"} className={inputClass}>
