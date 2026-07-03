@@ -169,6 +169,25 @@ export default async function EstablishmentPage({
             </div>
           )}
 
+          {hours && (
+            <div className="mt-6 lg:hidden">
+              <HoursDisplay
+                value={hours}
+                dayLabels={[
+                  tDash("dayMon"),
+                  tDash("dayTue"),
+                  tDash("dayWed"),
+                  tDash("dayThu"),
+                  tDash("dayFri"),
+                  tDash("daySat"),
+                  tDash("daySun"),
+                ]}
+                closedLabel={tDash("hoursClosed")}
+                todayLabel={t("today")}
+              />
+            </div>
+          )}
+
           <div className="mt-8">
             <h2 className="text-lg font-semibold text-ocean-dark">{t("about")}</h2>
             <p className="mt-2 whitespace-pre-line leading-relaxed text-foreground/80">{description}</p>
@@ -345,7 +364,7 @@ export default async function EstablishmentPage({
             </p>
           )}
           {hours && (
-            <div className="mt-3">
+            <div className="mt-3 hidden lg:block">
               <HoursDisplay
                 value={hours}
                 dayLabels={[
