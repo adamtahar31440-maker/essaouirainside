@@ -17,7 +17,6 @@ import { SubscriptionPlans } from "@/components/subscription-plans";
 import { LabelBadgeHistory } from "@/components/label-badge-history";
 import { ProApplicationForm } from "@/components/pro-application-form";
 import { DashboardLangSwitcher } from "@/components/dashboard-lang-switcher";
-import { SubmitButton } from "@/components/submit-button";
 import { ImageUploader } from "@/components/image-uploader";
 import { HoursEditor } from "@/components/hours-editor";
 import { ProductsEditor } from "@/components/products-editor";
@@ -25,8 +24,12 @@ import { UpdateSuccessBanner } from "@/components/update-success-banner";
 import { PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
 import { ALL_LOCALES } from "@/lib/localized-form";
 import { localeNames } from "@/i18n/routing";
+import { ProFicheForm } from "@/components/pro-fiche-form";
 
-const TRANSLATING_LOCALE_NAMES = ALL_LOCALES.filter((l) => l !== "fr").map((l) => localeNames[l]);
+const TRANSLATING_LOCALES = ALL_LOCALES.filter((l) => l !== "fr").map((l) => ({
+  code: l,
+  name: localeNames[l],
+}));
 
 const OPEN_LABEL_APPLICATION_STATUSES = ["pending", "info_requested", "visit_scheduled", "on_hold"];
 
@@ -150,7 +153,12 @@ export default async function ProDashboardPage({
       <section className="rounded-2xl border border-black/5 bg-white p-6">
         <h2 className="mb-3 text-sm font-semibold text-ocean-dark">{t("establishmentTitle")}</h2>
         {myEstablishment ? (
-          <form action={updateOwnEstablishment} className="space-y-6">
+          <ProFicheForm
+            action={updateOwnEstablishment}
+            translatingLocales={TRANSLATING_LOCALES}
+            saveLabel={t("save")}
+            savePendingLabel={t("savePending")}
+          >
             <input type="hidden" name="locale" value={locale} />
             <input type="hidden" name="id" value={myEstablishment.id} />
 
@@ -321,12 +329,7 @@ export default async function ProDashboardPage({
               limitReachedText={typeof maxPhotos === "number" ? t("imagesLimitReached", { max: maxPhotos }) : undefined}
             />
 
-            <SubmitButton
-              label={t("save")}
-              pendingLabel={t("savePending")}
-              translatingLocales={TRANSLATING_LOCALE_NAMES}
-            />
-          </form>
+          </ProFicheForm>
         ) : (
           <p className="text-sm text-foreground/60">{t("noEstablishment")}</p>
         )}

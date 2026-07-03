@@ -111,13 +111,37 @@ export async function updateOwnEstablishment(formData: FormData) {
     productsInput = [];
   }
 
+  let clientTranslations: Record<string, Record<string, string>> = {};
+  try {
+    clientTranslations = JSON.parse(String(formData.get("translations") ?? "{}"));
+  } catch {
+    clientTranslations = {};
+  }
+
   const targetLocales = ALL_LOCALES.filter((l) => l !== "fr");
   const translationFields: Record<string, string> = { name, description, hours };
   productsInput.forEach((p, i) => {
     translationFields[`product_${i}`] = p.name;
     if (p.category) translationFields[`category_${i}`] = p.category;
   });
-  const translations = await translateFields(translationFields, targetLocales, "fr");
+
+  // The dashboard already translates language by language client-side (for a real
+  // progress indicator) before submitting. Only fall back to a server-side batch
+  // translation for locales the client didn't supply (JS disabled, a request failed).
+  const missingLocales = targetLocales.filter((l) => !clientTranslations[l]);
+  const serverTranslations =
+    missingLocales.length > 0
+      ? await translateFields(translationFields, missingLocales, "fr")
+      : {};
+
+  const translations: Record<string, Record<string, string>> = {};
+  for (const field of Object.keys(translationFields)) {
+    translations[field] = {};
+    for (const locale of targetLocales) {
+      const value = clientTranslations[locale]?.[field] || serverTranslations[field]?.[locale];
+      if (value) translations[field][locale] = value;
+    }
+  }
 
   const products = productsInput.map((p, i) => ({
     name: { fr: p.name, ...translations[`product_${i}`] },

@@ -30,6 +30,7 @@ import { LabelBadgeHistory } from "@/components/label-badge-history";
 import { DirectionsButton } from "@/components/directions-button";
 import { PhotoGallery } from "@/components/photo-gallery";
 import { HoursDisplay } from "@/components/hours-display";
+import { ProductCategoryList } from "@/components/product-category-list";
 
 export async function generateMetadata({
   params,
@@ -210,26 +211,13 @@ export default async function EstablishmentPage({
           {products.length > 0 && (
             <div className="mt-8">
               <h2 className="text-lg font-semibold text-ocean-dark">{t("productsTitle")}</h2>
-              <div className="mt-3 space-y-5">
-                {productGroups.map((group, gi) => (
-                  <div key={gi}>
-                    {group.category && (
-                      <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-azur">
-                        {group.category}
-                      </h3>
-                    )}
-                    <div className="divide-y divide-black/5 rounded-2xl border border-black/5">
-                      {group.items.map((p, i) => (
-                        <div key={i} className="flex items-center justify-between gap-4 px-4 py-3">
-                          <span className="text-sm text-foreground/80">{p.name[locale] ?? p.name.fr}</span>
-                          {p.price != null && (
-                            <span className="shrink-0 text-sm font-semibold text-ocean-dark">{p.price} MAD</span>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+              <div className="mt-3">
+                <ProductCategoryList
+                  groups={productGroups.map((g) => ({
+                    category: g.category,
+                    items: g.items.map((p) => ({ name: p.name[locale] ?? p.name.fr, price: p.price })),
+                  }))}
+                />
               </div>
             </div>
           )}
