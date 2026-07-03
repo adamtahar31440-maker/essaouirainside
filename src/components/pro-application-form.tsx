@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Sparkles, Loader2 } from "lucide-react";
 import { ALL_LOCALES, LOCALE_LABELS } from "@/lib/localized-form";
 import { PRO_FORM_STRINGS } from "@/lib/pro-form-i18n";
 import { CATEGORY_SUBCATEGORIES } from "@/lib/categories";
@@ -28,9 +29,45 @@ export function ProApplicationForm({
   const t = PRO_FORM_STRINGS[lang] ?? PRO_FORM_STRINGS.fr;
   const dir = RTL_LOCALES.includes(lang) ? "rtl" : "ltr";
 
+  const nameRef = useRef<HTMLInputElement>(null);
+  const categorySelectRef = useRef<HTMLSelectElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const [generatingDescription, setGeneratingDescription] = useState(false);
+  const [generateError, setGenerateError] = useState<string | null>(null);
+
   const subcategories = Object.values(CATEGORY_SUBCATEGORIES)
     .flat()
     .filter((v, i, arr) => arr.indexOf(v) === i);
+
+  async function handleGenerateDescription() {
+    const keywords = descriptionRef.current?.value.trim() ?? "";
+    if (!keywords) {
+      setGenerateError(t.generateDescriptionEmptyError);
+      return;
+    }
+    setGeneratingDescription(true);
+    setGenerateError(null);
+    try {
+      const res = await fetch("/api/pro/generate-description", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          keywords,
+          locale: lang,
+          name: nameRef.current?.value || undefined,
+          category: categorySelectRef.current?.selectedOptions[0]?.text || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.description) throw new Error(data.error ?? "Generation failed");
+      if (descriptionRef.current) descriptionRef.current.value = data.description;
+    } catch (err) {
+      console.error("AI description generation failed:", err);
+      setGenerateError(t.generateDescriptionError);
+    } finally {
+      setGeneratingDescription(false);
+    }
+  }
 
   return (
     <div>
@@ -66,7 +103,7 @@ export function ProApplicationForm({
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label className={labelClass}>{t.category}</label>
-            <select name="categoryId" className={inputClass} required>
+            <select name="categoryId" ref={categorySelectRef} className={inputClass} required>
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name[lang] ?? c.name.fr}
@@ -88,11 +125,34 @@ export function ProApplicationForm({
 
         <div>
           <label className={labelClass}>{t.name}</label>
-          <input name="name" className={inputClass} required dir={dir} />
+          <input name="name" ref={nameRef} className={inputClass} required dir={dir} />
         </div>
         <div>
-          <label className={labelClass}>{t.description}</label>
-          <textarea name="description" rows={4} className={inputClass} dir={dir} />
+          <div className="mb-1 flex items-center justify-between gap-2">
+            <label className={labelClass}>{t.description}</label>
+            <button
+              type="button"
+              onClick={handleGenerateDescription}
+              disabled={generatingDescription}
+              className="flex shrink-0 items-center gap-1 rounded-full bg-ocean-dark/10 px-3 py-1 text-xs font-semibold text-ocean-dark hover:bg-ocean-dark/20 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {generatingDescription ? (
+                <Loader2 size={12} className="animate-spin" />
+              ) : (
+                <Sparkles size={12} />
+              )}
+              {generatingDescription ? t.generateDescriptionButtonPending : t.generateDescriptionButton}
+            </button>
+          </div>
+          <textarea
+            name="description"
+            ref={descriptionRef}
+            rows={4}
+            placeholder={t.generateDescriptionPlaceholder}
+            className={inputClass}
+            dir={dir}
+          />
+          {generateError && <p className="mt-1 text-xs font-medium text-red-600">{generateError}</p>}
         </div>
 
         <div>

@@ -8,6 +8,11 @@ export type ProFormStrings = {
   subcategory: string;
   name: string;
   description: string;
+  generateDescriptionButton: string;
+  generateDescriptionButtonPending: string;
+  generateDescriptionPlaceholder: string;
+  generateDescriptionEmptyError: string;
+  generateDescriptionError: string;
   address: string;
   addressHint: string;
   lat: string;
@@ -44,6 +49,12 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     subcategory: "Sous-catégorie",
     name: "Nom de l'établissement",
     description: "Description",
+    generateDescriptionButton: "Rédiger avec l'IA",
+    generateDescriptionButtonPending: "Rédaction en cours...",
+    generateDescriptionPlaceholder:
+      "Tapez quelques mots-clés (ex : cuisine marocaine traditionnelle, vue sur l'océan, accueil chaleureux), puis cliquez sur \"Rédiger avec l'IA\".",
+    generateDescriptionEmptyError: "Tapez d'abord quelques mots-clés dans le champ description.",
+    generateDescriptionError: "La rédaction a échoué. Veuillez réessayer.",
     address: "Adresse",
     addressHint: "Tapez pour rechercher une adresse existante à Essaouira.",
     lat: "Latitude",
@@ -81,6 +92,12 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     subcategory: "Subcategory",
     name: "Business name",
     description: "Description",
+    generateDescriptionButton: "Write with AI",
+    generateDescriptionButtonPending: "Writing...",
+    generateDescriptionPlaceholder:
+      "Type a few keywords (e.g. traditional Moroccan cuisine, ocean view, warm welcome), then click \"Write with AI\".",
+    generateDescriptionEmptyError: "Type a few keywords in the description field first.",
+    generateDescriptionError: "Writing failed. Please try again.",
     address: "Address",
     addressHint: "Type to search for an existing address in Essaouira.",
     lat: "Latitude",
@@ -118,6 +135,12 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     subcategory: "الفئة الفرعية",
     name: "اسم المنشأة",
     description: "الوصف",
+    generateDescriptionButton: "الكتابة بالذكاء الاصطناعي",
+    generateDescriptionButtonPending: "جارٍ الكتابة...",
+    generateDescriptionPlaceholder:
+      "اكتب بضع كلمات مفتاحية (مثال: مطبخ مغربي تقليدي، إطلالة على المحيط، استقبال دافئ)، ثم اضغط على \"الكتابة بالذكاء الاصطناعي\".",
+    generateDescriptionEmptyError: "اكتب أولاً بعض الكلمات المفتاحية في حقل الوصف.",
+    generateDescriptionError: "فشلت الكتابة. يرجى المحاولة مرة أخرى.",
     address: "العنوان",
     addressHint: "اكتب للبحث عن عنوان موجود في الصويرة.",
     lat: "خط العرض",
@@ -154,6 +177,12 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     subcategory: "Subcategoría",
     name: "Nombre del establecimiento",
     description: "Descripción",
+    generateDescriptionButton: "Redactar con IA",
+    generateDescriptionButtonPending: "Redactando...",
+    generateDescriptionPlaceholder:
+      "Escribe algunas palabras clave (ej.: cocina marroquí tradicional, vistas al mar, recibimiento cálido) y haz clic en \"Redactar con IA\".",
+    generateDescriptionEmptyError: "Escribe primero algunas palabras clave en el campo de descripción.",
+    generateDescriptionError: "La redacción falló. Inténtalo de nuevo.",
     address: "Dirección",
     addressHint: "Escribe para buscar una dirección existente en Essaouira.",
     lat: "Latitud",
@@ -191,6 +220,12 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     subcategory: "Unterkategorie",
     name: "Name des Betriebs",
     description: "Beschreibung",
+    generateDescriptionButton: "Mit KI verfassen",
+    generateDescriptionButtonPending: "Wird verfasst...",
+    generateDescriptionPlaceholder:
+      "Geben Sie ein paar Stichwörter ein (z. B. traditionelle marokkanische Küche, Meerblick, herzlicher Empfang) und klicken Sie auf \"Mit KI verfassen\".",
+    generateDescriptionEmptyError: "Geben Sie zuerst ein paar Stichwörter in das Beschreibungsfeld ein.",
+    generateDescriptionError: "Das Verfassen ist fehlgeschlagen. Bitte versuchen Sie es erneut.",
     address: "Adresse",
     addressHint: "Tippen Sie, um nach einer bestehenden Adresse in Essaouira zu suchen.",
     lat: "Breitengrad",
@@ -228,6 +263,12 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     subcategory: "Sottocategoria",
     name: "Nome dell'attività",
     description: "Descrizione",
+    generateDescriptionButton: "Scrivi con l'IA",
+    generateDescriptionButtonPending: "Scrittura in corso...",
+    generateDescriptionPlaceholder:
+      "Digita alcune parole chiave (es.: cucina marocchina tradizionale, vista sull'oceano, accoglienza calorosa), poi clicca su \"Scrivi con l'IA\".",
+    generateDescriptionEmptyError: "Digita prima alcune parole chiave nel campo descrizione.",
+    generateDescriptionError: "Scrittura non riuscita. Riprova.",
     address: "Indirizzo",
     addressHint: "Digita per cercare un indirizzo esistente a Essaouira.",
     lat: "Latitudine",
@@ -265,6 +306,12 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     subcategory: "Subcategoria",
     name: "Nome do estabelecimento",
     description: "Descrição",
+    generateDescriptionButton: "Redigir com IA",
+    generateDescriptionButtonPending: "A redigir...",
+    generateDescriptionPlaceholder:
+      "Digite algumas palavras-chave (ex.: culinária marroquina tradicional, vista para o oceano, receção calorosa) e clique em \"Redigir com IA\".",
+    generateDescriptionEmptyError: "Digite primeiro algumas palavras-chave no campo de descrição.",
+    generateDescriptionError: "A redação falhou. Tente novamente.",
     address: "Endereço",
     addressHint: "Digite para buscar um endereço existente em Essaouira.",
     lat: "Latitude",
@@ -302,6 +349,12 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     subcategory: "Подкатегория",
     name: "Название заведения",
     description: "Описание",
+    generateDescriptionButton: "Написать с помощью ИИ",
+    generateDescriptionButtonPending: "Идёт написание...",
+    generateDescriptionPlaceholder:
+      "Введите несколько ключевых слов (например: традиционная марокканская кухня, вид на океан, тёплый приём), затем нажмите «Написать с помощью ИИ».",
+    generateDescriptionEmptyError: "Сначала введите несколько ключевых слов в поле описания.",
+    generateDescriptionError: "Не удалось создать описание. Попробуйте снова.",
     address: "Адрес",
     addressHint: "Введите текст, чтобы найти существующий адрес в Эс-Сувейре.",
     lat: "Широта",
@@ -339,6 +392,12 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     subcategory: "子类别",
     name: "商户名称",
     description: "描述",
+    generateDescriptionButton: "用AI撰写",
+    generateDescriptionButtonPending: "正在撰写...",
+    generateDescriptionPlaceholder:
+      "输入几个关键词(例如:传统摩洛哥美食、海景、热情接待),然后点击\"用AI撰写\"。",
+    generateDescriptionEmptyError: "请先在描述字段中输入几个关键词。",
+    generateDescriptionError: "撰写失败,请重试。",
     address: "地址",
     addressHint: "输入以搜索索维拉现有的地址。",
     lat: "纬度",
@@ -375,6 +434,12 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     subcategory: "하위 카테고리",
     name: "업체명",
     description: "설명",
+    generateDescriptionButton: "AI로 작성하기",
+    generateDescriptionButtonPending: "작성 중...",
+    generateDescriptionPlaceholder:
+      "키워드 몇 개를 입력하세요 (예: 전통 모로코 요리, 오션뷰, 따뜻한 환대), 그런 다음 \"AI로 작성하기\"를 클릭하세요.",
+    generateDescriptionEmptyError: "먼저 설명란에 키워드를 입력해 주세요.",
+    generateDescriptionError: "작성에 실패했습니다. 다시 시도해 주세요.",
     address: "주소",
     addressHint: "에사우이라의 기존 주소를 검색하려면 입력하세요.",
     lat: "위도",
@@ -412,6 +477,12 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     subcategory: "Alt kategori",
     name: "İşletme adı",
     description: "Açıklama",
+    generateDescriptionButton: "Yapay Zeka ile Yaz",
+    generateDescriptionButtonPending: "Yazılıyor...",
+    generateDescriptionPlaceholder:
+      "Birkaç anahtar kelime yazın (ör. geleneksel Fas mutfağı, okyanus manzarası, sıcak karşılama), ardından \"Yapay Zeka ile Yaz\"a tıklayın.",
+    generateDescriptionEmptyError: "Önce açıklama alanına birkaç anahtar kelime yazın.",
+    generateDescriptionError: "Yazma başarısız oldu. Lütfen tekrar deneyin.",
     address: "Adres",
     addressHint: "Essaouira'da mevcut bir adresi aramak için yazın.",
     lat: "Enlem",
@@ -449,6 +520,12 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     subcategory: "תת-קטגוריה",
     name: "שם העסק",
     description: "תיאור",
+    generateDescriptionButton: "כתיבה עם AI",
+    generateDescriptionButtonPending: "כותב...",
+    generateDescriptionPlaceholder:
+      "הקלידו כמה מילות מפתח (למשל: מטבח מרוקאי מסורתי, נוף לים, קבלת פנים חמה), ואז לחצו על \"כתיבה עם AI\".",
+    generateDescriptionEmptyError: "הקלידו קודם כמה מילות מפתח בשדה התיאור.",
+    generateDescriptionError: "הכתיבה נכשלה. נסו שוב.",
     address: "כתובת",
     addressHint: "הקלידו כדי לחפש כתובת קיימת באסאווירה.",
     lat: "קו רוחב",
