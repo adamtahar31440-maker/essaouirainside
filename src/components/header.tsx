@@ -64,6 +64,12 @@ export function Header({ activeModules = [] }: { activeModules?: string[] }) {
             <Search size={18} />
           </Link>
           <LocaleSwitcher pathWithoutLocale={pathWithoutLocale} />
+          <Link
+            href={`/${locale}/pro`}
+            className="rounded-full bg-ocean-dark px-4 py-2 text-sm font-semibold text-white transition hover:bg-ocean"
+          >
+            {t("proSpace")}
+          </Link>
         </div>
 
         <button
@@ -97,6 +103,13 @@ export function Header({ activeModules = [] }: { activeModules?: string[] }) {
               className="rounded-md px-2 py-2 text-sm font-medium text-foreground/80 hover:bg-sand/50"
             >
               {t("search")}
+            </Link>
+            <Link
+              href={`/${locale}/pro`}
+              onClick={() => setOpen(false)}
+              className="mt-1 rounded-full bg-ocean-dark px-4 py-2 text-center text-sm font-semibold text-white"
+            >
+              {t("proSpace")}
             </Link>
           </nav>
           <div className="mt-3 grid grid-cols-3 gap-2">
