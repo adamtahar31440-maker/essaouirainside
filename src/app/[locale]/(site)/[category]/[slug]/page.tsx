@@ -7,7 +7,6 @@ import {
   MessageCircle,
   Globe,
   MapPin,
-  Clock,
   Wifi,
   Car,
   Accessibility,
@@ -27,6 +26,7 @@ import { MapSection } from "@/components/map-section";
 import { LabelBadgeHistory } from "@/components/label-badge-history";
 import { DirectionsButton } from "@/components/directions-button";
 import { PhotoGallery } from "@/components/photo-gallery";
+import { HoursDisplay } from "@/components/hours-display";
 
 export async function generateMetadata({
   params,
@@ -67,10 +67,11 @@ export default async function EstablishmentPage({
   const e = await getEstablishmentBySlug(slug);
   if (!e) notFound();
 
-  const [t, tCat, tNav, similar, badges, reviews] = await Promise.all([
+  const [t, tCat, tNav, tDash, similar, badges, reviews] = await Promise.all([
     getTranslations("establishment"),
     getTranslations("categories"),
     getTranslations("nav"),
+    getTranslations("dashboard"),
     getSimilarEstablishments(e.categoryId, e.slug),
     getLabelBadges(e.id),
     getApprovedReviewsForEstablishment(e.id),
@@ -334,9 +335,22 @@ export default async function EstablishmentPage({
             </p>
           )}
           {hours && (
-            <p className="mt-3 flex items-start gap-2 text-sm text-foreground/70">
-              <Clock size={16} className="mt-0.5 shrink-0" /> {hours}
-            </p>
+            <div className="mt-3">
+              <HoursDisplay
+                value={hours}
+                dayLabels={[
+                  tDash("dayMon"),
+                  tDash("dayTue"),
+                  tDash("dayWed"),
+                  tDash("dayThu"),
+                  tDash("dayFri"),
+                  tDash("daySat"),
+                  tDash("daySun"),
+                ]}
+                closedLabel={tDash("hoursClosed")}
+                todayLabel={t("today")}
+              />
+            </div>
           )}
           <div className="mt-5 flex flex-col gap-2">
             {e.phone && (
