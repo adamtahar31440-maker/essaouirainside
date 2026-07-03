@@ -24,9 +24,12 @@ function getClient() {
 }
 
 // Anthropic rejects overly large strict json_schema grammars ("compiled grammar is
-// too large"). Field count grows unboundedly with the number of products a pro adds,
-// so we cap how many fields go into a single request and merge the chunked results.
+// too large") and long outputs can get cut off mid-JSON if a chunk's total translated
+// text approaches max_tokens. Field count grows unboundedly with the number of
+// products a pro adds, and a single field (e.g. description) can be a long paragraph,
+// so chunks are bounded by both field count and cumulative source character length.
 const MAX_FIELDS_PER_CALL = 6;
+const MAX_CHARS_PER_CALL = 600;
 
 export async function translateFields(
   fields: Record<string, string>,
@@ -40,9 +43,22 @@ export async function translateFields(
   if (locales.length === 0) return {};
 
   const chunks: [string, string][][] = [];
-  for (let i = 0; i < entries.length; i += MAX_FIELDS_PER_CALL) {
-    chunks.push(entries.slice(i, i + MAX_FIELDS_PER_CALL));
+  let current: [string, string][] = [];
+  let currentChars = 0;
+  for (const entry of entries) {
+    const [, value] = entry;
+    if (
+      current.length > 0 &&
+      (current.length >= MAX_FIELDS_PER_CALL || currentChars + value.length > MAX_CHARS_PER_CALL)
+    ) {
+      chunks.push(current);
+      current = [];
+      currentChars = 0;
+    }
+    current.push(entry);
+    currentChars += value.length;
   }
+  if (current.length > 0) chunks.push(current);
 
   const results = await Promise.all(
     chunks.map((chunk) => translateChunk(chunk, locales, sourceLocale))
@@ -70,34 +86,43 @@ async function translateChunk(
   const localeList = locales.map((l) => `${l} (${LANGUAGE_NAMES[l]})`).join(", ");
   const sourceLanguageName = LANGUAGE_NAMES[sourceLocale] ?? "French";
 
-  const response = await getClient().messages.create({
-    model: MODEL,
-    max_tokens: 4096,
-    system:
-      "You are a professional tourism translator for a Morocco travel platform (Essaouira Inside). " +
-      `Translate the given ${sourceLanguageName} source fields into every requested target language. ` +
-      "Keep proper nouns, brand names, and place names in their original script. " +
-      "Preserve tone (warm, informative, tourism-oriented) and any formatting. Do not add commentary.",
-    messages: [
-      {
-        role: "user",
-        content: `Translate these ${sourceLanguageName} fields into: ${localeList}.\n\n${sourceText}`,
-      },
-    ],
-    output_config: {
-      format: {
-        type: "json_schema",
-        schema: {
-          type: "object",
-          properties,
-          required: Object.keys(properties),
-          additionalProperties: false,
+  // A translation hiccup (schema too large, output cut off, API error) must never
+  // crash the whole save — the pro would just see a blank error page. Fields that
+  // fail to translate this round simply keep their source-language value only;
+  // the next save retries them.
+  try {
+    const response = await getClient().messages.create({
+      model: MODEL,
+      max_tokens: 8192,
+      system:
+        "You are a professional tourism translator for a Morocco travel platform (Essaouira Inside). " +
+        `Translate the given ${sourceLanguageName} source fields into every requested target language. ` +
+        "Keep proper nouns, brand names, and place names in their original script. " +
+        "Preserve tone (warm, informative, tourism-oriented) and any formatting. Do not add commentary.",
+      messages: [
+        {
+          role: "user",
+          content: `Translate these ${sourceLanguageName} fields into: ${localeList}.\n\n${sourceText}`,
+        },
+      ],
+      output_config: {
+        format: {
+          type: "json_schema",
+          schema: {
+            type: "object",
+            properties,
+            required: Object.keys(properties),
+            additionalProperties: false,
+          },
         },
       },
-    },
-  });
+    });
 
-  const block = response.content.find((c) => c.type === "text");
-  if (!block || block.type !== "text") return {};
-  return JSON.parse(block.text) as Record<string, Record<string, string>>;
+    const block = response.content.find((c) => c.type === "text");
+    if (!block || block.type !== "text") return {};
+    return JSON.parse(block.text) as Record<string, Record<string, string>>;
+  } catch (err) {
+    console.error("translateFields chunk failed:", err);
+    return {};
+  }
 }

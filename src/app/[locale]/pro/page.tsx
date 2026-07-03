@@ -23,6 +23,10 @@ import { HoursEditor } from "@/components/hours-editor";
 import { ProductsEditor } from "@/components/products-editor";
 import { UpdateSuccessBanner } from "@/components/update-success-banner";
 import { PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
+import { ALL_LOCALES } from "@/lib/localized-form";
+import { localeNames } from "@/i18n/routing";
+
+const TRANSLATING_LOCALE_NAMES = ALL_LOCALES.filter((l) => l !== "fr").map((l) => localeNames[l]);
 
 const OPEN_LABEL_APPLICATION_STATUSES = ["pending", "info_requested", "visit_scheduled", "on_hold"];
 
@@ -317,7 +321,11 @@ export default async function ProDashboardPage({
               limitReachedText={typeof maxPhotos === "number" ? t("imagesLimitReached", { max: maxPhotos }) : undefined}
             />
 
-            <SubmitButton label={t("save")} pendingLabel={t("savePending")} />
+            <SubmitButton
+              label={t("save")}
+              pendingLabel={t("savePending")}
+              translatingLocales={TRANSLATING_LOCALE_NAMES}
+            />
           </form>
         ) : (
           <p className="text-sm text-foreground/60">{t("noEstablishment")}</p>
