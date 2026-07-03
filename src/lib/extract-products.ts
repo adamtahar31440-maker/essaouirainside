@@ -23,13 +23,21 @@ export async function extractProductsFromImages(
       "(restaurant menus, hairdresser price lists, shop price tags, activity price boards, etc.) for a " +
       "Morocco tourism business directory. Read every item name and its price if visible. Extract the " +
       "numeric price exactly as written (no currency conversion). If a price isn't shown for an item, " +
-      "use null. Keep item names in the language they're written in. Ignore headers, decorative text, " +
-      "addresses, phone numbers, and anything that isn't an actual product/service/price entry. " +
+      "use null. Ignore headers, decorative text, addresses, phone numbers, and anything that isn't an " +
+      "actual product/service/price entry. " +
       "The document is usually organized into sections with a heading (e.g. Entrées/Plats/Desserts for " +
       "a restaurant menu, or Coupe/Coloration/Soins for a hairdresser price list). For every item, set " +
       "category to the exact section heading it appears under, written exactly as it appears on the " +
       "document (same language, same wording). If the document has no section headings at all, set " +
-      "category to null for every item — do not invent categories that aren't written on the document.",
+      "category to null for every item — do not invent categories that aren't written on the document. " +
+      "IMPORTANT — bilingual documents: many menus/price lists show the exact same items twice, once per " +
+      "language, side by side in two columns or two blocks (e.g. a French column and an English column " +
+      "listing the same dishes in the same order, or French/Arabic pairs). When you detect this pattern, " +
+      "output each item only ONCE — never output the French and English (or any other language pair) " +
+      "version of the same item as two separate entries. Prefer the French wording and French category " +
+      "heading when a French version is present; only fall back to another language if that item has no " +
+      "French version anywhere on the document. Only output items in more than one language if they are " +
+      "genuinely different items, not translations of each other.",
     messages: [
       {
         role: "user",
