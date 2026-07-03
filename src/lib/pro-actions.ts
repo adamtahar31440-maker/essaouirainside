@@ -7,7 +7,7 @@ import { eq, and } from "drizzle-orm";
 import { getDb } from "@/db";
 import { professionals, establishments, categories, serviceOrders, labelApplications } from "@/db/schema";
 import { getProfessionalByClerkId, getLabelApplicationByEstablishmentId } from "@/lib/admin-data";
-import { readLocalized, ALL_LOCALES } from "@/lib/localized-form";
+import { ALL_LOCALES } from "@/lib/localized-form";
 import { translateFields } from "@/lib/translate";
 import { slugify } from "@/lib/slug";
 
@@ -89,16 +89,23 @@ export async function updateOwnEstablishment(formData: FormData) {
   const [establishment] = await db.select().from(establishments).where(eq(establishments.id, id));
   if (!establishment || establishment.professionalId !== professional.id) throw new Error("Forbidden");
 
+  const name = String(formData.get("name") ?? "");
+  const description = String(formData.get("description") ?? "");
+  const hours = String(formData.get("hours") ?? "");
+
+  const targetLocales = ALL_LOCALES.filter((l) => l !== "fr");
+  const translations = await translateFields({ name, description, hours }, targetLocales, "fr");
+
   await db
     .update(establishments)
     .set({
-      name: readLocalized(formData, "name"),
-      description: readLocalized(formData, "description"),
+      name: { fr: name, ...translations.name },
+      description: { fr: description, ...translations.description },
       address: String(formData.get("address") ?? ""),
       phone: String(formData.get("phone") ?? ""),
       whatsapp: String(formData.get("whatsapp") ?? ""),
       website: String(formData.get("website") ?? ""),
-      hours: readLocalized(formData, "hours"),
+      hours: { fr: hours, ...translations.hours },
       priceLevel: String(formData.get("priceLevel") ?? establishment.priceLevel ?? "€€"),
       images: String(formData.get("images") ?? "")
         .split(/\r?\n/)

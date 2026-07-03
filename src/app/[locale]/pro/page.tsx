@@ -15,9 +15,9 @@ import {
 import { applyAsProfessional, requestMarketplaceService, applyForLabel, updateOwnEstablishment } from "@/lib/pro-actions";
 import { SubscriptionPlans } from "@/components/subscription-plans";
 import { LabelBadgeHistory } from "@/components/label-badge-history";
-import { LocalizedFieldGroup } from "@/components/admin/localized-field-group";
 import { ProApplicationForm } from "@/components/pro-application-form";
 import { DashboardLangSwitcher } from "@/components/dashboard-lang-switcher";
+import { SubmitButton } from "@/components/submit-button";
 import { PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
 
 const OPEN_LABEL_APPLICATION_STATUSES = ["pending", "info_requested", "visit_scheduled", "on_hold"];
@@ -147,9 +147,20 @@ export default async function ProDashboardPage({
               </p>
             )}
 
-            <LocalizedFieldGroup field="name" label={t("fieldName")} values={myEstablishment.name} required />
-            <LocalizedFieldGroup field="description" label={t("fieldDescription")} values={myEstablishment.description} multiline />
-            <LocalizedFieldGroup field="hours" label={t("fieldHours")} values={myEstablishment.hours ?? undefined} />
+            <p className="rounded-lg bg-ocean-dark/5 px-3 py-2 text-xs text-foreground/60">{t("editHint")}</p>
+
+            <div>
+              <label className={labelClass}>{t("fieldName")}</label>
+              <input name="name" defaultValue={myEstablishment.name.fr} className={inputClass} required />
+            </div>
+            <div>
+              <label className={labelClass}>{t("fieldDescription")}</label>
+              <textarea name="description" defaultValue={myEstablishment.description.fr} rows={4} className={inputClass} />
+            </div>
+            <div>
+              <label className={labelClass}>{t("fieldHours")}</label>
+              <input name="hours" defaultValue={myEstablishment.hours?.fr ?? ""} className={inputClass} />
+            </div>
 
             <div>
               <label className={labelClass}>{t("fieldAddress")}</label>
@@ -190,9 +201,7 @@ export default async function ProDashboardPage({
               />
             </div>
 
-            <button type="submit" className="rounded-full bg-ocean-dark px-6 py-2.5 text-sm font-semibold text-white hover:bg-ocean">
-              {t("save")}
-            </button>
+            <SubmitButton label={t("save")} pendingLabel={t("savePending")} />
           </form>
         ) : (
           <p className="text-sm text-foreground/60">{t("noEstablishment")}</p>
