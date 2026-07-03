@@ -211,6 +211,7 @@
     "amenityPetsAllowed": "Evcil hayvanlara izin verilir",
     "fieldImages": "Fotoğraflar (satır başına bir URL)",
     "imagesLimitReached": "Mevcut planınız için {max} fotoğraf sınırına ulaştınız. Daha fazla eklemek için planınızı yükseltin.",
+    "imagesUnsupportedFormat": "Desteklenmeyen format (genellikle iPhone'dan HEIC fotoğraflar). iPhone'unuzda: Ayarlar > Kamera > Formatlar > \"En Uyumlu\", ardından fotoğrafı yeniden çekin — veya zaten JPEG/PNG olan bir fotoğraf seçin.",
     "save": "Kaydet",
     "savePending": "Çeviriliyor ve kaydediliyor...",
     "saveError": "Kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.",

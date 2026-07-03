@@ -152,7 +152,7 @@ export function ProApplicationForm({
           </div>
         </div>
 
-        <ImageUploader label={t.images} hint={t.imagesHint} />
+        <ImageUploader label={t.images} hint={t.imagesHint} unsupportedFormatText={t.imagesUnsupportedFormat} />
 
         <SubmitButton label={t.submit} pendingLabel={t.submitPending} />
       </form>

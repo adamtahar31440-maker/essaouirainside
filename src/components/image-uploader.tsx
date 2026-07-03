@@ -6,18 +6,22 @@ import { X, Loader2 } from "lucide-react";
 
 type UploadItem = { id: string; url: string; uploading: boolean; error?: string };
 
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+
 export function ImageUploader({
   label,
   hint,
   defaultImages = [],
   max,
   limitReachedText,
+  unsupportedFormatText,
 }: {
   label: string;
   hint?: string;
   defaultImages?: string[];
   max?: number | null;
   limitReachedText?: string;
+  unsupportedFormatText?: string;
 }) {
   const [items, setItems] = useState<UploadItem[]>(
     defaultImages.map((url, i) => ({ id: `existing-${i}-${url}`, url, uploading: false }))
@@ -45,13 +49,30 @@ export function ImageUploader({
     await Promise.all(
       files.map(async (file, i) => {
         const item = pending[i];
+
+        // iPhones save photos as HEIC by default, which browsers can't even display in
+        // an <img> tag and which this upload flow doesn't accept — catch it up front
+        // with a clear message instead of a generic failure after a network round-trip.
+        const looksLikeHeic = /\.heic$|\.heif$/i.test(file.name) || /heic|heif/i.test(file.type);
+        if (!ALLOWED_TYPES.includes(file.type) || looksLikeHeic) {
+          setItems((prev) =>
+            prev.map((it) =>
+              it.id === item.id
+                ? { ...it, uploading: false, error: unsupportedFormatText ?? "Format non supporté" }
+                : it
+            )
+          );
+          return;
+        }
+
         try {
           const blob = await upload(file.name, file, {
             access: "public",
             handleUploadUrl: "/api/upload/image",
           });
           setItems((prev) => prev.map((it) => (it.id === item.id ? { ...it, url: blob.url, uploading: false } : it)));
-        } catch {
+        } catch (err) {
+          console.error("Image upload failed:", err);
           setItems((prev) =>
             prev.map((it) => (it.id === item.id ? { ...it, uploading: false, error: "Échec de l'envoi" } : it))
           );

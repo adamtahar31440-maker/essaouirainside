@@ -211,6 +211,7 @@
     "amenityPetsAllowed": "Animais permitidos",
     "fieldImages": "Fotos (um URL por linha)",
     "imagesLimitReached": "Atingiu o limite de {max} fotos do seu plano atual. Faça upgrade para adicionar mais.",
+    "imagesUnsupportedFormat": "Formato não suportado (geralmente fotos HEIC do iPhone). No seu iPhone: Ajustes > Câmara > Formatos > \"Mais compatível\", depois tire a foto novamente — ou escolha uma foto já em JPEG/PNG.",
     "save": "Guardar",
     "savePending": "A traduzir e a guardar...",
     "saveError": "Ocorreu um erro ao guardar. Tente novamente.",

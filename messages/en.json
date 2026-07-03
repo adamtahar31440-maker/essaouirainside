@@ -211,6 +211,7 @@
     "amenityPetsAllowed": "Pets allowed",
     "fieldImages": "Photos (one URL per line)",
     "imagesLimitReached": "You've reached the {max}-photo limit for your current plan. Upgrade to add more.",
+    "imagesUnsupportedFormat": "Unsupported format (often HEIC photos from an iPhone). On your iPhone, go to Settings > Camera > Formats > \"Most Compatible\", then retake the photo — or choose a photo that's already JPEG/PNG.",
     "save": "Save",
     "savePending": "Translating and saving...",
     "saveError": "An error occurred while saving. Please try again.",

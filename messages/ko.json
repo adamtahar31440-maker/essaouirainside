@@ -211,6 +211,7 @@
     "amenityPetsAllowed": "반려동물 동반 가능",
     "fieldImages": "사진 (한 줄에 하나의 URL)",
     "imagesLimitReached": "현재 플랜의 사진 {max}장 한도에 도달했습니다. 더 추가하려면 플랜을 업그레이드하세요.",
+    "imagesUnsupportedFormat": "지원되지 않는 형식입니다 (주로 iPhone의 HEIC 사진). iPhone에서: 설정 > 카메라 > 포맷 > \"높은 호환성\"으로 변경한 뒤 다시 촬영하거나, 이미 JPEG/PNG 형식인 사진을 선택해 주세요.",
     "save": "저장",
     "savePending": "번역 및 저장 중...",
     "saveError": "저장 중 오류가 발생했습니다. 다시 시도해 주세요.",

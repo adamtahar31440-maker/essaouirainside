@@ -26,6 +26,7 @@ export type ProFormStrings = {
   amenityPetsAllowed: string;
   images: string;
   imagesHint: string;
+  imagesUnsupportedFormat: string;
   submit: string;
   submitPending: string;
 };
@@ -63,6 +64,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     images: "Photos",
     imagesHint:
       "Ajoutez au moins une photo de la devanture/façade de votre commerce : elle nous permet de vérifier que l'établissement existe réellement avant de valider votre demande. Vous pouvez prendre une photo avec votre téléphone ou en choisir une depuis votre ordinateur.",
+    imagesUnsupportedFormat:
+      "Format non supporté (souvent des photos iPhone en HEIC). Réglages > Appareil photo > Formats > \"Le plus compatible\" sur votre iPhone, puis reprenez la photo — ou choisissez une photo déjà au format JPEG/PNG.",
     submit: "Envoyer ma demande",
     submitPending: "Envoi en cours...",
   },
@@ -98,6 +101,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     images: "Photos",
     imagesHint:
       "Add at least one photo of your business's storefront/façade — it lets us verify the business really exists before approving your application. You can take a photo with your phone or choose one from your computer.",
+    imagesUnsupportedFormat:
+      "Unsupported format (often HEIC photos from an iPhone). On your iPhone, go to Settings > Camera > Formats > \"Most Compatible\", then retake the photo — or choose a photo that's already JPEG/PNG.",
     submit: "Submit my application",
     submitPending: "Sending...",
   },
@@ -132,6 +137,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     images: "الصور",
     imagesHint:
       "أضف صورة واحدة على الأقل لواجهة محلك التجاري: تتيح لنا التحقق من وجود المنشأة فعليًا قبل الموافقة على طلبك. يمكنك التقاط صورة بهاتفك أو اختيار واحدة من حاسوبك.",
+    imagesUnsupportedFormat:
+      "صيغة غير مدعومة (غالبًا صور HEIC من آيفون). في هاتفك: الإعدادات > الكاميرا > التنسيقات > \"الأكثر توافقًا\"، ثم أعد التقاط الصورة — أو اختر صورة بصيغة JPEG/PNG.",
     submit: "إرسال طلبي",
     submitPending: "جارٍ الإرسال...",
   },
@@ -167,6 +174,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     images: "Fotos",
     imagesHint:
       "Añade al menos una foto de la fachada de tu negocio: nos permite verificar que el establecimiento existe realmente antes de aprobar tu solicitud. Puedes tomar una foto con tu teléfono o elegir una desde tu ordenador.",
+    imagesUnsupportedFormat:
+      "Formato no compatible (a menudo fotos HEIC de iPhone). En tu iPhone: Ajustes > Cámara > Formatos > \"El más compatible\", y vuelve a tomar la foto — o elige una foto que ya esté en JPEG/PNG.",
     submit: "Enviar mi solicitud",
     submitPending: "Enviando...",
   },
@@ -202,6 +211,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     images: "Fotos",
     imagesHint:
       "Fügen Sie mindestens ein Foto der Fassade/des Eingangs Ihres Betriebs hinzu — so können wir prüfen, ob der Betrieb tatsächlich existiert, bevor wir Ihren Antrag genehmigen. Sie können ein Foto mit Ihrem Telefon aufnehmen oder eines von Ihrem Computer auswählen.",
+    imagesUnsupportedFormat:
+      "Nicht unterstütztes Format (oft HEIC-Fotos vom iPhone). Auf Ihrem iPhone: Einstellungen > Kamera > Formate > \"Kompatibilität\", dann das Foto erneut aufnehmen — oder ein Foto wählen, das bereits JPEG/PNG ist.",
     submit: "Antrag senden",
     submitPending: "Wird gesendet...",
   },
@@ -237,6 +248,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     images: "Foto",
     imagesHint:
       "Aggiungi almeno una foto della facciata/vetrina della tua attività: ci permette di verificare che l'attività esista realmente prima di approvare la tua richiesta. Puoi scattare una foto con il telefono o sceglierne una dal computer.",
+    imagesUnsupportedFormat:
+      "Formato non supportato (spesso foto HEIC da iPhone). Sul tuo iPhone: Impostazioni > Fotocamera > Formati > \"Massima compatibilità\", poi rifai la foto — oppure scegli una foto già in JPEG/PNG.",
     submit: "Invia la mia richiesta",
     submitPending: "Invio in corso...",
   },
@@ -272,6 +285,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     images: "Fotos",
     imagesHint:
       "Adicione pelo menos uma foto da fachada do seu estabelecimento: isso nos permite verificar que o negócio realmente existe antes de aprovar sua solicitação. Você pode tirar uma foto com o celular ou escolher uma do computador.",
+    imagesUnsupportedFormat:
+      "Formato não suportado (geralmente fotos HEIC do iPhone). No seu iPhone: Ajustes > Câmara > Formatos > \"Mais compatível\", depois tire a foto novamente — ou escolha uma foto já em JPEG/PNG.",
     submit: "Enviar minha solicitação",
     submitPending: "Enviando...",
   },
@@ -307,6 +322,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     images: "Фото",
     imagesHint:
       "Добавьте хотя бы одну фотографию фасада вашего заведения — это позволит нам убедиться, что заведение действительно существует, прежде чем одобрить заявку. Вы можете сделать фото на телефон или выбрать его с компьютера.",
+    imagesUnsupportedFormat:
+      "Неподдерживаемый формат (часто фото HEIC с iPhone). На iPhone: Настройки > Камера > Форматы > «Максимальная совместимость», затем переснимите фото — или выберите фото уже в формате JPEG/PNG.",
     submit: "Отправить заявку",
     submitPending: "Отправка...",
   },
@@ -341,6 +358,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     images: "照片",
     imagesHint:
       "请至少添加一张商户门面/外观的照片：这样我们才能在批准您的申请前核实商户确实存在。您可以用手机拍照，或从电脑中选择一张。",
+    imagesUnsupportedFormat:
+      "格式不支持(通常是 iPhone 的 HEIC 照片)。在您的 iPhone 上：设置 > 相机 > 格式 > \"兼容性最佳\"，然后重新拍照——或选择一张已经是 JPEG/PNG 格式的照片。",
     submit: "提交申请",
     submitPending: "发送中...",
   },
@@ -376,6 +395,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     images: "사진",
     imagesHint:
       "업체의 정면/외관 사진을 최소 한 장 추가해 주세요. 신청을 승인하기 전에 업체가 실제로 존재하는지 확인하는 데 사용됩니다. 휴대폰으로 직접 촬영하거나 컴퓨터에서 사진을 선택할 수 있습니다.",
+    imagesUnsupportedFormat:
+      "지원되지 않는 형식입니다 (주로 iPhone의 HEIC 사진). iPhone에서: 설정 > 카메라 > 포맷 > \"높은 호환성\"으로 변경한 뒤 다시 촬영하거나, 이미 JPEG/PNG 형식인 사진을 선택해 주세요.",
     submit: "신청서 제출",
     submitPending: "전송 중...",
   },
@@ -411,6 +432,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     images: "Fotoğraflar",
     imagesHint:
       "İşletmenizin vitrininin/cephesinin en az bir fotoğrafını ekleyin: başvurunuzu onaylamadan önce işletmenin gerçekten var olduğunu doğrulamamızı sağlar. Telefonunuzla fotoğraf çekebilir veya bilgisayarınızdan bir fotoğraf seçebilirsiniz.",
+    imagesUnsupportedFormat:
+      "Desteklenmeyen format (genellikle iPhone'dan HEIC fotoğraflar). iPhone'unuzda: Ayarlar > Kamera > Formatlar > \"En Uyumlu\", ardından fotoğrafı yeniden çekin — veya zaten JPEG/PNG olan bir fotoğraf seçin.",
     submit: "Başvurumu gönder",
     submitPending: "Gönderiliyor...",
   },
@@ -445,6 +468,8 @@ export const PRO_FORM_STRINGS: Record<string, ProFormStrings> = {
     images: "תמונות",
     imagesHint:
       "הוסיפו לפחות תמונה אחת של חזית העסק שלכם: היא מאפשרת לנו לוודא שהעסק אכן קיים לפני אישור הבקשה שלכם. תוכלו לצלם תמונה בטלפון או לבחור אחת מהמחשב.",
+    imagesUnsupportedFormat:
+      "פורמט לא נתמך (לרוב תמונות HEIC מאייפון). באייפון שלכם: הגדרות > מצלמה > פורמטים > \"תאימות מרבית\", ואז צלמו שוב — או בחרו תמונה שכבר בפורמט JPEG/PNG.",
     submit: "שליחת הבקשה",
     submitPending: "שולח...",
   },

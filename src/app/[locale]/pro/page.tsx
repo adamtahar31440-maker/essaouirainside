@@ -328,6 +328,7 @@ export default async function ProDashboardPage({
               defaultImages={myEstablishment.images ?? []}
               max={maxPhotos}
               limitReachedText={typeof maxPhotos === "number" ? t("imagesLimitReached", { max: maxPhotos }) : undefined}
+              unsupportedFormatText={t("imagesUnsupportedFormat")}
             />
 
           </ProFicheForm>

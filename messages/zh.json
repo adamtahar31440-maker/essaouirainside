@@ -211,6 +211,7 @@
     "amenityPetsAllowed": "允许携带宠物",
     "fieldImages": "照片（每行一个网址）",
     "imagesLimitReached": "您已达到当前套餐 {max} 张照片的上限。升级套餐以添加更多照片。",
+    "imagesUnsupportedFormat": "格式不支持(通常是 iPhone 的 HEIC 照片)。在您的 iPhone 上：设置 > 相机 > 格式 > \"兼容性最佳\"，然后重新拍照——或选择一张已经是 JPEG/PNG 格式的照片。",
     "save": "保存",
     "savePending": "正在翻译并保存...",
     "saveError": "保存时发生错误,请重试。",
