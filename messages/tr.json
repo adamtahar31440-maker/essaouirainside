@@ -56,7 +56,12 @@
     "similar": "Benzer Mekânlar",
     "map": "Konum",
     "callNow": "Ara",
-    "getDirections": "Yol Tarifi"
+    "getDirections": "Yol Tarifi",
+    "reviewsTitle": "Müşteri yorumları",
+    "noReviews": "Henüz yorum yok.",
+    "basedOnReviews": "{count} yoruma dayanmaktadır",
+    "viewCertificate": "Resmi sertifikayı görüntüle",
+    "morePhotos": "+{count} fotoğraf"
   },
   "search": {
     "title": "Arama",

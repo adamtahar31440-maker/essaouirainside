@@ -3,11 +3,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Phone, MessageCircle, Globe, MapPin, Clock, Wifi, Car, Accessibility } from "lucide-react";
+import { Phone, MessageCircle, Globe, MapPin, Clock, Wifi, Car, Accessibility, Star, ChevronRight } from "lucide-react";
 import { CATEGORY_PATH_TO_TYPE } from "@/lib/categories";
 import { subcategoryLabel, priceLevelLabel } from "@/lib/labels";
 import { getEstablishmentBySlug, getSimilarEstablishments } from "@/lib/data";
-import { getLabelBadges } from "@/lib/admin-data";
+import { getLabelBadges, getApprovedReviewsForEstablishment } from "@/lib/admin-data";
 import { isModuleActive, CATEGORY_MODULE_KEY } from "@/lib/modules";
 import { EstablishmentCard } from "@/components/establishment-card";
 import { Section } from "@/components/section";
@@ -53,12 +53,16 @@ export default async function EstablishmentPage({
   const e = await getEstablishmentBySlug(slug);
   if (!e) notFound();
 
-  const t = await getTranslations("establishment");
-  const [similar, badges] = await Promise.all([
+  const [t, tCat, tNav, similar, badges, reviews] = await Promise.all([
+    getTranslations("establishment"),
+    getTranslations("categories"),
+    getTranslations("nav"),
     getSimilarEstablishments(e.categoryId, e.slug),
     getLabelBadges(e.id),
+    getApprovedReviewsForEstablishment(e.id),
   ]);
   const activeBadges = badges.filter((b) => b.status === "active");
+  const avgRating = reviews.length > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length : null;
 
   const name = e.name[locale] ?? e.name.fr;
   const description = e.description[locale] ?? e.description.fr;
@@ -95,16 +99,36 @@ export default async function EstablishmentPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
+      <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-6">
+        <nav className="flex flex-wrap items-center gap-1 text-xs text-foreground/50">
+          <Link href={`/${locale}`} className="hover:text-ocean-dark">{tNav("home")}</Link>
+          <ChevronRight size={12} className="rtl:rotate-180" />
+          <Link href={`/${locale}/${category}`} className="hover:text-ocean-dark">
+            {tCat(type as "hebergement" | "restaurant" | "activite" | "shopping")}
+          </Link>
+          <ChevronRight size={12} className="rtl:rotate-180" />
+          <span className="truncate text-foreground/70">{name}</span>
+        </nav>
+      </div>
+
       {images.length > 0 && (
-        <div className="grid grid-cols-2 gap-1 sm:h-[420px] sm:grid-cols-4 sm:grid-rows-2">
+        <div className="mt-4 grid grid-cols-2 gap-1 sm:h-[420px] sm:grid-cols-4 sm:grid-rows-2">
           <div className="relative col-span-2 row-span-2 aspect-[4/3] overflow-hidden bg-sand sm:aspect-auto">
             <Image src={images[0]} alt={name} fill className="object-cover" priority sizes="50vw" />
           </div>
-          {images.slice(1, 5).map((img, i) => (
-            <div key={i} className="relative hidden aspect-square overflow-hidden bg-sand sm:block">
-              <Image src={img} alt={`${name} ${i + 2}`} fill className="object-cover" sizes="25vw" />
-            </div>
-          ))}
+          {images.slice(1, 5).map((img, i) => {
+            const isLastVisible = i === 3 && images.length > 5;
+            return (
+              <div key={i} className="relative hidden aspect-square overflow-hidden bg-sand sm:block">
+                <Image src={img} alt={`${name} ${i + 2}`} fill className="object-cover" sizes="25vw" />
+                {isLastVisible && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-sm font-semibold text-white">
+                    {t("morePhotos", { count: images.length - 5 })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 
@@ -114,11 +138,20 @@ export default async function EstablishmentPage({
             {subcategoryLabel(e.subcategory, locale)}
           </p>
           <h1 className="mt-1 text-3xl font-semibold text-ocean-dark sm:text-4xl">{name}</h1>
-          {e.address && (
-            <p className="mt-2 flex items-center gap-1.5 text-foreground/60">
-              <MapPin size={16} /> {e.address}
-            </p>
-          )}
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
+            {avgRating !== null && (
+              <a href="#reviews" className="flex items-center gap-1 text-sm font-semibold text-ocean-dark hover:underline">
+                <Star size={16} className="fill-terracotta text-terracotta" />
+                {avgRating.toFixed(1)}
+                <span className="font-normal text-foreground/50">({reviews.length})</span>
+              </a>
+            )}
+            {e.address && (
+              <p className="flex items-center gap-1.5 text-foreground/60">
+                <MapPin size={16} /> {e.address}
+              </p>
+            )}
+          </div>
 
           {activeBadges.length > 0 && (
             <div className="mt-5">
@@ -127,7 +160,7 @@ export default async function EstablishmentPage({
                 href={`/${locale}/approved/${e.slug}`}
                 className="mt-2 inline-block text-sm font-medium text-terracotta hover:underline"
               >
-                Voir le certificat officiel →
+                {t("viewCertificate")} →
               </Link>
             </div>
           )}
@@ -181,6 +214,47 @@ export default async function EstablishmentPage({
             </div>
           )}
 
+          <div id="reviews" className="mt-10 scroll-mt-24">
+            <h2 className="flex items-center gap-2 text-lg font-semibold text-ocean-dark">
+              {t("reviewsTitle")}
+              {avgRating !== null && (
+                <span className="flex items-center gap-1 text-sm font-normal text-foreground/60">
+                  <Star size={14} className="fill-terracotta text-terracotta" />
+                  {avgRating.toFixed(1)} · {t("basedOnReviews", { count: reviews.length })}
+                </span>
+              )}
+            </h2>
+            {reviews.length === 0 ? (
+              <p className="mt-3 text-sm text-foreground/60">{t("noReviews")}</p>
+            ) : (
+              <div className="mt-4 space-y-4">
+                {reviews.map((r) => (
+                  <div key={r.id} className="rounded-2xl border border-black/5 p-4">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-semibold text-ocean-dark">{r.authorName}</p>
+                      <div className="flex items-center gap-0.5">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star
+                            key={i}
+                            size={14}
+                            className={i < r.rating ? "fill-terracotta text-terracotta" : "text-black/15"}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    {r.comment && <p className="mt-2 text-sm leading-relaxed text-foreground/80">{r.comment}</p>}
+                    {r.ownerReply && (
+                      <div className="mt-3 rounded-xl bg-sand/40 p-3">
+                        <p className="text-xs font-semibold text-ocean-dark">{name}</p>
+                        <p className="mt-1 text-sm text-foreground/70">{r.ownerReply}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           {e.lat && e.lng && (
             <div className="mt-10">
               <h2 className="text-lg font-semibold text-ocean-dark">{t("map")}</h2>
@@ -191,7 +265,7 @@ export default async function EstablishmentPage({
           )}
         </div>
 
-        <aside className="h-fit rounded-2xl border border-black/5 bg-white p-6 shadow-sm">
+        <aside className="h-fit rounded-2xl border border-black/5 bg-white p-6 shadow-sm lg:sticky lg:top-24">
           {e.priceLevel && (
             <p className="text-sm font-semibold text-foreground/60">
               {t("price")}: <span className="text-ocean-dark">{priceLevelLabel(e.priceLevel)}</span>

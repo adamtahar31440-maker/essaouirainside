@@ -56,7 +56,12 @@
     "similar": "Similar places",
     "map": "Location",
     "callNow": "Call now",
-    "getDirections": "Get directions"
+    "getDirections": "Get directions",
+    "reviewsTitle": "Customer reviews",
+    "noReviews": "No reviews yet.",
+    "basedOnReviews": "Based on {count} reviews",
+    "viewCertificate": "View official certificate",
+    "morePhotos": "+{count} photos"
   },
   "search": {
     "title": "Search",

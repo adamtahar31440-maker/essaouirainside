@@ -56,7 +56,12 @@
     "similar": "Ähnliche Orte",
     "map": "Standort",
     "callNow": "Anrufen",
-    "getDirections": "Route anzeigen"
+    "getDirections": "Route anzeigen",
+    "reviewsTitle": "Kundenbewertungen",
+    "noReviews": "Noch keine Bewertungen.",
+    "basedOnReviews": "Basierend auf {count} Bewertungen",
+    "viewCertificate": "Offizielles Zertifikat ansehen",
+    "morePhotos": "+{count} Fotos"
   },
   "search": {
     "title": "Suche",

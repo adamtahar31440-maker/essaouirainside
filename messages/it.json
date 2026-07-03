@@ -56,7 +56,12 @@
     "similar": "Strutture simili",
     "map": "Posizione",
     "callNow": "Chiama",
-    "getDirections": "Indicazioni"
+    "getDirections": "Indicazioni",
+    "reviewsTitle": "Recensioni dei clienti",
+    "noReviews": "Nessuna recensione per il momento.",
+    "basedOnReviews": "Basato su {count} recensioni",
+    "viewCertificate": "Vedi il certificato ufficiale",
+    "morePhotos": "+{count} foto"
   },
   "search": {
     "title": "Ricerca",

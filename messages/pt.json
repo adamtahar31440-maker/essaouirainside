@@ -56,7 +56,12 @@
     "similar": "Estabelecimentos semelhantes",
     "map": "Localização",
     "callNow": "Ligar",
-    "getDirections": "Como chegar"
+    "getDirections": "Como chegar",
+    "reviewsTitle": "Avaliações de clientes",
+    "noReviews": "Ainda não há avaliações.",
+    "basedOnReviews": "Com base em {count} avaliações",
+    "viewCertificate": "Ver certificado oficial",
+    "morePhotos": "+{count} fotos"
   },
   "search": {
     "title": "Pesquisa",

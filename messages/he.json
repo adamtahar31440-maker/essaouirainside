@@ -56,7 +56,12 @@
     "similar": "מקומות דומים",
     "map": "מיקום",
     "callNow": "התקשרו",
-    "getDirections": "קבלו הנחיות"
+    "getDirections": "קבלו הנחיות",
+    "reviewsTitle": "חוות דעת לקוחות",
+    "noReviews": "אין עדיין חוות דעת.",
+    "basedOnReviews": "בהתבסס על {count} חוות דעת",
+    "viewCertificate": "צפייה בתעודה הרשמית",
+    "morePhotos": "+{count} תמונות"
   },
   "search": {
     "title": "חיפוש",

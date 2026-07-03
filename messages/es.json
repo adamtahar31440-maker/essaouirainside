@@ -56,7 +56,12 @@
     "similar": "Establecimientos similares",
     "map": "Ubicación",
     "callNow": "Llamar",
-    "getDirections": "Cómo llegar"
+    "getDirections": "Cómo llegar",
+    "reviewsTitle": "Opiniones de clientes",
+    "noReviews": "Todavía no hay opiniones.",
+    "basedOnReviews": "Basado en {count} opiniones",
+    "viewCertificate": "Ver el certificado oficial",
+    "morePhotos": "+{count} fotos"
   },
   "search": {
     "title": "Búsqueda",

@@ -56,7 +56,12 @@
     "similar": "Établissements similaires",
     "map": "Localisation",
     "callNow": "Appeler",
-    "getDirections": "Itinéraire"
+    "getDirections": "Itinéraire",
+    "reviewsTitle": "Avis clients",
+    "noReviews": "Aucun avis pour le moment.",
+    "basedOnReviews": "Basé sur {count} avis",
+    "viewCertificate": "Voir le certificat officiel",
+    "morePhotos": "+{count} photos"
   },
   "search": {
     "title": "Recherche",

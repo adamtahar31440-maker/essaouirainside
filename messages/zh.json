@@ -56,7 +56,12 @@
     "similar": "类似商家",
     "map": "位置",
     "callNow": "拨打电话",
-    "getDirections": "路线导航"
+    "getDirections": "路线导航",
+    "reviewsTitle": "顾客评价",
+    "noReviews": "暂无评价。",
+    "basedOnReviews": "基于 {count} 条评价",
+    "viewCertificate": "查看官方证书",
+    "morePhotos": "+{count} 张照片"
   },
   "search": {
     "title": "搜索",

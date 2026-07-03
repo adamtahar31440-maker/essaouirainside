@@ -56,7 +56,12 @@
     "similar": "Похожие места",
     "map": "Расположение",
     "callNow": "Позвонить",
-    "getDirections": "Маршрут"
+    "getDirections": "Маршрут",
+    "reviewsTitle": "Отзывы клиентов",
+    "noReviews": "Пока нет отзывов.",
+    "basedOnReviews": "На основе {count} отзывов",
+    "viewCertificate": "Посмотреть официальный сертификат",
+    "morePhotos": "+{count} фото"
   },
   "search": {
     "title": "Поиск",

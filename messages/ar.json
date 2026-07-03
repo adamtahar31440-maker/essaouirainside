@@ -56,7 +56,12 @@
     "similar": "أماكن مشابهة",
     "map": "الموقع",
     "callNow": "اتصل الآن",
-    "getDirections": "احصل على الاتجاهات"
+    "getDirections": "احصل على الاتجاهات",
+    "reviewsTitle": "آراء العملاء",
+    "noReviews": "لا توجد آراء حتى الآن.",
+    "basedOnReviews": "بناءً على {count} رأي",
+    "viewCertificate": "عرض الشهادة الرسمية",
+    "morePhotos": "+{count} صور"
   },
   "search": {
     "title": "بحث",

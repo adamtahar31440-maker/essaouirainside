@@ -56,7 +56,12 @@
     "similar": "유사한 업체",
     "map": "위치",
     "callNow": "전화하기",
-    "getDirections": "길찾기"
+    "getDirections": "길찾기",
+    "reviewsTitle": "고객 리뷰",
+    "noReviews": "아직 리뷰가 없습니다.",
+    "basedOnReviews": "리뷰 {count}개 기준",
+    "viewCertificate": "공식 인증서 보기",
+    "morePhotos": "+{count}장의 사진"
   },
   "search": {
     "title": "검색",
