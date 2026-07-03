@@ -1,5 +1,6 @@
 import { upsertEmergencyContact } from "@/lib/admin-actions";
 import { SubmitButton } from "@/components/submit-button";
+import { AddressLocationPicker } from "@/components/address-location-picker";
 
 type Contact = {
   id: number;
@@ -72,20 +73,15 @@ export function EmergencyContactForm({ locale, contact }: { locale: string; cont
         </div>
       </section>
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div>
-          <label className={labelClass}>Adresse</label>
-          <input name="address" defaultValue={contact?.address ?? ""} className={inputClass} />
-        </div>
-        <div>
-          <label className={labelClass}>Latitude</label>
-          <input type="number" step="any" name="lat" defaultValue={contact?.lat ?? ""} className={inputClass} />
-        </div>
-        <div>
-          <label className={labelClass}>Longitude</label>
-          <input type="number" step="any" name="lng" defaultValue={contact?.lng ?? ""} className={inputClass} />
-        </div>
-      </section>
+      <div>
+        <label className={labelClass}>Adresse</label>
+        <AddressLocationPicker
+          className={inputClass}
+          defaultAddress={contact?.address ?? ""}
+          defaultLat={contact?.lat}
+          defaultLng={contact?.lng}
+        />
+      </div>
 
       <div>
         <label className={labelClass}>Pays (ambassades uniquement)</label>
