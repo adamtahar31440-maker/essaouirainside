@@ -151,7 +151,7 @@ export async function updateOwnEstablishment(formData: FormData) {
     .where(and(eq(establishments.id, id), eq(establishments.professionalId, professional.id)));
 
   revalidatePath("/", "layout");
-  redirect(`/${formData.get("locale")}/pro`);
+  redirect(`/${formData.get("locale")}/pro?updated=1`);
 }
 
 export async function applyForLabel(formData: FormData) {

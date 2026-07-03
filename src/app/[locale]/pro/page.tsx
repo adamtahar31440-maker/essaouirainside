@@ -21,6 +21,7 @@ import { SubmitButton } from "@/components/submit-button";
 import { ImageUploader } from "@/components/image-uploader";
 import { HoursEditor } from "@/components/hours-editor";
 import { ProductsEditor } from "@/components/products-editor";
+import { UpdateSuccessBanner } from "@/components/update-success-banner";
 import { PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
 
 const OPEN_LABEL_APPLICATION_STATUSES = ["pending", "info_requested", "visit_scheduled", "on_hold"];
@@ -30,10 +31,13 @@ const labelClass = "mb-1 block text-xs font-semibold text-foreground/60";
 
 export default async function ProDashboardPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ updated?: string }>;
 }) {
   const { locale } = await params;
+  const { updated } = await searchParams;
   setRequestLocale(locale);
   const t = await getTranslations("dashboard");
   const user = await currentUser();
@@ -113,6 +117,8 @@ export default async function ProDashboardPage({
 
   return (
     <div className="space-y-10">
+      {updated === "1" && <UpdateSuccessBanner message={t("updateSuccess")} />}
+
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-ocean-dark">{t("greeting", { name: professional.companyName })}</h1>
@@ -264,6 +270,11 @@ export default async function ProDashboardPage({
                 namePlaceholder={t("productNamePlaceholder")}
                 pricePlaceholder={t("productPricePlaceholder")}
                 addLabel={t("addProduct")}
+                scanLabel={t("scanDocument")}
+                scanningLabel={t("scanning")}
+                scanHint={t("scanHint")}
+                scanErrorText={t("scanError")}
+                scanSuccessText={(count) => t("scanSuccess", { count })}
               />
             </div>
 
