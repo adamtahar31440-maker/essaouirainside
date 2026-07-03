@@ -29,7 +29,7 @@ export function ProductsEditor({
   scanningLabel,
   scanHint,
   scanErrorText,
-  scanSuccessText,
+  scanSuccessTemplate,
 }: {
   name: string;
   defaultProducts?: { name: string; price: number | null }[];
@@ -40,7 +40,7 @@ export function ProductsEditor({
   scanningLabel: string;
   scanHint: string;
   scanErrorText: string;
-  scanSuccessText: (count: number) => string;
+  scanSuccessTemplate: string;
 }) {
   const [items, setItems] = useState<ProductInput[]>(
     defaultProducts.map((p) => ({ name: p.name, price: p.price != null ? String(p.price) : "" }))
@@ -153,7 +153,9 @@ export function ProductsEditor({
       <p className="mt-1 text-xs text-foreground/50">{scanHint}</p>
       {scanError && <p className="mt-1 text-xs font-medium text-red-600">{scanErrorText}</p>}
       {scanSuccessCount !== null && scanSuccessCount > 0 && (
-        <p className="mt-1 text-xs font-medium text-green-700">{scanSuccessText(scanSuccessCount)}</p>
+        <p className="mt-1 text-xs font-medium text-green-700">
+          {scanSuccessTemplate.replace("{count}", String(scanSuccessCount))}
+        </p>
       )}
 
       <input type="hidden" name={name} value={serialized} />

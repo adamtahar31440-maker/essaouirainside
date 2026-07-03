@@ -274,7 +274,7 @@ export default async function ProDashboardPage({
                 scanningLabel={t("scanning")}
                 scanHint={t("scanHint")}
                 scanErrorText={t("scanError")}
-                scanSuccessText={(count) => t("scanSuccess", { count })}
+                scanSuccessTemplate={t.raw("scanSuccess")}
               />
             </div>
 
