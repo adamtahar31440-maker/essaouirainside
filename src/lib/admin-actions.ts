@@ -29,7 +29,8 @@ import {
 import { can, type Role } from "@/lib/roles";
 import { LABEL_CRITERIA } from "@/lib/label-criteria";
 import { slugify } from "@/lib/slug";
-import { readLocalized } from "@/lib/localized-form";
+import { readLocalized, ALL_LOCALES } from "@/lib/localized-form";
+import { translateFields } from "@/lib/translate";
 
 async function requireRole(section: Parameters<typeof can>[1]) {
   const user = await currentUser();
@@ -75,14 +76,20 @@ export async function upsertEstablishment(formData: FormData) {
   const db = getDb();
 
   const id = formData.get("id") ? Number(formData.get("id")) : null;
-  const nameFr = String(formData.get("name_fr") ?? "");
+  const name = String(formData.get("name") ?? "");
+  const description = String(formData.get("description") ?? "");
+
+  const targetLocales = ALL_LOCALES.filter((l) => l !== "fr");
+  const translations = await translateFields({ name, description }, targetLocales, "fr");
+  const localizedName = { fr: name, ...translations.name };
+  const localizedDescription = { fr: description, ...translations.description };
 
   const data = {
     categoryId: Number(formData.get("categoryId")),
     subcategory: String(formData.get("subcategory") ?? ""),
-    slug: id ? String(formData.get("slug")) : slugify(nameFr),
-    name: readLocalized(formData, "name"),
-    description: readLocalized(formData, "description"),
+    slug: id ? String(formData.get("slug")) : slugify(name),
+    name: localizedName,
+    description: localizedDescription,
     address: String(formData.get("address") ?? ""),
     lat: formData.get("lat") ? Number(formData.get("lat")) : null,
     lng: formData.get("lng") ? Number(formData.get("lng")) : null,

@@ -1,8 +1,7 @@
 import { upsertEstablishment } from "@/lib/admin-actions";
 import { CATEGORY_SUBCATEGORIES } from "@/lib/categories";
 import { PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
-import { LocalizedFieldGroup } from "@/components/admin/localized-field-group";
-import { AutoTranslateButton } from "@/components/admin/auto-translate-button";
+import { SubmitButton } from "@/components/submit-button";
 
 type Category = { id: number; type: string; name: Record<string, string> };
 type Professional = { id: number; companyName: string; status: string };
@@ -94,10 +93,18 @@ export function EstablishmentForm({
         </section>
       )}
 
-      <AutoTranslateButton />
+      <p className="rounded-lg bg-ocean-dark/5 px-3 py-2 text-xs text-foreground/60">
+        Rédigez en français : les autres langues du site seront automatiquement retraduites lors de l&apos;enregistrement.
+      </p>
 
-      <LocalizedFieldGroup field="name" label="Nom" values={establishment?.name} required />
-      <LocalizedFieldGroup field="description" label="Description" values={establishment?.description} multiline />
+      <div>
+        <label className={labelClass}>Nom</label>
+        <input name="name" defaultValue={establishment?.name.fr} className={inputClass} required />
+      </div>
+      <div>
+        <label className={labelClass}>Description</label>
+        <textarea name="description" defaultValue={establishment?.description.fr} rows={4} className={inputClass} />
+      </div>
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div>
@@ -206,12 +213,7 @@ export function EstablishmentForm({
         />
       </section>
 
-      <button
-        type="submit"
-        className="rounded-full bg-ocean-dark px-6 py-2.5 text-sm font-semibold text-white hover:bg-ocean"
-      >
-        Enregistrer
-      </button>
+      <SubmitButton label="Enregistrer" pendingLabel="Traduction et enregistrement en cours..." />
     </form>
   );
 }
