@@ -6,7 +6,12 @@ import { redirect } from "next/navigation";
 import { eq, and } from "drizzle-orm";
 import { getDb } from "@/db";
 import { professionals, establishments, categories, serviceOrders, labelApplications } from "@/db/schema";
-import { getProfessionalByClerkId, getLabelApplicationByEstablishmentId } from "@/lib/admin-data";
+import {
+  getProfessionalByClerkId,
+  getLabelApplicationByEstablishmentId,
+  getSubscriptionByProfessionalId,
+  getSubscriptionPlans,
+} from "@/lib/admin-data";
 import { ALL_LOCALES } from "@/lib/localized-form";
 import { translateFields } from "@/lib/translate";
 import { slugify } from "@/lib/slug";
@@ -96,6 +101,19 @@ export async function updateOwnEstablishment(formData: FormData) {
   const targetLocales = ALL_LOCALES.filter((l) => l !== "fr");
   const translations = await translateFields({ name, description, hours }, targetLocales, "fr");
 
+  const [subscription, plans] = await Promise.all([
+    getSubscriptionByProfessionalId(professional.id),
+    getSubscriptionPlans(),
+  ]);
+  const currentPlanKey = subscription?.status === "active" ? subscription.planKey : "starter";
+  const maxPhotos = plans.find((p) => p.key === currentPlanKey)?.maxPhotos ?? null;
+
+  let images = String(formData.get("images") ?? "")
+    .split(/\r?\n/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (typeof maxPhotos === "number") images = images.slice(0, maxPhotos);
+
   await db
     .update(establishments)
     .set({
@@ -107,10 +125,7 @@ export async function updateOwnEstablishment(formData: FormData) {
       website: String(formData.get("website") ?? ""),
       hours: { fr: hours, ...translations.hours },
       priceLevel: String(formData.get("priceLevel") ?? establishment.priceLevel ?? "€€"),
-      images: String(formData.get("images") ?? "")
-        .split(/\r?\n/)
-        .map((s) => s.trim())
-        .filter(Boolean),
+      images,
     })
     .where(and(eq(establishments.id, id), eq(establishments.professionalId, professional.id)));
 

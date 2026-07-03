@@ -165,6 +165,7 @@
     "fieldWebsite": "웹사이트",
     "fieldPriceLevel": "가격대",
     "fieldImages": "사진 (한 줄에 하나의 URL)",
+    "imagesLimitReached": "현재 플랜의 사진 {max}장 한도에 도달했습니다. 더 추가하려면 플랜을 업그레이드하세요.",
     "save": "저장",
     "savePending": "정보 준비 중...",
     "noEstablishment": "아직 계정에 연결된 업체 정보가 없습니다. 저희 팀이 업체 정보를 생성해 드릴 예정입니다.",

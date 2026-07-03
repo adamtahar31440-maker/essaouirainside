@@ -165,6 +165,7 @@
     "fieldWebsite": "Webseite",
     "fieldPriceLevel": "Preisniveau",
     "fieldImages": "Fotos (eine URL pro Zeile)",
+    "imagesLimitReached": "Sie haben das Limit von {max} Fotos für Ihren aktuellen Plan erreicht. Upgraden Sie, um mehr hinzuzufügen.",
     "save": "Speichern",
     "savePending": "Ihr Profil wird vorbereitet...",
     "noEstablishment": "Ihrem Konto ist noch kein Profil zugeordnet. Unser Team wird Ihr Betriebsprofil erstellen.",

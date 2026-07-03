@@ -165,6 +165,7 @@
     "fieldWebsite": "Website",
     "fieldPriceLevel": "Price level",
     "fieldImages": "Photos (one URL per line)",
+    "imagesLimitReached": "You've reached the {max}-photo limit for your current plan. Upgrade to add more.",
     "save": "Save",
     "savePending": "Preparing your listing...",
     "noEstablishment": "No listing is linked to your account yet. Our team will create your business listing.",

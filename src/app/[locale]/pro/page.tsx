@@ -18,6 +18,7 @@ import { LabelBadgeHistory } from "@/components/label-badge-history";
 import { ProApplicationForm } from "@/components/pro-application-form";
 import { DashboardLangSwitcher } from "@/components/dashboard-lang-switcher";
 import { SubmitButton } from "@/components/submit-button";
+import { ImageUploader } from "@/components/image-uploader";
 import { PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
 
 const OPEN_LABEL_APPLICATION_STATUSES = ["pending", "info_requested", "visit_scheduled", "on_hold"];
@@ -79,6 +80,8 @@ export default async function ProDashboardPage({
     getSubscriptionPlans(),
   ]);
   const myEstablishment = allEstablishments.find((e) => e.professionalId === professional.id);
+  const currentPlanKey = subscription?.status === "active" ? subscription.planKey : "starter";
+  const maxPhotos = plans.find((p) => p.key === currentPlanKey)?.maxPhotos ?? null;
 
   const [labelApplication, labelBadges] = myEstablishment
     ? await Promise.all([
@@ -190,16 +193,12 @@ export default async function ProDashboardPage({
                 ))}
               </select>
             </div>
-            <div>
-              <label className={labelClass}>{t("fieldImages")}</label>
-              <textarea
-                name="images"
-                defaultValue={myEstablishment.images?.join("\n") ?? ""}
-                rows={4}
-                className={inputClass}
-                placeholder="https://..."
-              />
-            </div>
+            <ImageUploader
+              label={t("fieldImages")}
+              defaultImages={myEstablishment.images ?? []}
+              max={maxPhotos}
+              limitReachedText={typeof maxPhotos === "number" ? t("imagesLimitReached", { max: maxPhotos }) : undefined}
+            />
 
             <SubmitButton label={t("save")} pendingLabel={t("savePending")} />
           </form>

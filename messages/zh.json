@@ -165,6 +165,7 @@
     "fieldWebsite": "网站",
     "fieldPriceLevel": "价格等级",
     "fieldImages": "照片（每行一个网址）",
+    "imagesLimitReached": "您已达到当前套餐 {max} 张照片的上限。升级套餐以添加更多照片。",
     "save": "保存",
     "savePending": "正在准备您的资料...",
     "noEstablishment": "您的账户尚未关联任何商户资料。我们的团队将为您创建商户资料。",

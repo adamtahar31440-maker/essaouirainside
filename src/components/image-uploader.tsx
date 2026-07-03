@@ -6,12 +6,34 @@ import { X, Loader2 } from "lucide-react";
 
 type UploadItem = { id: string; url: string; uploading: boolean; error?: string };
 
-export function ImageUploader({ label, hint }: { label: string; hint?: string }) {
-  const [items, setItems] = useState<UploadItem[]>([]);
+export function ImageUploader({
+  label,
+  hint,
+  defaultImages = [],
+  max,
+  limitReachedText,
+}: {
+  label: string;
+  hint?: string;
+  defaultImages?: string[];
+  max?: number | null;
+  limitReachedText?: string;
+}) {
+  const [items, setItems] = useState<UploadItem[]>(
+    defaultImages.map((url, i) => ({ id: `existing-${i}-${url}`, url, uploading: false }))
+  );
+
+  const readyCount = items.filter((it) => !it.uploading && !it.error).length;
+  const limitReached = typeof max === "number" && readyCount >= max;
 
   async function handleFiles(fileList: FileList | null) {
     if (!fileList || fileList.length === 0) return;
-    const files = Array.from(fileList);
+    let files = Array.from(fileList);
+    if (typeof max === "number") {
+      const remaining = Math.max(0, max - readyCount);
+      files = files.slice(0, remaining);
+    }
+    if (files.length === 0) return;
 
     const pending = files.map((file) => ({
       id: `${file.name}-${Date.now()}-${Math.random()}`,
@@ -46,15 +68,27 @@ export function ImageUploader({ label, hint }: { label: string; hint?: string })
 
   return (
     <div>
-      <label className="mb-1 block text-xs font-semibold text-foreground/60">{label}</label>
+      <div className="mb-1 flex items-center justify-between">
+        <label className="block text-xs font-semibold text-foreground/60">{label}</label>
+        {typeof max === "number" && (
+          <span className="text-xs text-foreground/50">
+            {readyCount}/{max}
+          </span>
+        )}
+      </div>
       <input
         type="file"
         accept="image/*"
         multiple
+        disabled={limitReached}
         onChange={(e) => handleFiles(e.target.files)}
-        className="block w-full text-sm text-foreground/70 file:mr-3 file:rounded-full file:border-0 file:bg-ocean-dark file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-ocean"
+        className="block w-full text-sm text-foreground/70 file:mr-3 file:rounded-full file:border-0 file:bg-ocean-dark file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-ocean disabled:cursor-not-allowed disabled:opacity-50 disabled:file:bg-foreground/30"
       />
-      {hint && <p className="mt-1 text-xs text-foreground/50">{hint}</p>}
+      {limitReached && limitReachedText ? (
+        <p className="mt-1 text-xs font-medium text-terracotta">{limitReachedText}</p>
+      ) : (
+        hint && <p className="mt-1 text-xs text-foreground/50">{hint}</p>
+      )}
       <input type="hidden" name="images" value={readyUrls.join("\n")} readOnly />
 
       {items.length > 0 && (

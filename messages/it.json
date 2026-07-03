@@ -165,6 +165,7 @@
     "fieldWebsite": "Sito web",
     "fieldPriceLevel": "Fascia di prezzo",
     "fieldImages": "Foto (un URL per riga)",
+    "imagesLimitReached": "Hai raggiunto il limite di {max} foto per il tuo piano attuale. Passa a un piano superiore per aggiungerne altre.",
     "save": "Salva",
     "savePending": "Preparazione della tua scheda...",
     "noEstablishment": "Nessuna scheda è ancora collegata al tuo account. Il nostro team creerà la tua scheda attività.",

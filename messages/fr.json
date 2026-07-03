@@ -165,6 +165,7 @@
     "fieldWebsite": "Site internet",
     "fieldPriceLevel": "Niveau de prix",
     "fieldImages": "Photos (une URL par ligne)",
+    "imagesLimitReached": "Limite de {max} photos atteinte pour votre offre actuelle. Passez à un plan supérieur pour en ajouter plus.",
     "save": "Enregistrer",
     "savePending": "Préparation de votre fiche...",
     "noEstablishment": "Aucune fiche n'est encore reliée à votre compte. Notre équipe va créer votre fiche établissement.",

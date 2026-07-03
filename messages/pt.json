@@ -165,6 +165,7 @@
     "fieldWebsite": "Site",
     "fieldPriceLevel": "Nível de preço",
     "fieldImages": "Fotos (um URL por linha)",
+    "imagesLimitReached": "Atingiu o limite de {max} fotos do seu plano atual. Faça upgrade para adicionar mais.",
     "save": "Guardar",
     "savePending": "A preparar a sua ficha...",
     "noEstablishment": "Ainda não há nenhuma ficha associada à sua conta. A nossa equipa vai criar a sua ficha de estabelecimento.",

@@ -165,6 +165,7 @@
     "fieldWebsite": "Web sitesi",
     "fieldPriceLevel": "Fiyat seviyesi",
     "fieldImages": "Fotoğraflar (satır başına bir URL)",
+    "imagesLimitReached": "Mevcut planınız için {max} fotoğraf sınırına ulaştınız. Daha fazla eklemek için planınızı yükseltin.",
     "save": "Kaydet",
     "savePending": "Profiliniz hazırlanıyor...",
     "noEstablishment": "Hesabınıza henüz bir profil bağlı değil. Ekibimiz işletme profilinizi oluşturacak.",
