@@ -213,6 +213,7 @@
     "imagesLimitReached": "Limite de {max} photos atteinte pour votre offre actuelle. Passez à un plan supérieur pour en ajouter plus.",
     "save": "Enregistrer",
     "savePending": "Traduction et enregistrement en cours...",
+    "saveError": "Une erreur est survenue lors de l'enregistrement. Veuillez réessayer.",
     "updateSuccess": "Votre fiche pro est mise à jour.",
     "scanSuccess": "{count} élément(s) détecté(s) et ajouté(s) à la liste.",
     "noEstablishment": "Aucune fiche n'est encore reliée à votre compte. Notre équipe va créer votre fiche établissement.",

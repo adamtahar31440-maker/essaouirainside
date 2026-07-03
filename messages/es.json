@@ -213,6 +213,7 @@
     "imagesLimitReached": "Has alcanzado el límite de {max} fotos de tu plan actual. Mejora tu plan para añadir más.",
     "save": "Guardar",
     "savePending": "Traduciendo y guardando...",
+    "saveError": "Se produjo un error al guardar. Inténtelo de nuevo.",
     "updateSuccess": "Tu ficha profesional se ha actualizado.",
     "scanSuccess": "{count} elemento(s) detectado(s) y añadido(s) a la lista.",
     "noEstablishment": "Todavía no hay ninguna ficha vinculada a tu cuenta. Nuestro equipo creará tu ficha de establecimiento.",

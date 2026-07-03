@@ -213,6 +213,7 @@
     "imagesLimitReached": "Hai raggiunto il limite di {max} foto per il tuo piano attuale. Passa a un piano superiore per aggiungerne altre.",
     "save": "Salva",
     "savePending": "Traduzione e salvataggio in corso...",
+    "saveError": "Si è verificato un errore durante il salvataggio. Riprova.",
     "updateSuccess": "La tua scheda professionale è stata aggiornata.",
     "scanSuccess": "{count} elemento/i rilevato/i e aggiunto/i all'elenco.",
     "noEstablishment": "Nessuna scheda è ancora collegata al tuo account. Il nostro team creerà la tua scheda attività.",

@@ -158,8 +158,9 @@ export default async function ProDashboardPage({
             translatingLocales={TRANSLATING_LOCALES}
             saveLabel={t("save")}
             savePendingLabel={t("savePending")}
+            saveErrorLabel={t("saveError")}
+            locale={locale}
           >
-            <input type="hidden" name="locale" value={locale} />
             <input type="hidden" name="id" value={myEstablishment.id} />
 
             {myEstablishment.status !== "active" && (

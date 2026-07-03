@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Check, Loader2 } from "lucide-react";
 
 type LocaleStatus = "pending" | "loading" | "done" | "error";
@@ -10,16 +11,22 @@ export function ProFicheForm({
   translatingLocales,
   saveLabel,
   savePendingLabel,
+  saveErrorLabel,
+  locale,
   children,
 }: {
   action: (formData: FormData) => Promise<void>;
   translatingLocales: { code: string; name: string }[];
   saveLabel: string;
   savePendingLabel: string;
+  saveErrorLabel: string;
+  locale: string;
   children: React.ReactNode;
 }) {
+  const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState(false);
   const [statuses, setStatuses] = useState<LocaleStatus[]>(() =>
     translatingLocales.map(() => "pending")
   );
@@ -29,6 +36,7 @@ export function ProFicheForm({
     if (!formRef.current || saving) return;
 
     setSaving(true);
+    setSaveError(false);
     setStatuses(translatingLocales.map(() => "pending"));
 
     const formData = new FormData(formRef.current);
@@ -70,8 +78,21 @@ export function ProFicheForm({
     }
 
     formData.set("translations", JSON.stringify(allTranslations));
-    await action(formData);
-    setSaving(false);
+
+    // The server action no longer redirects itself: calling it directly (instead of
+    // through a native <form action> submission) doesn't get Next's automatic
+    // redirect-interception, which left the button stuck on "saving" forever even
+    // though the save had actually gone through. We navigate ourselves once it
+    // resolves, and surface a real error instead of hanging if it throws.
+    try {
+      await action(formData);
+      router.push(`/${locale}/pro?updated=1`);
+      router.refresh();
+    } catch (err) {
+      console.error("Save failed:", err);
+      setSaveError(true);
+      setSaving(false);
+    }
   }
 
   return (
@@ -85,6 +106,9 @@ export function ProFicheForm({
         >
           {saving ? savePendingLabel : saveLabel}
         </button>
+        {saveError && !saving && (
+          <p className="mt-2 text-xs font-medium text-red-600">{saveErrorLabel}</p>
+        )}
         {saving && (
           <div className="mt-3 space-y-2">
             <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/10">

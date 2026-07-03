@@ -213,6 +213,7 @@
     "imagesLimitReached": "您已达到当前套餐 {max} 张照片的上限。升级套餐以添加更多照片。",
     "save": "保存",
     "savePending": "正在翻译并保存...",
+    "saveError": "保存时发生错误,请重试。",
     "updateSuccess": "您的商户资料已更新。",
     "scanSuccess": "已检测到 {count} 项并添加到列表。",
     "noEstablishment": "您的账户尚未关联任何商户资料。我们的团队将为您创建商户资料。",

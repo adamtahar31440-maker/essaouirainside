@@ -2,7 +2,6 @@
 
 import { safeCurrentUser as currentUser } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { eq, and } from "drizzle-orm";
 import { getDb } from "@/db";
 import { professionals, establishments, categories, serviceOrders, labelApplications } from "@/db/schema";
@@ -189,7 +188,6 @@ export async function updateOwnEstablishment(formData: FormData) {
     .where(and(eq(establishments.id, id), eq(establishments.professionalId, professional.id)));
 
   revalidatePath("/", "layout");
-  redirect(`/${formData.get("locale")}/pro?updated=1`);
 }
 
 export async function applyForLabel(formData: FormData) {

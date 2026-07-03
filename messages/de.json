@@ -213,6 +213,7 @@
     "imagesLimitReached": "Sie haben das Limit von {max} Fotos für Ihren aktuellen Plan erreicht. Upgraden Sie, um mehr hinzuzufügen.",
     "save": "Speichern",
     "savePending": "Übersetzung und Speicherung laufen...",
+    "saveError": "Beim Speichern ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
     "updateSuccess": "Ihr Profibereich wurde aktualisiert.",
     "scanSuccess": "{count} Eintrag/Einträge erkannt und zur Liste hinzugefügt.",
     "noEstablishment": "Ihrem Konto ist noch kein Profil zugeordnet. Unser Team wird Ihr Betriebsprofil erstellen.",
