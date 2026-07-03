@@ -482,16 +482,23 @@ export async function upsertEmergencyContact(formData: FormData) {
   const db = getDb();
   const id = formData.get("id") ? Number(formData.get("id")) : null;
 
+  const name = String(formData.get("name") ?? "");
+  const hours = String(formData.get("hours") ?? "");
+  const notes = String(formData.get("notes") ?? "");
+
+  const targetLocales = ALL_LOCALES.filter((l) => l !== "fr");
+  const translations = await translateFields({ name, hours, notes }, targetLocales, "fr");
+
   const data = {
     category: String(formData.get("category") ?? "urgences"),
-    name: readLocalized(formData, "name"),
+    name: { fr: name, ...translations.name },
     phone: String(formData.get("phone") ?? "") || null,
     whatsapp: String(formData.get("whatsapp") ?? "") || null,
     address: String(formData.get("address") ?? "") || null,
     lat: formData.get("lat") ? Number(formData.get("lat")) : null,
     lng: formData.get("lng") ? Number(formData.get("lng")) : null,
-    hours: readLocalized(formData, "hours"),
-    notes: readLocalized(formData, "notes"),
+    hours: hours ? { fr: hours, ...translations.hours } : null,
+    notes: notes ? { fr: notes, ...translations.notes } : null,
     website: String(formData.get("website") ?? "") || null,
     country: String(formData.get("country") ?? "") || null,
     featured: formData.get("featured") === "on",

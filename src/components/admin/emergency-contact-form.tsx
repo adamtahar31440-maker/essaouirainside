@@ -1,6 +1,5 @@
 import { upsertEmergencyContact } from "@/lib/admin-actions";
-import { LocalizedFieldGroup } from "@/components/admin/localized-field-group";
-import { AutoTranslateButton } from "@/components/admin/auto-translate-button";
+import { SubmitButton } from "@/components/submit-button";
 
 type Contact = {
   id: number;
@@ -49,9 +48,14 @@ export function EmergencyContactForm({ locale, contact }: { locale: string; cont
         </select>
       </div>
 
-      <AutoTranslateButton />
+      <p className="rounded-lg bg-ocean-dark/5 px-3 py-2 text-xs text-foreground/60">
+        Rédigez en français : les autres langues du site seront automatiquement retraduites lors de l&apos;enregistrement.
+      </p>
 
-      <LocalizedFieldGroup field="name" label="Nom" values={contact?.name} required />
+      <div>
+        <label className={labelClass}>Nom</label>
+        <input name="name" defaultValue={contact?.name.fr} className={inputClass} required />
+      </div>
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div>
@@ -88,16 +92,20 @@ export function EmergencyContactForm({ locale, contact }: { locale: string; cont
         <input name="country" defaultValue={contact?.country ?? ""} className={inputClass} />
       </div>
 
-      <LocalizedFieldGroup field="hours" label="Horaires" values={contact?.hours ?? undefined} />
-      <LocalizedFieldGroup field="notes" label="Notes / procédure" values={contact?.notes ?? undefined} multiline rows={3} />
+      <div>
+        <label className={labelClass}>Horaires</label>
+        <input name="hours" defaultValue={contact?.hours?.fr ?? ""} className={inputClass} />
+      </div>
+      <div>
+        <label className={labelClass}>Notes / procédure</label>
+        <textarea name="notes" defaultValue={contact?.notes?.fr ?? ""} rows={3} className={inputClass} />
+      </div>
 
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" name="featured" defaultChecked={!!contact?.featured} /> Afficher dans le bouton SOS
       </label>
 
-      <button type="submit" className="rounded-full bg-ocean-dark px-6 py-2.5 text-sm font-semibold text-white hover:bg-ocean">
-        Enregistrer
-      </button>
+      <SubmitButton label="Enregistrer" pendingLabel="Traduction et enregistrement en cours..." />
     </form>
   );
 }
