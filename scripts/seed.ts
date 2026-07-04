@@ -2,9 +2,7 @@ import { getDb } from "../src/db";
 import {
   categories,
   establishments,
-  articles,
   contentPages,
-  events,
 } from "../src/db/schema";
 
 const db = getDb();
@@ -200,45 +198,6 @@ async function main() {
     await db.insert(establishments).values(e as any).onConflictDoNothing();
   }
 
-  console.log("Seeding articles...");
-  await db.insert(articles).values([
-    {
-      category: "guides", slug: "guide-3-jours-essaouira",
-      title: { fr: "Essaouira en 3 jours : l'itinéraire complet", en: "Essaouira in 3 days: the complete itinerary", ar: "الصويرة في 3 أيام: البرنامج الكامل" },
-      excerpt: { fr: "Notre guide pas à pas pour découvrir l'essentiel d'Essaouira en un long week-end.", en: "Our step-by-step guide to discover the best of Essaouira in a long weekend.", ar: "دليلنا خطوة بخطوة لاكتشاف أهم معالم الصويرة في عطلة نهاية أسبوع طويلة." },
-      body: { fr: "Jour 1 : médina et remparts. Jour 2 : plage et sports nautiques. Jour 3 : excursion vallée de l'Argan...", en: "Day 1: medina and ramparts. Day 2: beach and water sports. Day 3: Argan valley excursion...", ar: "اليوم الأول: المدينة القديمة والأسوار. اليوم الثاني: الشاطئ والرياضات المائية. اليوم الثالث: رحلة وادي الأركان..." },
-      coverImage: img("guide-3-jours", 1)[0],
-    },
-    {
-      category: "conseils", slug: "quand-partir-essaouira",
-      title: { fr: "Quand partir à Essaouira ? Météo et meilleure saison", en: "When to visit Essaouira? Weather and best season", ar: "متى تزور الصويرة؟ الطقس وأفضل موسم" },
-      excerpt: { fr: "Vent, température, affluence : tout savoir pour choisir la meilleure période.", en: "Wind, temperature, crowds: everything to choose the best period.", ar: "الرياح، درجة الحرارة، الازدحام: كل ما تحتاج معرفته لاختيار أفضل فترة." },
-      body: { fr: "Essaouira bénéficie d'un climat doux toute l'année, mais le vent (le fameux 'Alizé') est plus fort entre avril et septembre...", en: "Essaouira enjoys mild weather year-round, but the wind is stronger between April and September...", ar: "تتمتع الصويرة بمناخ معتدل طوال السنة، لكن الرياح تكون أقوى بين أبريل وشتنبر..." },
-      coverImage: img("quand-partir", 1)[0],
-    },
-    {
-      category: "actualites", slug: "nouveau-festival-gnaoua-2026",
-      title: { fr: "Festival Gnaoua 2026 : ce qu'il faut savoir", en: "Gnaoua Festival 2026: what you need to know", ar: "مهرجان كناوة 2026: كل ما يجب معرفته" },
-      excerpt: { fr: "Dates, programmation et conseils pratiques pour le plus grand festival de musique de la ville.", en: "Dates, line-up and practical tips for the city's biggest music festival.", ar: "التواريخ والبرمجة ونصائح عملية لأكبر مهرجان موسيقي في المدينة." },
-      body: { fr: "Le Festival Gnaoua et Musiques du Monde revient cette année avec une programmation internationale...", en: "The Gnaoua World Music Festival returns this year with an international line-up...", ar: "يعود مهرجان كناوة وموسيقى العالم هذه السنة ببرمجة دولية..." },
-      coverImage: img("gnaoua-2026", 1)[0],
-    },
-    {
-      category: "interviews", slug: "interview-artisan-thuya",
-      title: { fr: "Rencontre avec un maître artisan du bois de thuya", en: "Meeting a master thuya wood craftsman", ar: "لقاء مع حرفي خبير في خشب العرعار" },
-      excerpt: { fr: "Portrait d'un artisan qui perpétue un savoir-faire transmis de génération en génération.", en: "Portrait of a craftsman preserving know-how passed down through generations.", ar: "صورة عن حرفي يحافظ على خبرة متوارثة عبر الأجيال." },
-      body: { fr: "Dans son atelier de la médina, Hassan façonne le bois de thuya depuis plus de trente ans...", en: "In his medina workshop, Hassan has been shaping thuya wood for over thirty years...", ar: "في ورشته بالمدينة القديمة، يشكّل حسن خشب العرعار منذ أكثر من ثلاثين سنة..." },
-      coverImage: img("interview-artisan", 1)[0],
-    },
-    {
-      category: "reportages", slug: "reportage-cooperative-argan-femmes",
-      title: { fr: "Dans une coopérative féminine d'huile d'argan", en: "Inside a women's argan oil cooperative", ar: "داخل تعاونية نسائية لزيت الأركان" },
-      excerpt: { fr: "Reportage auprès des femmes qui produisent l'or liquide du Maroc.", en: "A report on the women producing Morocco's liquid gold.", ar: "تقرير عن النساء المنتجات لذهب المغرب السائل." },
-      body: { fr: "Chaque matin, une trentaine de femmes se retrouvent pour décortiquer les noix d'argan à la main...", en: "Every morning, around thirty women gather to hand-crack argan nuts...", ar: "كل صباح، تجتمع نحو ثلاثين امرأة لتكسير حبات الأركان يدوياً..." },
-      coverImage: img("cooperative-argan", 1)[0],
-    },
-  ]).onConflictDoNothing();
-
   console.log("Seeding content pages...");
   await db.insert(contentPages).values([
     {
@@ -276,38 +235,6 @@ async function main() {
       title: { fr: "Santé à Essaouira", en: "Healthcare in Essaouira", ar: "الصحة في الصويرة" },
       body: { fr: "Essaouira dispose d'un hôpital public, de cliniques privées et de pharmacies de garde pour les résidents et expatriés...", en: "Essaouira has a public hospital, private clinics and on-call pharmacies for residents and expats...", ar: "تتوفر الصويرة على مستشفى عمومي وعيادات خاصة وصيدليات للحراسة للسكان والمقيمين الأجانب..." },
       coverImage: img("sante", 1)[0],
-    },
-  ]).onConflictDoNothing();
-
-  console.log("Seeding events...");
-  await db.insert(events).values([
-    {
-      category: "festivals", slug: "festival-gnaoua-2026",
-      title: { fr: "Festival Gnaoua et Musiques du Monde", en: "Gnaoua World Music Festival", ar: "مهرجان كناوة وموسيقى العالم" },
-      description: { fr: "Le plus grand festival de musique du Maroc, mêlant gnaoua, jazz et musiques du monde.", en: "Morocco's biggest music festival, blending gnaoua, jazz and world music.", ar: "أكبر مهرجان موسيقي في المغرب، يمزج بين كناوة والجاز وموسيقى العالم." },
-      startDate: new Date("2026-06-25"), endDate: new Date("2026-06-28"),
-      location: "Places publiques, Essaouira", image: img("event-gnaoua", 1)[0],
-    },
-    {
-      category: "marches", slug: "marche-hebdomadaire-souk-jdid",
-      title: { fr: "Marché hebdomadaire du Souk Jdid", en: "Souk Jdid weekly market", ar: "السوق الأسبوعي بسوق الجديد" },
-      description: { fr: "Marché local hebdomadaire avec produits frais, épices et artisanat.", en: "Weekly local market with fresh produce, spices and crafts.", ar: "سوق أسبوعي محلي بمنتجات طازجة وتوابل وحرف يدوية." },
-      startDate: new Date("2026-07-05"), endDate: new Date("2026-07-05"),
-      location: "Souk Jdid, Essaouira", image: img("event-souk", 1)[0],
-    },
-    {
-      category: "expositions", slug: "expo-peintres-essaouira",
-      title: { fr: "Exposition des peintres d'Essaouira", en: "Essaouira Painters Exhibition", ar: "معرض رسامي الصويرة" },
-      description: { fr: "Exposition collective d'artistes locaux dans une galerie de la médina.", en: "Group exhibition of local artists in a medina gallery.", ar: "معرض جماعي لفنانين محليين في معرض بالمدينة القديمة." },
-      startDate: new Date("2026-07-12"), endDate: new Date("2026-07-20"),
-      location: "Galerie d'art, Médina", image: img("event-expo", 1)[0],
-    },
-    {
-      category: "concerts", slug: "concert-plage-essaouira",
-      title: { fr: "Concert live sur la plage", en: "Live beach concert", ar: "حفل موسيقي حي على الشاطئ" },
-      description: { fr: "Soirée musicale en plein air sur la grande plage d'Essaouira.", en: "Open-air music evening on Essaouira's main beach.", ar: "سهرة موسيقية في الهواء الطلق على الشاطئ الكبير للصويرة." },
-      startDate: new Date("2026-08-02"), endDate: new Date("2026-08-02"),
-      location: "Grande plage, Essaouira", image: img("event-concert", 1)[0],
     },
   ]).onConflictDoNothing();
 

@@ -15,11 +15,8 @@ const SECTIONS: { href: string; label: string; permission?: Permission; group?: 
   { href: "/sections", label: "Sections personnalisées", permission: "articles", group: "Contenu & Navigation" },
   { href: "/categories", label: "Catégories", permission: "categories", group: "Contenu & Navigation" },
   { href: "/nav", label: "Navigation", permission: "nav", group: "Contenu & Navigation" },
-  { href: "/articles", label: "Articles", permission: "articles", group: "Contenu & Navigation" },
-  { href: "/evenements", label: "Événements", permission: "events", group: "Contenu & Navigation" },
 
   { href: "/establissements", label: "Établissements", permission: "establishments", group: "Établissements" },
-  { href: "/immobilier", label: "Immobilier", permission: "realEstate", group: "Établissements" },
   { href: "/label-candidatures", label: "Candidatures Label", permission: "label", group: "Établissements" },
   { href: "/avis", label: "Avis", permission: "reviews", group: "Établissements" },
 

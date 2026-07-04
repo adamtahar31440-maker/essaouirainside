@@ -6,12 +6,9 @@
     "restaurants": "Restaurants",
     "activities": "Activities",
     "shopping": "Shopping",
-    "realEstate": "Real Estate",
     "pricing": "For Pros",
     "assistance": "Help & Emergencies",
     "living": "Living in Essaouira",
-    "blog": "Blog",
-    "agenda": "Events",
     "search": "Search",
     "proSpace": "Pro Space"
   },
@@ -21,8 +18,6 @@
     "searchPlaceholder": "Search a hotel, restaurant, activity...",
     "categories": "Explore by category",
     "latestEstablishments": "Latest listings",
-    "latestArticles": "Latest articles",
-    "upcomingEvents": "Upcoming events",
     "mapTitle": "Explore on the map",
     "mapSubtitle": "Easily find the best spots around you.",
     "mapCta": "View interactive map",
@@ -83,29 +78,6 @@
     "sortNameAsc": "Name (A-Z)",
     "noResults": "No results found",
     "all": "All"
-  },
-  "blog": {
-    "title": "Blog",
-    "categories": {
-      "guides": "Guides",
-      "actualites": "News",
-      "conseils": "Tips",
-      "interviews": "Interviews",
-      "reportages": "Features"
-    },
-    "readMore": "Read article",
-    "publishedOn": "Published on"
-  },
-  "agenda": {
-    "title": "Events",
-    "categories": {
-      "festivals": "Festivals",
-      "concerts": "Concerts",
-      "marches": "Markets",
-      "expositions": "Exhibitions"
-    },
-    "from": "From",
-    "to": "to"
   },
   "discover": {
     "title": "Discover Essaouira",

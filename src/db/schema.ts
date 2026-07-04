@@ -163,26 +163,6 @@ export const invoices = pgTable("invoices", {
   paidAt: timestamp("paid_at"),
 });
 
-export const realEstateListings = pgTable("real_estate_listings", {
-  id: serial("id").primaryKey(),
-  professionalId: integer("professional_id"),
-  listingType: varchar("listing_type", { length: 16 }).notNull(), // vente|location
-  category: varchar("category", { length: 32 }).notNull(), // villa|riad|appartement|terrain
-  slug: varchar("slug", { length: 160 }).notNull().unique(),
-  title: jsonb("title").$type<Localized>().notNull(),
-  description: jsonb("description").$type<Localized>().notNull(),
-  priceMad: integer("price_mad"),
-  surfaceM2: integer("surface_m2"),
-  rooms: integer("rooms"),
-  address: varchar("address", { length: 255 }),
-  lat: doublePrecision("lat"),
-  lng: doublePrecision("lng"),
-  images: jsonb("images").$type<string[]>().default([]),
-  status: varchar("status", { length: 16 }).notNull().default("pending"), // pending|validated|refused
-  featured: boolean("featured").default(false),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
 export const adCampaigns = pgTable("ad_campaigns", {
   id: serial("id").primaryKey(),
   professionalId: integer("professional_id"),
@@ -228,9 +208,9 @@ export const modules = pgTable("modules", {
   id: serial("id").primaryKey(),
   key: varchar("key", { length: 32 }).notNull().unique(),
   status: varchar("status", { length: 16 }).notNull().default("active"), // active|inactive|maintenance
-  // Nav-manageable builtin pages (immobilier, blog, agenda) additionally use
-  // these two columns so an admin can rename/reorder them in the flat nav
-  // without ever being able to delete the underlying page.
+  // Nav-manageable builtin pages additionally use these two columns so an
+  // admin can rename/reorder them in the flat nav without ever being able
+  // to delete the underlying page.
   label: jsonb("label").$type<Localized | null>(),
   order: integer("order").default(0),
 });

@@ -5,10 +5,7 @@
 // checked for slug collisions directly against the database at creation time.
 export const RESERVED_TOP_LEVEL_SLUGS = [
   "assistance",
-  "blog",
-  "agenda",
   "recherche",
-  "immobilier",
   "tarifs",
   "approved",
   "pro",

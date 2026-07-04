@@ -25,8 +25,6 @@ export const PERMISSIONS: Record<
   | "users"
   | "professionals"
   | "establishments"
-  | "realEstate"
-  | "events"
   | "articles"
   | "categories"
   | "nav"
@@ -48,8 +46,6 @@ export const PERMISSIONS: Record<
   users: ["admin"],
   professionals: ["admin", "sales"],
   establishments: ["admin"],
-  realEstate: ["admin", "sales"],
-  events: ["admin", "editor"],
   articles: ["admin", "editor"],
   categories: ["admin"],
   nav: ["admin"],

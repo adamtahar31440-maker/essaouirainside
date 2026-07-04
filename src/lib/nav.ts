@@ -4,14 +4,9 @@ import { inArray } from "drizzle-orm";
 
 // Builtin pages the admin can rename, reorder and hide from the flat nav via
 // /admin/nav — but never delete, since that would take down the feature
-// behind them (real estate listings, blog articles, agenda events...).
-// Tarifs and Assistance are deliberately excluded: they stay exactly as
-// hardcoded, unmanaged links (explicit request from the site owner).
-export const BUILTIN_NAV_DEFAULTS: Record<string, { href: string; i18nKey: string }> = {
-  immobilier: { href: "/immobilier", i18nKey: "realEstate" },
-  blog: { href: "/blog", i18nKey: "blog" },
-  agenda: { href: "/agenda", i18nKey: "agenda" },
-};
+// behind them. Tarifs and Assistance are deliberately excluded: they stay
+// exactly as hardcoded, unmanaged links (explicit request from the site owner).
+export const BUILTIN_NAV_DEFAULTS: Record<string, { href: string; i18nKey: string }> = {};
 
 export type NavItem = {
   type: "builtin" | "category" | "section";

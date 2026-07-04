@@ -6,12 +6,9 @@
     "restaurants": "מסעדות",
     "activities": "פעילויות",
     "shopping": "קניות",
-    "realEstate": "נדל\"ן",
     "pricing": "לבעלי עסקים ומחירים",
     "assistance": "סיוע וחירום",
     "living": "לחיות באסווירה",
-    "blog": "בלוג",
-    "agenda": "אירועים",
     "search": "חיפוש",
     "proSpace": "אזור מקצועי"
   },
@@ -21,8 +18,6 @@
     "searchPlaceholder": "חפשו מלון, מסעדה, פעילות...",
     "categories": "גלו לפי קטגוריה",
     "latestEstablishments": "כתובות שנוספו לאחרונה",
-    "latestArticles": "מאמרים אחרונים",
-    "upcomingEvents": "אירועים קרובים",
     "mapTitle": "גלו במפה",
     "mapSubtitle": "מצאו בקלות את הכתובות הטובות ביותר בסביבתכם.",
     "mapCta": "צפו במפה האינטראקטיבית",
@@ -83,29 +78,6 @@
     "sortNameAsc": "שם (א-ת)",
     "noResults": "לא נמצאו תוצאות",
     "all": "הכול"
-  },
-  "blog": {
-    "title": "בלוג",
-    "categories": {
-      "guides": "מדריכים",
-      "actualites": "חדשות",
-      "conseils": "טיפים",
-      "interviews": "ראיונות",
-      "reportages": "כתבות"
-    },
-    "readMore": "קראו את המאמר",
-    "publishedOn": "פורסם בתאריך"
-  },
-  "agenda": {
-    "title": "אירועים",
-    "categories": {
-      "festivals": "פסטיבלים",
-      "concerts": "הופעות",
-      "marches": "שווקים",
-      "expositions": "תערוכות"
-    },
-    "from": "מ",
-    "to": "עד"
   },
   "discover": {
     "title": "גלו את אסווירה",

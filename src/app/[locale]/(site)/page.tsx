@@ -4,15 +4,12 @@ import { MapPinned } from "lucide-react";
 import {
   getCategories,
   getEstablishments,
-  getArticles,
-  getEvents,
   getAllSubcategories,
 } from "@/lib/data";
 import { buildSubcategoryMap, subcategoryLabel } from "@/lib/labels";
 import { getCategoryIcon } from "@/lib/category-icons";
 import { getActiveModuleKeys } from "@/lib/modules";
 import { EstablishmentCard } from "@/components/establishment-card";
-import { ArticleCard } from "@/components/article-card";
 import { Section } from "@/components/section";
 import { SearchBar } from "@/components/search-bar";
 import { NewsletterForm } from "@/components/newsletter-form";
@@ -26,12 +23,10 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [t, categoriesAll, establishmentsAll, articles, events, activeModules, allSubcategories] = await Promise.all([
+  const [t, categoriesAll, establishmentsAll, activeModules, allSubcategories] = await Promise.all([
     getTranslations("home"),
     getCategories(),
     getEstablishments({ limit: 12 }),
-    getArticles({ limit: 3 }),
-    getEvents({ limit: 3 }),
     getActiveModuleKeys(),
     getAllSubcategories(),
   ]);
@@ -57,7 +52,6 @@ export default async function HomePage({
         href: `/${locale}/${path}/${e.slug}`,
       };
     });
-  const blogActive = activeModules.has("blog");
   const newsletterActive = activeModules.has("newsletter");
 
   return (
@@ -144,54 +138,6 @@ export default async function HomePage({
           )}
         </div>
       </Section>
-
-      {blogActive && (
-        <Section
-          title={t("latestArticles")}
-          action={
-            <Link href={`/${locale}/blog`} className="text-sm font-semibold text-azur hover:underline">
-              {t("viewAll")}
-            </Link>
-          }
-        >
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {articles.map((a) => (
-              <ArticleCard
-                key={a.id}
-                href={`/${locale}/blog/${a.slug}`}
-                title={a.title[locale] ?? a.title.fr}
-                excerpt={a.excerpt[locale] ?? a.excerpt.fr}
-                image={a.coverImage}
-                category={a.category}
-              />
-            ))}
-          </div>
-        </Section>
-      )}
-
-      {events.length > 0 && (
-        <Section
-          title={t("upcomingEvents")}
-          action={
-            <Link href={`/${locale}/agenda`} className="text-sm font-semibold text-azur hover:underline">
-              {t("viewAll")}
-            </Link>
-          }
-        >
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {events.map((ev) => (
-              <ArticleCard
-                key={ev.id}
-                href={`/${locale}/agenda/${ev.slug}`}
-                title={ev.title[locale] ?? ev.title.fr}
-                excerpt={ev.description[locale] ?? ev.description.fr}
-                image={ev.image}
-                category={ev.category}
-              />
-            ))}
-          </div>
-        </Section>
-      )}
 
       {newsletterActive && (
         <section className="bg-ocean-dark py-16 text-white">

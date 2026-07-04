@@ -6,12 +6,9 @@
     "restaurants": "Рестораны",
     "activities": "Развлечения",
     "shopping": "Шопинг",
-    "realEstate": "Недвижимость",
     "pricing": "Для профессионалов и цены",
     "assistance": "Помощь и экстренные службы",
     "living": "Жизнь в Эс-Сувейре",
-    "blog": "Блог",
-    "agenda": "События",
     "search": "Поиск",
     "proSpace": "Кабинет партнёра"
   },
@@ -21,8 +18,6 @@
     "searchPlaceholder": "Поиск отеля, ресторана, развлечения...",
     "categories": "Изучить по категориям",
     "latestEstablishments": "Последние добавленные заведения",
-    "latestArticles": "Последние статьи",
-    "upcomingEvents": "Предстоящие события",
     "mapTitle": "Изучить на карте",
     "mapSubtitle": "Легко находите лучшие места поблизости.",
     "mapCta": "Открыть интерактивную карту",
@@ -83,29 +78,6 @@
     "sortNameAsc": "Название (А-Я)",
     "noResults": "Результатов не найдено",
     "all": "Все"
-  },
-  "blog": {
-    "title": "Блог",
-    "categories": {
-      "guides": "Гиды",
-      "actualites": "Новости",
-      "conseils": "Советы",
-      "interviews": "Интервью",
-      "reportages": "Репортажи"
-    },
-    "readMore": "Читать статью",
-    "publishedOn": "Опубликовано"
-  },
-  "agenda": {
-    "title": "События",
-    "categories": {
-      "festivals": "Фестивали",
-      "concerts": "Концерты",
-      "marches": "Рынки",
-      "expositions": "Выставки"
-    },
-    "from": "С",
-    "to": "по"
   },
   "discover": {
     "title": "Открыть для себя Эс-Сувейру",

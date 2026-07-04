@@ -6,12 +6,9 @@
     "restaurants": "餐厅",
     "activities": "活动",
     "shopping": "购物",
-    "realEstate": "房地产",
     "pricing": "商家与价格",
     "assistance": "紧急援助",
     "living": "在索维拉生活",
-    "blog": "博客",
-    "agenda": "活动日历",
     "search": "搜索",
     "proSpace": "商家专区"
   },
@@ -21,8 +18,6 @@
     "searchPlaceholder": "搜索酒店、餐厅或活动...",
     "categories": "按类别探索",
     "latestEstablishments": "最新添加的商家",
-    "latestArticles": "最新文章",
-    "upcomingEvents": "即将举行的活动",
     "mapTitle": "在地图上探索",
     "mapSubtitle": "轻松找到您周围的优质地点。",
     "mapCta": "查看互动地图",
@@ -83,29 +78,6 @@
     "sortNameAsc": "名称（A-Z）",
     "noResults": "未找到结果",
     "all": "全部"
-  },
-  "blog": {
-    "title": "博客",
-    "categories": {
-      "guides": "指南",
-      "actualites": "新闻",
-      "conseils": "建议",
-      "interviews": "访谈",
-      "reportages": "专题报道"
-    },
-    "readMore": "阅读文章",
-    "publishedOn": "发布于"
-  },
-  "agenda": {
-    "title": "活动日历",
-    "categories": {
-      "festivals": "节日",
-      "concerts": "音乐会",
-      "marches": "集市",
-      "expositions": "展览"
-    },
-    "from": "从",
-    "to": "至"
   },
   "discover": {
     "title": "探索索维拉",

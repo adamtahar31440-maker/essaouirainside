@@ -6,12 +6,9 @@
     "restaurants": "Restoranlar",
     "activities": "Aktiviteler",
     "shopping": "Alışveriş",
-    "realEstate": "Emlak",
     "pricing": "Profesyoneller ve Fiyatlar",
     "assistance": "Yardım ve Acil Durumlar",
     "living": "Essaouira'da Yaşam",
-    "blog": "Blog",
-    "agenda": "Etkinlikler",
     "search": "Ara",
     "proSpace": "Profesyonel Alanı"
   },
@@ -21,8 +18,6 @@
     "searchPlaceholder": "Otel, restoran veya aktivite ara...",
     "categories": "Kategoriye göre keşfet",
     "latestEstablishments": "Son eklenen adresler",
-    "latestArticles": "Son makaleler",
-    "upcomingEvents": "Yaklaşan etkinlikler",
     "mapTitle": "Haritada keşfet",
     "mapSubtitle": "Çevrenizdeki en iyi adresleri kolayca bulun.",
     "mapCta": "İnteraktif haritayı gör",
@@ -83,29 +78,6 @@
     "sortNameAsc": "İsim (A-Z)",
     "noResults": "Sonuç bulunamadı",
     "all": "Tümü"
-  },
-  "blog": {
-    "title": "Blog",
-    "categories": {
-      "guides": "Rehberler",
-      "actualites": "Haberler",
-      "conseils": "Tavsiyeler",
-      "interviews": "Röportajlar",
-      "reportages": "Röportaj Yazıları"
-    },
-    "readMore": "Makaleyi Oku",
-    "publishedOn": "Yayın tarihi"
-  },
-  "agenda": {
-    "title": "Etkinlikler",
-    "categories": {
-      "festivals": "Festivaller",
-      "concerts": "Konserler",
-      "marches": "Pazarlar",
-      "expositions": "Sergiler"
-    },
-    "from": "Başlangıç",
-    "to": "Bitiş"
   },
   "discover": {
     "title": "Essaouira'yı Keşfet",

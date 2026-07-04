@@ -33,9 +33,8 @@ export default async function AdminNavPage({
       <div className="mb-6">
         <h1 className="text-2xl font-semibold text-ocean-dark">Navigation</h1>
         <p className="mt-1 text-sm text-foreground/60">
-          Tous les liens de la barre de navigation, à un seul endroit. Les fonctionnalités intégrées (Immobilier,
-          Blog, Agenda) peuvent être renommées, déplacées et masquées, mais pas supprimées. Tarifs et Assistance
-          ne sont pas gérés ici. Les catégories et sections personnalisées peuvent être entièrement supprimées.
+          Tous les liens de la barre de navigation, à un seul endroit. Tarifs et Assistance ne sont pas gérés ici.
+          Les catégories et sections personnalisées peuvent être entièrement supprimées.
         </p>
       </div>
 

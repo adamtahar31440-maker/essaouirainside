@@ -1,22 +1,18 @@
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
-import { getAllEstablishments, getCategories, getArticles, getEvents } from "@/lib/data";
+import { getAllEstablishments, getCategories } from "@/lib/data";
 
 const BASE_URL = "https://essaouirainside.com";
 
 const STATIC_PATHS = [
   "",
-  "/blog",
-  "/agenda",
   "/recherche",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [establishments, categories, articles, events] = await Promise.all([
+  const [establishments, categories] = await Promise.all([
     getAllEstablishments(),
     getCategories(),
-    getArticles(),
-    getEvents(),
   ]);
 
   const categoryById = new Map(categories.map((c) => [c.id, c]));
@@ -35,12 +31,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const path = cat ? cat.slug : null;
       if (!path) continue;
       entries.push({ url: `${BASE_URL}/${locale}/${path}/${e.slug}`, changeFrequency: "monthly" });
-    }
-    for (const a of articles) {
-      entries.push({ url: `${BASE_URL}/${locale}/blog/${a.slug}`, changeFrequency: "monthly" });
-    }
-    for (const ev of events) {
-      entries.push({ url: `${BASE_URL}/${locale}/agenda/${ev.slug}`, changeFrequency: "weekly" });
     }
   }
 

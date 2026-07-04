@@ -6,12 +6,9 @@
     "restaurants": "Restaurants",
     "activities": "Activités",
     "shopping": "Shopping",
-    "realEstate": "Immobilier",
     "pricing": "Pros & Tarifs",
     "assistance": "Assistance & Urgences",
     "living": "Vivre à Essaouira",
-    "blog": "Blog",
-    "agenda": "Agenda",
     "search": "Rechercher",
     "proSpace": "Espace Pro"
   },
@@ -21,8 +18,6 @@
     "searchPlaceholder": "Rechercher un hôtel, un restaurant, une activité...",
     "categories": "Explorer par catégorie",
     "latestEstablishments": "Dernières adresses ajoutées",
-    "latestArticles": "Derniers articles",
-    "upcomingEvents": "Événements à venir",
     "mapTitle": "Explorer sur la carte",
     "mapSubtitle": "Trouvez facilement les meilleures adresses autour de vous.",
     "mapCta": "Voir la carte interactive",
@@ -83,29 +78,6 @@
     "sortNameAsc": "Nom (A-Z)",
     "noResults": "Aucun résultat trouvé",
     "all": "Tous"
-  },
-  "blog": {
-    "title": "Blog",
-    "categories": {
-      "guides": "Guides",
-      "actualites": "Actualités",
-      "conseils": "Conseils",
-      "interviews": "Interviews",
-      "reportages": "Reportages"
-    },
-    "readMore": "Lire l'article",
-    "publishedOn": "Publié le"
-  },
-  "agenda": {
-    "title": "Agenda",
-    "categories": {
-      "festivals": "Festivals",
-      "concerts": "Concerts",
-      "marches": "Marchés",
-      "expositions": "Expositions"
-    },
-    "from": "Du",
-    "to": "au"
   },
   "discover": {
     "title": "Découvrir Essaouira",

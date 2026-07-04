@@ -10,9 +10,7 @@ export default async function AdminDashboardPage() {
       <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
         <StatCard label="Établissements" value={stats.establishments} />
         <StatCard label="Professionnels" value={stats.professionals} />
-        <StatCard label="Articles publiés" value={stats.articles} />
         <StatCard label="Avis en attente" value={stats.reviewsPending} />
-        <StatCard label="Annonces immobilières" value={stats.realEstate} />
         <StatCard label="Abonnements actifs" value={stats.activeSubscriptions} />
         <StatCard label="Abonnés newsletter" value={stats.newsletterSubscribers} />
       </div>

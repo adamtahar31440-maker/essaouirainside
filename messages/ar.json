@@ -6,12 +6,9 @@
     "restaurants": "المطاعم",
     "activities": "الأنشطة",
     "shopping": "التسوق",
-    "realEstate": "العقارات",
     "pricing": "للمحترفين",
     "assistance": "المساعدة والطوارئ",
     "living": "العيش في الصويرة",
-    "blog": "المدونة",
-    "agenda": "الفعاليات",
     "search": "بحث",
     "proSpace": "مساحة المحترفين"
   },
@@ -21,8 +18,6 @@
     "searchPlaceholder": "ابحث عن فندق، مطعم، نشاط...",
     "categories": "استكشف حسب الفئة",
     "latestEstablishments": "أحدث الإضافات",
-    "latestArticles": "أحدث المقالات",
-    "upcomingEvents": "الفعاليات القادمة",
     "mapTitle": "استكشف على الخريطة",
     "mapSubtitle": "اعثر بسهولة على أفضل الأماكن من حولك.",
     "mapCta": "عرض الخريطة التفاعلية",
@@ -83,29 +78,6 @@
     "sortNameAsc": "الاسم (أ-ي)",
     "noResults": "لا توجد نتائج",
     "all": "الكل"
-  },
-  "blog": {
-    "title": "المدونة",
-    "categories": {
-      "guides": "أدلة",
-      "actualites": "أخبار",
-      "conseils": "نصائح",
-      "interviews": "مقابلات",
-      "reportages": "تقارير"
-    },
-    "readMore": "اقرأ المقال",
-    "publishedOn": "نُشر في"
-  },
-  "agenda": {
-    "title": "الفعاليات",
-    "categories": {
-      "festivals": "مهرجانات",
-      "concerts": "حفلات",
-      "marches": "أسواق",
-      "expositions": "معارض"
-    },
-    "from": "من",
-    "to": "إلى"
   },
   "discover": {
     "title": "اكتشف الصويرة",
