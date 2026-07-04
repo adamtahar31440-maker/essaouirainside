@@ -150,7 +150,9 @@
     "readMore": "En savoir plus",
     "back": "Retour",
     "loading": "Chargement...",
-    "badgePartner": "Partenaire"
+    "badgePartner": "Partenaire",
+    "pricesTitle": "Tarifs",
+    "mapTitle": "Carte"
   },
   "dashboard": {
     "greeting": "Bonjour {name}",

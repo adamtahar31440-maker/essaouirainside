@@ -168,14 +168,47 @@ export async function upsertContentPage(formData: FormData) {
   await requireRole("articles");
   const db = getDb();
   const id = formData.get("id") ? Number(formData.get("id")) : null;
-  const titleFr = String(formData.get("title_fr") ?? "");
+
+  const title = String(formData.get("title") ?? "");
+  const body = String(formData.get("body") ?? "");
+
+  let pricesInput: { name: string; price: number | null; category: string | null }[] = [];
+  try {
+    pricesInput = JSON.parse(String(formData.get("prices") ?? "[]"));
+  } catch {
+    pricesInput = [];
+  }
+
+  const targetLocales = ALL_LOCALES.filter((l) => l !== "fr");
+  const translationFields: Record<string, string> = { title, body };
+  pricesInput.forEach((p, i) => {
+    translationFields[`price_${i}`] = p.name;
+    if (p.category) translationFields[`priceCategory_${i}`] = p.category;
+  });
+  const translations = await translateFields(translationFields, targetLocales, "fr");
+
+  const prices = pricesInput.map((p, i) => ({
+    name: { fr: p.name, ...translations[`price_${i}`] },
+    price: p.price,
+    category: p.category ? { fr: p.category, ...translations[`priceCategory_${i}`] } : null,
+  }));
+
+  let mapPoints: { label: string; lat: number; lng: number }[] = [];
+  try {
+    mapPoints = JSON.parse(String(formData.get("mapPoints") ?? "[]"));
+  } catch {
+    mapPoints = [];
+  }
 
   const data = {
     section: String(formData.get("section") ?? "decouvrir"),
-    slug: id ? String(formData.get("slug")) : slugify(titleFr),
-    title: readLocalized(formData, "title"),
-    body: readLocalized(formData, "body"),
+    slug: id ? String(formData.get("slug")) : slugify(title),
+    title: { fr: title, ...translations.title },
+    body: { fr: body, ...translations.body },
     coverImage: String(formData.get("coverImage") ?? "") || null,
+    prices,
+    mapEnabled: formData.get("mapEnabled") === "on",
+    mapPoints,
   };
 
   if (id) {

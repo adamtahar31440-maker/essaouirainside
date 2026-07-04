@@ -150,7 +150,9 @@
     "readMore": "了解更多",
     "back": "返回",
     "loading": "加载中...",
-    "badgePartner": "合作伙伴"
+    "badgePartner": "合作伙伴",
+    "pricesTitle": "价格",
+    "mapTitle": "地图"
   },
   "dashboard": {
     "greeting": "您好，{name}",

@@ -150,7 +150,9 @@
     "readMore": "더 알아보기",
     "back": "뒤로",
     "loading": "로딩 중...",
-    "badgePartner": "파트너"
+    "badgePartner": "파트너",
+    "pricesTitle": "요금",
+    "mapTitle": "지도"
   },
   "dashboard": {
     "greeting": "안녕하세요, {name}님",

@@ -90,6 +90,11 @@ export const contentPages = pgTable("content_pages", {
   body: jsonb("body").$type<Localized>().notNull(),
   coverImage: varchar("cover_image", { length: 255 }),
   order: integer("order").default(0),
+  // Optional price list (e.g. taxi fares by time of day); category groups rows
+  // (e.g. Jour/Nuit) the same way establishment products are grouped.
+  prices: jsonb("prices").$type<{ name: Localized; price: number | null; category: Localized | null }[]>().default([]),
+  mapEnabled: boolean("map_enabled").default(false),
+  mapPoints: jsonb("map_points").$type<{ label: string; lat: number; lng: number }[]>().default([]),
 });
 
 export const events = pgTable("events", {

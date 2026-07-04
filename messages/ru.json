@@ -150,7 +150,9 @@
     "readMore": "Узнать больше",
     "back": "Назад",
     "loading": "Загрузка...",
-    "badgePartner": "Партнёр"
+    "badgePartner": "Партнёр",
+    "pricesTitle": "Тарифы",
+    "mapTitle": "Карта"
   },
   "dashboard": {
     "greeting": "Здравствуйте, {name}",

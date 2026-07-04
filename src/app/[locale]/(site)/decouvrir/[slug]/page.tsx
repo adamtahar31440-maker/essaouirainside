@@ -33,6 +33,18 @@ export default async function DecouvrirDetailPage({
 
   const t = await getTranslations("common");
 
+  const priceGroups = (page.prices ?? []).reduce<{ category: string | null; items: { name: string; price: number | null }[] }[]>(
+    (groups, p) => {
+      const categoryLabel = p.category ? p.category[locale] ?? p.category.fr : null;
+      const item = { name: p.name[locale] ?? p.name.fr, price: p.price };
+      const existing = groups.find((g) => g.category === categoryLabel);
+      if (existing) existing.items.push(item);
+      else groups.push({ category: categoryLabel, items: [item] });
+      return groups;
+    },
+    []
+  );
+
   return (
     <ContentDetail
       locale={locale}
@@ -41,6 +53,10 @@ export default async function DecouvrirDetailPage({
       title={page.title[locale] ?? page.title.fr}
       body={page.body[locale] ?? page.body.fr}
       coverImage={page.coverImage}
+      priceGroups={priceGroups}
+      pricesTitle={t("pricesTitle")}
+      mapPoints={page.mapEnabled ? page.mapPoints ?? [] : []}
+      mapTitle={t("mapTitle")}
     />
   );
 }

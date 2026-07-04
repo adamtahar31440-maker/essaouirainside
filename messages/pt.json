@@ -150,7 +150,9 @@
     "readMore": "Saber mais",
     "back": "Voltar",
     "loading": "A carregar...",
-    "badgePartner": "Parceiro"
+    "badgePartner": "Parceiro",
+    "pricesTitle": "Tarifas",
+    "mapTitle": "Mapa"
   },
   "dashboard": {
     "greeting": "Olá {name}",

@@ -150,7 +150,9 @@
     "readMore": "اقرأ المزيد",
     "back": "رجوع",
     "loading": "جارٍ التحميل...",
-    "badgePartner": "شريك"
+    "badgePartner": "شريك",
+    "pricesTitle": "الأسعار",
+    "mapTitle": "الخريطة"
   },
   "dashboard": {
     "greeting": "مرحبًا {name}",

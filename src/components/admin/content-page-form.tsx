@@ -1,6 +1,8 @@
 import { upsertContentPage } from "@/lib/admin-actions";
-import { LocalizedFieldGroup } from "@/components/admin/localized-field-group";
-import { AutoTranslateButton } from "@/components/admin/auto-translate-button";
+import { SubmitButton } from "@/components/submit-button";
+import { ProductsEditor } from "@/components/products-editor";
+import { MapSectionToggle } from "@/components/admin/map-section-toggle";
+import { MapPointsEditor } from "@/components/admin/map-points-editor";
 
 type ContentPage = {
   id: number;
@@ -9,6 +11,9 @@ type ContentPage = {
   title: Record<string, string>;
   body: Record<string, string>;
   coverImage: string | null;
+  prices?: { name: Record<string, string>; price: number | null; category: Record<string, string> | null }[] | null;
+  mapEnabled?: boolean | null;
+  mapPoints?: { label: string; lat: number; lng: number }[] | null;
 };
 
 const inputClass =
@@ -31,19 +36,63 @@ export function ContentPageForm({ locale, page }: { locale: string; page?: Conte
         </select>
       </div>
 
-      <AutoTranslateButton />
+      <p className="rounded-lg bg-ocean-dark/5 px-3 py-2 text-xs text-foreground/60">
+        Rédigez en français : les autres langues du site seront automatiquement retraduites lors de l&apos;enregistrement.
+      </p>
 
-      <LocalizedFieldGroup field="title" label="Titre" values={page?.title} required />
-      <LocalizedFieldGroup field="body" label="Contenu" values={page?.body} multiline rows={8} />
+      <div>
+        <label className={labelClass}>Titre</label>
+        <input name="title" defaultValue={page?.title.fr} className={inputClass} required />
+      </div>
+      <div>
+        <label className={labelClass}>Contenu</label>
+        <textarea name="body" defaultValue={page?.body.fr} rows={8} className={inputClass} />
+      </div>
 
       <div>
         <label className={labelClass}>Image de couverture (URL)</label>
         <input name="coverImage" defaultValue={page?.coverImage ?? ""} className={inputClass} />
       </div>
 
-      <button type="submit" className="rounded-full bg-ocean-dark px-6 py-2.5 text-sm font-semibold text-white hover:bg-ocean">
-        Enregistrer
-      </button>
+      <div>
+        <label className={labelClass}>Tarifs (facultatif)</label>
+        <p className="mb-2 text-xs text-foreground/50">
+          Ex : plusieurs tarifs différents (jour/nuit, par destination...). La catégorie permet de les regrouper
+          (ex : &quot;Jour&quot; / &quot;Nuit&quot;).
+        </p>
+        <ProductsEditor
+          name="prices"
+          defaultProducts={(page?.prices ?? []).map((p) => ({
+            name: p.name.fr,
+            price: p.price,
+            category: p.category?.fr ?? null,
+          }))}
+          namePlaceholder="Ex : Centre-ville"
+          pricePlaceholder="Prix (DH)"
+          categoryPlaceholder="Jour / Nuit"
+          addLabel="Ajouter un tarif"
+          scanLabel="Scanner un document"
+          scanningLabel="Analyse en cours..."
+          scanHint="Vous pouvez aussi prendre en photo une liste de tarifs déjà imprimée."
+          scanErrorText="L'analyse a échoué. Veuillez réessayer."
+          scanSuccessTemplate="{count} tarif(s) ajouté(s)."
+        />
+      </div>
+
+      <MapSectionToggle label="Afficher une carte sur cette page" defaultEnabled={!!page?.mapEnabled}>
+        <MapPointsEditor
+          name="mapPoints"
+          defaultPoints={page?.mapPoints ?? []}
+          labelPlaceholder="Nom du point (ex : Station Bab Sbaa)"
+          addressPlaceholder="Rechercher une adresse..."
+          addLabel="Ajouter un point"
+          notLocatedText="Non localisé"
+          missingKeyText="Carte indisponible : clé API Google Maps non configurée."
+          errorText="Impossible de charger Google Maps."
+        />
+      </MapSectionToggle>
+
+      <SubmitButton label="Enregistrer" pendingLabel="Traduction et enregistrement en cours..." />
     </form>
   );
 }

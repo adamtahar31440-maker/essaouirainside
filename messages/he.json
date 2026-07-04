@@ -150,7 +150,9 @@
     "readMore": "למידע נוסף",
     "back": "חזרה",
     "loading": "טוען...",
-    "badgePartner": "שותף"
+    "badgePartner": "שותף",
+    "pricesTitle": "מחירים",
+    "mapTitle": "מפה"
   },
   "dashboard": {
     "greeting": "שלום {name}",

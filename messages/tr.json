@@ -150,7 +150,9 @@
     "readMore": "Daha fazla bilgi",
     "back": "Geri",
     "loading": "Yükleniyor...",
-    "badgePartner": "Ortak"
+    "badgePartner": "Ortak",
+    "pricesTitle": "Fiyatlar",
+    "mapTitle": "Harita"
   },
   "dashboard": {
     "greeting": "Merhaba {name}",
