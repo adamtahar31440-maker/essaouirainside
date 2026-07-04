@@ -15,6 +15,7 @@ export function ImageUploader({
   max,
   limitReachedText,
   unsupportedFormatText,
+  fieldName = "images",
 }: {
   label: string;
   hint?: string;
@@ -22,6 +23,7 @@ export function ImageUploader({
   max?: number | null;
   limitReachedText?: string;
   unsupportedFormatText?: string;
+  fieldName?: string;
 }) {
   const [items, setItems] = useState<UploadItem[]>(
     defaultImages.map((url, i) => ({ id: `existing-${i}-${url}`, url, uploading: false }))
@@ -110,7 +112,7 @@ export function ImageUploader({
       ) : (
         hint && <p className="mt-1 text-xs text-foreground/50">{hint}</p>
       )}
-      <input type="hidden" name="images" value={readyUrls.join("\n")} readOnly />
+      <input type="hidden" name={fieldName} value={readyUrls.join("\n")} readOnly />
 
       {items.length > 0 && (
         <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-4">

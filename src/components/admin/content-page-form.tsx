@@ -1,6 +1,7 @@
 import { upsertContentPage } from "@/lib/admin-actions";
 import { SubmitButton } from "@/components/submit-button";
 import { ProductsEditor } from "@/components/products-editor";
+import { ImageUploader } from "@/components/image-uploader";
 import { MapSectionToggle } from "@/components/admin/map-section-toggle";
 import { MapPointsEditor } from "@/components/admin/map-points-editor";
 
@@ -49,10 +50,13 @@ export function ContentPageForm({ locale, page }: { locale: string; page?: Conte
         <textarea name="body" defaultValue={page?.body.fr} rows={8} className={inputClass} />
       </div>
 
-      <div>
-        <label className={labelClass}>Image de couverture (URL)</label>
-        <input name="coverImage" defaultValue={page?.coverImage ?? ""} className={inputClass} />
-      </div>
+      <ImageUploader
+        label="Image de couverture"
+        fieldName="coverImage"
+        max={1}
+        defaultImages={page?.coverImage ? [page.coverImage] : []}
+        unsupportedFormatText='Format non supporté (souvent des photos iPhone en HEIC). Réglages > Appareil photo > Formats > "Le plus compatible", puis reprenez la photo — ou choisissez une photo déjà au format JPEG/PNG.'
+      />
 
       <div>
         <label className={labelClass}>Tarifs (facultatif)</label>
@@ -89,6 +93,7 @@ export function ContentPageForm({ locale, page }: { locale: string; page?: Conte
           notLocatedText="Non localisé"
           missingKeyText="Carte indisponible : clé API Google Maps non configurée."
           errorText="Impossible de charger Google Maps."
+          dragHint="Faites glisser un repère sur la carte pour ajuster précisément sa position."
         />
       </MapSectionToggle>
 
