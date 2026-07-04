@@ -21,6 +21,7 @@ import {
   labelEvaluations,
   labelBadges,
   labelApplications,
+  siteSections,
 } from "@/db/schema";
 import { desc, eq, count } from "drizzle-orm";
 
@@ -145,6 +146,24 @@ export async function adminGetContentPageById(id: number) {
   const db = getDb();
   const rows = await db.select().from(contentPages).where(eq(contentPages.id, id));
   return rows[0] ?? null;
+}
+
+// ---- Site sections (custom nav sections for content pages) ----
+export async function adminGetSiteSections() {
+  const db = getDb();
+  return db.select().from(siteSections).orderBy(desc(siteSections.id));
+}
+
+export async function adminGetSiteSectionById(id: number) {
+  const db = getDb();
+  const rows = await db.select().from(siteSections).where(eq(siteSections.id, id));
+  return rows[0] ?? null;
+}
+
+export async function adminCountContentPagesBySection(section: string) {
+  const db = getDb();
+  const rows = await db.select({ value: count() }).from(contentPages).where(eq(contentPages.section, section));
+  return rows[0]?.value ?? 0;
 }
 
 // ---- Events ----

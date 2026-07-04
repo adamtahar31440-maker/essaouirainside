@@ -26,12 +26,14 @@ import {
   labelEvaluations,
   labelBadges,
   labelApplications,
+  siteSections,
 } from "@/db/schema";
 import { can, type Role } from "@/lib/roles";
 import { LABEL_CRITERIA } from "@/lib/label-criteria";
 import { slugify } from "@/lib/slug";
 import { readLocalized, ALL_LOCALES } from "@/lib/localized-form";
 import { translateFields } from "@/lib/translate";
+import { RESERVED_TOP_LEVEL_SLUGS } from "@/lib/categories";
 
 async function requireRole(section: Parameters<typeof can>[1]) {
   const user = await currentUser();
@@ -218,6 +220,45 @@ export async function upsertContentPage(formData: FormData) {
   }
   revalidatePath("/", "layout");
   redirect(`/${formData.get("locale")}/admin/pages`);
+}
+
+// ---- Site sections ----
+export async function upsertSiteSection(formData: FormData) {
+  await requireRole("articles");
+  const db = getDb();
+  const id = formData.get("id") ? Number(formData.get("id")) : null;
+
+  const name = String(formData.get("name") ?? "");
+  const requestedSlug = slugify(String(formData.get("slug") ?? "") || name);
+
+  if (RESERVED_TOP_LEVEL_SLUGS.includes(requestedSlug)) {
+    throw new Error(
+      `"${requestedSlug}" est déjà utilisé par une page du site et ne peut pas servir de section. Choisissez un autre nom.`
+    );
+  }
+
+  const targetLocales = ALL_LOCALES.filter((l) => l !== "fr");
+  const translations = await translateFields({ name }, targetLocales, "fr");
+
+  const data = {
+    slug: requestedSlug,
+    name: { fr: name, ...translations.name },
+  };
+
+  if (id) {
+    await db.update(siteSections).set(data).where(eq(siteSections.id, id));
+  } else {
+    await db.insert(siteSections).values(data);
+  }
+  revalidatePath("/", "layout");
+  redirect(`/${formData.get("locale")}/admin/sections`);
+}
+
+export async function deleteSiteSection(id: number) {
+  await requireRole("articles");
+  const db = getDb();
+  await db.delete(siteSections).where(eq(siteSections.id, id));
+  revalidatePath("/", "layout");
 }
 
 // ---- Events ----

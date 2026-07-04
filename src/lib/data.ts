@@ -6,6 +6,7 @@ import {
   contentPages,
   events,
   emergencyContacts,
+  siteSections,
 } from "@/db/schema";
 import { desc, eq, and, asc } from "drizzle-orm";
 
@@ -105,6 +106,17 @@ export async function getContentPages(section: string) {
     .from(contentPages)
     .where(eq(contentPages.section, section))
     .orderBy(asc(contentPages.order));
+}
+
+export async function getSiteSections() {
+  const db = getDb();
+  return db.select().from(siteSections).orderBy(asc(siteSections.order));
+}
+
+export async function getSiteSectionBySlug(slug: string) {
+  const db = getDb();
+  const rows = await db.select().from(siteSections).where(eq(siteSections.slug, slug));
+  return rows[0] ?? null;
 }
 
 export async function getContentPageBySlug(section: string, slug: string) {

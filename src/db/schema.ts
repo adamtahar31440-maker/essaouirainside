@@ -97,6 +97,17 @@ export const contentPages = pgTable("content_pages", {
   mapPoints: jsonb("map_points").$type<{ label: string; lat: number; lng: number }[]>().default([]),
 });
 
+// Admin-created custom sections that behave like Découvrir/Vivre à Essaouira:
+// each gets its own top-level nav link (in the "Vivre à Essaouira" dropdown,
+// alongside Blog/Agenda) and listing/detail pages, backed by content_pages
+// rows whose "section" matches this slug.
+export const siteSections = pgTable("site_sections", {
+  id: serial("id").primaryKey(),
+  slug: varchar("slug", { length: 64 }).notNull().unique(),
+  name: jsonb("name").$type<Localized>().notNull(),
+  order: integer("order").default(0),
+});
+
 export const events = pgTable("events", {
   id: serial("id").primaryKey(),
   category: varchar("category", { length: 32 }).notNull(), // festivals | concerts | marches | expositions

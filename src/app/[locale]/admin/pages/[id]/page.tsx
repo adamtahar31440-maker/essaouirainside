@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { adminGetContentPageById } from "@/lib/admin-data";
+import { adminGetContentPageById, adminGetSiteSections } from "@/lib/admin-data";
 import { ContentPageForm } from "@/components/admin/content-page-form";
 
 export default async function EditContentPage({
@@ -8,13 +8,16 @@ export default async function EditContentPage({
   params: Promise<{ locale: string; id: string }>;
 }) {
   const { locale, id } = await params;
-  const page = await adminGetContentPageById(Number(id));
+  const [page, customSections] = await Promise.all([
+    adminGetContentPageById(Number(id)),
+    adminGetSiteSections(),
+  ]);
   if (!page) notFound();
 
   return (
     <div>
       <h1 className="mb-6 text-2xl font-semibold text-ocean-dark">Modifier : {page.title.fr}</h1>
-      <ContentPageForm locale={locale} page={page} />
+      <ContentPageForm locale={locale} page={page} customSections={customSections} />
     </div>
   );
 }

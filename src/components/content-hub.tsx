@@ -11,7 +11,7 @@ export function ContentHub({
   locale: string;
   basePath: string;
   title: string;
-  subtitle: string;
+  subtitle?: string;
   pages: { slug: string; title: Record<string, string>; coverImage?: string | null }[];
 }) {
   return (
@@ -19,7 +19,7 @@ export function ContentHub({
       <div className="bg-sand/40 py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <h1 className="text-3xl font-semibold text-ocean-dark sm:text-4xl">{title}</h1>
-          <p className="mt-2 text-foreground/60">{subtitle}</p>
+          {subtitle && <p className="mt-2 text-foreground/60">{subtitle}</p>}
         </div>
       </div>
 

@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { CATEGORY_PATH_TO_TYPE } from "@/lib/categories";
 import { subcategoryLabel, priceLevelLabel } from "@/lib/labels";
-import { getEstablishmentBySlug, getSimilarEstablishments } from "@/lib/data";
+import { getEstablishmentBySlug, getSimilarEstablishments, getSiteSectionBySlug, getContentPageBySlug } from "@/lib/data";
 import { getLabelBadges, getApprovedReviewsForEstablishment } from "@/lib/admin-data";
 import { isModuleActive, CATEGORY_MODULE_KEY } from "@/lib/modules";
 import { EstablishmentCard } from "@/components/establishment-card";
@@ -31,6 +31,7 @@ import { DirectionsButton } from "@/components/directions-button";
 import { PhotoGallery } from "@/components/photo-gallery";
 import { HoursDisplay } from "@/components/hours-display";
 import { ProductCategoryList } from "@/components/product-category-list";
+import { ContentDetail } from "@/components/content-detail";
 
 export async function generateMetadata({
   params,
@@ -38,6 +39,19 @@ export async function generateMetadata({
   params: Promise<{ locale: string; category: string; slug: string }>;
 }): Promise<Metadata> {
   const { locale, category, slug } = await params;
+  const type = CATEGORY_PATH_TO_TYPE[category];
+  if (!type) {
+    const section = await getSiteSectionBySlug(category);
+    if (!section) return {};
+    const page = await getContentPageBySlug(category, slug);
+    if (!page) return {};
+    const title = page.title[locale] ?? page.title.fr;
+    return {
+      title,
+      description: (page.body[locale] ?? page.body.fr).slice(0, 155),
+      alternates: { canonical: `https://essaouirainside.com/${locale}/${category}/${slug}` },
+    };
+  }
   const e = await getEstablishmentBySlug(slug);
   if (!e) return {};
   const name = e.name[locale] ?? e.name.fr;
@@ -63,7 +77,39 @@ export default async function EstablishmentPage({
   setRequestLocale(locale);
 
   const type = CATEGORY_PATH_TO_TYPE[category];
-  if (!type) notFound();
+  if (!type) {
+    const section = await getSiteSectionBySlug(category);
+    if (!section) notFound();
+    const page = await getContentPageBySlug(category, slug);
+    if (!page) notFound();
+
+    const t = await getTranslations("common");
+    const priceGroups = (page.prices ?? []).reduce<
+      { category: string | null; items: { name: string; price: number | null }[] }[]
+    >((groups, p) => {
+      const categoryLabel = p.category ? p.category[locale] ?? p.category.fr : null;
+      const item = { name: p.name[locale] ?? p.name.fr, price: p.price };
+      const existing = groups.find((g) => g.category === categoryLabel);
+      if (existing) existing.items.push(item);
+      else groups.push({ category: categoryLabel, items: [item] });
+      return groups;
+    }, []);
+
+    return (
+      <ContentDetail
+        locale={locale}
+        backHref={`/${locale}/${category}`}
+        backLabel={t("back")}
+        title={page.title[locale] ?? page.title.fr}
+        body={page.body[locale] ?? page.body.fr}
+        coverImage={page.coverImage}
+        priceGroups={priceGroups}
+        pricesTitle={t("pricesTitle")}
+        mapPoints={page.mapEnabled ? page.mapPoints ?? [] : []}
+        mapTitle={t("mapTitle")}
+      />
+    );
+  }
 
   const moduleKey = CATEGORY_MODULE_KEY[type];
   if (moduleKey && !(await isModuleActive(moduleKey))) notFound();

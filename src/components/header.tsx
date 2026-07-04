@@ -8,7 +8,13 @@ import { Menu, X, Search, Globe, ChevronDown } from "lucide-react";
 import { localeNames, routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
-export function Header({ activeModules = [] }: { activeModules?: string[] }) {
+export function Header({
+  activeModules = [],
+  sections = [],
+}: {
+  activeModules?: string[];
+  sections?: { slug: string; name: string }[];
+}) {
   const t = useTranslations("nav");
   const locale = useLocale();
   const pathname = usePathname();
@@ -27,7 +33,8 @@ export function Header({ activeModules = [] }: { activeModules?: string[] }) {
   const livingLinks = [
     { href: "/blog", label: t("blog"), moduleKey: "blog" },
     { href: "/agenda", label: t("agenda") },
-  ].filter((link) => isActive(link.moduleKey));
+    ...sections.map((s) => ({ href: `/${s.slug}`, label: s.name })),
+  ].filter((link) => isActive((link as { moduleKey?: string }).moduleKey));
 
   const pathWithoutLocale = pathname.replace(`/${locale}`, "") || "/";
   const localePrefixed = (href: string) => `/${locale}${href === "/" ? "" : href}`;

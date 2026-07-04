@@ -37,3 +37,25 @@ export const CATEGORY_SUBCATEGORIES: Record<string, string[]> = {
   ],
   shopping: ["souks", "bois-thuya", "bijoux", "decoration", "mode", "art"],
 };
+
+// Top-level URL segments already used by static routes (or by establishment
+// categories). A custom site section's slug must avoid these, otherwise its
+// pages would be unreachable — Next.js resolves the matching static folder
+// before ever falling back to the [category] dynamic route.
+export const RESERVED_TOP_LEVEL_SLUGS = [
+  ...Object.values(CATEGORY_TYPE_TO_PATH),
+  "decouvrir",
+  "vivre-a-essaouira",
+  "assistance",
+  "blog",
+  "agenda",
+  "recherche",
+  "immobilier",
+  "tarifs",
+  "approved",
+  "pro",
+  "admin",
+  "sign-in",
+  "sign-up",
+  "api",
+];

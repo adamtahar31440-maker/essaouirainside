@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { upsertContentPage } from "@/lib/admin-actions";
 import { SubmitButton } from "@/components/submit-button";
 import { ProductsEditor } from "@/components/products-editor";
@@ -17,11 +18,21 @@ type ContentPage = {
   mapPoints?: { label: string; lat: number; lng: number }[] | null;
 };
 
+type CustomSection = { slug: string; name: Record<string, string> };
+
 const inputClass =
   "w-full rounded-lg border border-black/10 px-3 py-2 text-sm outline-none focus:border-ocean-dark";
 const labelClass = "mb-1 block text-xs font-semibold text-foreground/60";
 
-export function ContentPageForm({ locale, page }: { locale: string; page?: ContentPage }) {
+export function ContentPageForm({
+  locale,
+  page,
+  customSections = [],
+}: {
+  locale: string;
+  page?: ContentPage;
+  customSections?: CustomSection[];
+}) {
   return (
     <form action={upsertContentPage} className="space-y-8">
       <input type="hidden" name="locale" value={locale} />
@@ -29,11 +40,21 @@ export function ContentPageForm({ locale, page }: { locale: string; page?: Conte
       {page && <input type="hidden" name="slug" value={page.slug} />}
 
       <div>
-        <label className={labelClass}>Section</label>
+        <div className="mb-1 flex items-center justify-between gap-2">
+          <label className={labelClass}>Section</label>
+          <Link href={`/${locale}/admin/sections/new`} className="text-xs font-medium text-azur hover:underline">
+            + Créer une nouvelle section
+          </Link>
+        </div>
         <select name="section" defaultValue={page?.section ?? "decouvrir"} className={inputClass}>
           <option value="decouvrir">Découvrir</option>
           <option value="vivre">Vivre à Essaouira</option>
           <option value="assistance-guides">Assistance — Guides pratiques</option>
+          {customSections.map((s) => (
+            <option key={s.slug} value={s.slug}>
+              {s.name.fr}
+            </option>
+          ))}
         </select>
       </div>
 

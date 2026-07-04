@@ -17,6 +17,7 @@ const SECTIONS: { href: string; label: string; permission?: Permission }[] = [
   { href: "/evenements", label: "Événements", permission: "events" },
   { href: "/articles", label: "Articles", permission: "articles" },
   { href: "/pages", label: "Pages", permission: "articles" },
+  { href: "/sections", label: "Sections personnalisées", permission: "articles" },
   { href: "/assistance", label: "Assistance & Urgences", permission: "assistance" },
   { href: "/label-candidatures", label: "Candidatures Label", permission: "label" },
   { href: "/avis", label: "Avis", permission: "reviews" },

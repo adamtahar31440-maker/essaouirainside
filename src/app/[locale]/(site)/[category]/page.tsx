@@ -4,10 +4,11 @@ import Link from "next/link";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CATEGORY_PATH_TO_TYPE, CATEGORY_SUBCATEGORIES } from "@/lib/categories";
 import { subcategoryLabel } from "@/lib/labels";
-import { getEstablishments } from "@/lib/data";
+import { getEstablishments, getSiteSectionBySlug, getContentPages } from "@/lib/data";
 import { isModuleActive, CATEGORY_MODULE_KEY } from "@/lib/modules";
 import { EstablishmentCard } from "@/components/establishment-card";
 import { Section } from "@/components/section";
+import { ContentHub } from "@/components/content-hub";
 import { cn } from "@/lib/utils";
 
 export async function generateMetadata({
@@ -17,7 +18,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, category } = await params;
   const type = CATEGORY_PATH_TO_TYPE[category];
-  if (!type) return {};
+  if (!type) {
+    const section = await getSiteSectionBySlug(category);
+    if (!section) return {};
+    const label = section.name[locale] ?? section.name.fr;
+    return {
+      title: label,
+      alternates: { canonical: `https://essaouirainside.com/${locale}/${category}` },
+    };
+  }
   const tCat = await getTranslations({ locale, namespace: "categories" });
   const label = tCat(type as "hebergement" | "restaurant" | "activite" | "shopping");
   return {
@@ -39,7 +48,19 @@ export default async function CategoryPage({
   setRequestLocale(locale);
 
   const type = CATEGORY_PATH_TO_TYPE[category];
-  if (!type) notFound();
+  if (!type) {
+    const section = await getSiteSectionBySlug(category);
+    if (!section) notFound();
+    const pages = await getContentPages(category);
+    return (
+      <ContentHub
+        locale={locale}
+        basePath={category}
+        title={section.name[locale] ?? section.name.fr}
+        pages={pages}
+      />
+    );
+  }
 
   const moduleKey = CATEGORY_MODULE_KEY[type];
   if (moduleKey && !(await isModuleActive(moduleKey))) notFound();
