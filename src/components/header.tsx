@@ -10,10 +10,10 @@ import { cn } from "@/lib/utils";
 
 export function Header({
   activeModules = [],
-  sections = [],
+  navLinks = [],
 }: {
   activeModules?: string[];
-  sections?: { slug: string; name: string }[];
+  navLinks?: { href: string; label: string }[];
 }) {
   const t = useTranslations("nav");
   const locale = useLocale();
@@ -21,20 +21,6 @@ export function Header({
   const [open, setOpen] = useState(false);
 
   const isActive = (key?: string) => !key || activeModules.includes(key);
-
-  const discoverLinks = [
-    { href: "/hebergements", label: t("stays") },
-    { href: "/restaurants", label: t("restaurants"), moduleKey: "restaurants" },
-    { href: "/activites", label: t("activities"), moduleKey: "activites" },
-    { href: "/shopping", label: t("shopping"), moduleKey: "shopping" },
-    { href: "/immobilier", label: t("realEstate"), moduleKey: "immobilier" },
-  ].filter((link) => isActive(link.moduleKey));
-
-  const livingLinks = [
-    { href: "/blog", label: t("blog"), moduleKey: "blog" },
-    { href: "/agenda", label: t("agenda") },
-    ...sections.map((s) => ({ href: `/${s.slug}`, label: s.name })),
-  ].filter((link) => isActive((link as { moduleKey?: string }).moduleKey));
 
   const pathWithoutLocale = pathname.replace(`/${locale}`, "") || "/";
   const localePrefixed = (href: string) => `/${locale}${href === "/" ? "" : href}`;
@@ -50,8 +36,15 @@ export function Header({
           <Link href={`/${locale}`} className="text-sm font-medium text-foreground/80 transition hover:text-ocean-dark">
             {t("home")}
           </Link>
-          <NavDropdown label={t("discover")} href="/decouvrir" items={discoverLinks} />
-          <NavDropdown label={t("living")} href="/vivre-a-essaouira" items={livingLinks} />
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={localePrefixed(link.href)}
+              className="text-sm font-medium text-foreground/80 transition hover:text-ocean-dark"
+            >
+              {link.label}
+            </Link>
+          ))}
           {isActive("tarifs") && (
             <Link href={localePrefixed("/tarifs")} className="text-sm font-medium text-foreground/80 transition hover:text-ocean-dark">
               {t("pricing")}
@@ -100,8 +93,16 @@ export function Header({
             >
               {t("home")}
             </Link>
-            <MobileNavGroup label={t("discover")} href="/decouvrir" items={discoverLinks} onNavigate={() => setOpen(false)} />
-            <MobileNavGroup label={t("living")} href="/vivre-a-essaouira" items={livingLinks} onNavigate={() => setOpen(false)} />
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={localePrefixed(link.href)}
+                onClick={() => setOpen(false)}
+                className="rounded-md px-2 py-2 text-sm font-medium text-foreground/80 hover:bg-sand/50"
+              >
+                {link.label}
+              </Link>
+            ))}
             {isActive("tarifs") && (
               <Link
                 href={localePrefixed("/tarifs")}
@@ -152,124 +153,6 @@ export function Header({
         </div>
       )}
     </header>
-  );
-}
-
-function NavDropdown({
-  label,
-  href,
-  items,
-}: {
-  label: string;
-  href: string;
-  items: { href: string; label: string }[];
-}) {
-  const locale = useLocale();
-  const [open, setOpen] = useState(false);
-
-  if (items.length === 0) {
-    return (
-      <Link href={`/${locale}${href}`} className="text-sm font-medium text-foreground/80 transition hover:text-ocean-dark">
-        {label}
-      </Link>
-    );
-  }
-
-  return (
-    <div className="relative">
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1 text-sm font-medium text-foreground/80 transition hover:text-ocean-dark"
-      >
-        {label}
-        <ChevronDown size={14} className={cn("transition-transform", open && "rotate-180")} />
-      </button>
-
-      {open && (
-        <>
-          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute left-0 z-20 mt-2 w-56 rounded-xl border border-black/10 bg-white p-2 shadow-lg rtl:left-auto rtl:right-0">
-            <Link
-              href={`/${locale}${href}`}
-              onClick={() => setOpen(false)}
-              className="block rounded-lg px-3 py-2 text-sm font-semibold text-ocean-dark hover:bg-sand/50"
-            >
-              {label}
-            </Link>
-            <div className="my-1 h-px bg-black/5" />
-            {items.map((item) => (
-              <Link
-                key={item.href}
-                href={`/${locale}${item.href}`}
-                onClick={() => setOpen(false)}
-                className="block rounded-lg px-3 py-2 text-sm text-foreground/80 hover:bg-sand/50"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-function MobileNavGroup({
-  label,
-  href,
-  items,
-  onNavigate,
-}: {
-  label: string;
-  href: string;
-  items: { href: string; label: string }[];
-  onNavigate: () => void;
-}) {
-  const locale = useLocale();
-  const [expanded, setExpanded] = useState(false);
-
-  if (items.length === 0) {
-    return (
-      <Link
-        href={`/${locale}${href}`}
-        onClick={onNavigate}
-        className="rounded-md px-2 py-2 text-sm font-medium text-foreground/80 hover:bg-sand/50"
-      >
-        {label}
-      </Link>
-    );
-  }
-
-  return (
-    <div>
-      <div className="flex items-center justify-between rounded-md hover:bg-sand/50">
-        <Link href={`/${locale}${href}`} onClick={onNavigate} className="flex-1 px-2 py-2 text-sm font-medium text-foreground/80">
-          {label}
-        </Link>
-        <button
-          type="button"
-          onClick={() => setExpanded((e) => !e)}
-          aria-label={label}
-          className="p-2 text-foreground/60"
-        >
-          <ChevronDown size={16} className={cn("transition-transform", expanded && "rotate-180")} />
-        </button>
-      </div>
-      {expanded && (
-        <div className="ml-3 flex flex-col gap-1 border-l border-black/10 pl-3">
-          {items.map((item) => (
-            <Link
-              key={item.href}
-              href={`/${locale}${item.href}`}
-              onClick={onNavigate}
-              className="rounded-md px-2 py-2 text-sm text-foreground/70 hover:bg-sand/50"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-      )}
-    </div>
   );
 }
 

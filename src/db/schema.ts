@@ -16,10 +16,19 @@ export type LocalizedList = Record<string, string[]>;
 
 export const categories = pgTable("categories", {
   id: serial("id").primaryKey(),
-  type: varchar("type", { length: 32 }).notNull(), // hebergement | restaurant | activite | shopping
+  type: varchar("type", { length: 32 }).notNull(), // legacy join key, equals slug for categories created after the admin CRUD shipped
   slug: varchar("slug", { length: 128 }).notNull().unique(),
   name: jsonb("name").$type<Localized>().notNull(),
   icon: varchar("icon", { length: 64 }),
+  order: integer("order").default(0),
+  status: varchar("status", { length: 16 }).notNull().default("active"), // active | inactive
+});
+
+export const subcategories = pgTable("subcategories", {
+  id: serial("id").primaryKey(),
+  categoryId: integer("category_id").notNull(),
+  slug: varchar("slug", { length: 64 }).notNull(),
+  name: jsonb("name").$type<Localized>().notNull(),
   order: integer("order").default(0),
 });
 
@@ -242,6 +251,11 @@ export const modules = pgTable("modules", {
   id: serial("id").primaryKey(),
   key: varchar("key", { length: 32 }).notNull().unique(),
   status: varchar("status", { length: 16 }).notNull().default("active"), // active|inactive|maintenance
+  // Nav-manageable builtin pages (decouvrir, vivre-a-essaouira, immobilier, blog,
+  // agenda) additionally use these two columns so an admin can rename/reorder
+  // them in the flat nav without ever being able to delete the underlying page.
+  label: jsonb("label").$type<Localized | null>(),
+  order: integer("order").default(0),
 });
 
 export const siteSettings = pgTable("site_settings", {

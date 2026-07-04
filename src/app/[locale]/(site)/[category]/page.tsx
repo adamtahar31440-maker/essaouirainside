@@ -2,10 +2,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { CATEGORY_PATH_TO_TYPE, CATEGORY_SUBCATEGORIES } from "@/lib/categories";
-import { subcategoryLabel } from "@/lib/labels";
-import { getEstablishments, getSiteSectionBySlug, getContentPages } from "@/lib/data";
-import { isModuleActive, CATEGORY_MODULE_KEY } from "@/lib/modules";
+import { buildSubcategoryMap, subcategoryLabel } from "@/lib/labels";
+import { getEstablishments, getSiteSectionBySlug, getContentPages, getCategoryBySlug, getSubcategories } from "@/lib/data";
 import { EstablishmentCard } from "@/components/establishment-card";
 import { Section } from "@/components/section";
 import { ContentHub } from "@/components/content-hub";
@@ -17,8 +15,8 @@ export async function generateMetadata({
   params: Promise<{ locale: string; category: string }>;
 }): Promise<Metadata> {
   const { locale, category } = await params;
-  const type = CATEGORY_PATH_TO_TYPE[category];
-  if (!type) {
+  const cat = await getCategoryBySlug(category);
+  if (!cat) {
     const section = await getSiteSectionBySlug(category);
     if (!section) return {};
     const label = section.name[locale] ?? section.name.fr;
@@ -27,8 +25,7 @@ export async function generateMetadata({
       alternates: { canonical: `https://essaouirainside.com/${locale}/${category}` },
     };
   }
-  const tCat = await getTranslations({ locale, namespace: "categories" });
-  const label = tCat(type as "hebergement" | "restaurant" | "activite" | "shopping");
+  const label = cat.name[locale] ?? cat.name.fr;
   return {
     title: label,
     description: `${label} à Essaouira — Essaouira Inside`,
@@ -47,8 +44,8 @@ export default async function CategoryPage({
   const { sub } = await searchParams;
   setRequestLocale(locale);
 
-  const type = CATEGORY_PATH_TO_TYPE[category];
-  if (!type) {
+  const cat = await getCategoryBySlug(category);
+  if (!cat) {
     const section = await getSiteSectionBySlug(category);
     if (!section) notFound();
     const pages = await getContentPages(category);
@@ -62,23 +59,21 @@ export default async function CategoryPage({
     );
   }
 
-  const moduleKey = CATEGORY_MODULE_KEY[type];
-  if (moduleKey && !(await isModuleActive(moduleKey))) notFound();
+  if (cat.status !== "active") notFound();
 
-  const [t, tCat, establishments] = await Promise.all([
+  const [t, establishments, subcategories] = await Promise.all([
     getTranslations("search"),
-    getTranslations("categories"),
-    getEstablishments({ type, subcategory: sub }),
+    getEstablishments({ type: cat.type, subcategory: sub }),
+    getSubcategories(cat.id),
   ]);
-
-  const subcategories = CATEGORY_SUBCATEGORIES[type] ?? [];
+  const subcategoryMap = buildSubcategoryMap(subcategories);
 
   return (
     <div>
       <div className="bg-sand/40 py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <h1 className="text-3xl font-semibold text-ocean-dark sm:text-4xl">
-            {tCat(type as "hebergement" | "restaurant" | "activite" | "shopping")}
+            {cat.name[locale] ?? cat.name.fr}
           </h1>
         </div>
       </div>
@@ -96,14 +91,14 @@ export default async function CategoryPage({
           </Link>
           {subcategories.map((s) => (
             <Link
-              key={s}
-              href={`/${locale}/${category}?sub=${s}`}
+              key={s.slug}
+              href={`/${locale}/${category}?sub=${s.slug}`}
               className={cn(
                 "rounded-full border px-4 py-1.5 text-sm font-medium",
-                sub === s ? "border-ocean-dark bg-ocean-dark text-white" : "border-black/10 text-foreground/70"
+                sub === s.slug ? "border-ocean-dark bg-ocean-dark text-white" : "border-black/10 text-foreground/70"
               )}
             >
-              {subcategoryLabel(s, locale)}
+              {subcategoryLabel(subcategoryMap, s.slug, locale)}
             </Link>
           ))}
         </div>
@@ -118,7 +113,7 @@ export default async function CategoryPage({
                 href={`/${locale}/${category}/${e.slug}`}
                 name={e.name[locale] ?? e.name.fr}
                 image={e.images?.[0]}
-                subcategory={subcategoryLabel(e.subcategory, locale)}
+                subcategory={subcategoryLabel(subcategoryMap, e.subcategory, locale)}
                 address={e.address}
                 priceLevel={e.priceLevel}
                 badge={e.badge}

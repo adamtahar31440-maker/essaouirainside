@@ -1,28 +1,22 @@
 import Link from "next/link";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Bed, Utensils, Waves, ShoppingBag, MapPinned } from "lucide-react";
+import { MapPinned } from "lucide-react";
 import {
   getCategories,
   getEstablishments,
   getArticles,
   getEvents,
+  getAllSubcategories,
 } from "@/lib/data";
-import { CATEGORY_TYPE_TO_PATH } from "@/lib/categories";
-import { subcategoryLabel } from "@/lib/labels";
-import { getActiveModuleKeys, CATEGORY_MODULE_KEY } from "@/lib/modules";
+import { buildSubcategoryMap, subcategoryLabel } from "@/lib/labels";
+import { getCategoryIcon } from "@/lib/category-icons";
+import { getActiveModuleKeys } from "@/lib/modules";
 import { EstablishmentCard } from "@/components/establishment-card";
 import { ArticleCard } from "@/components/article-card";
 import { Section } from "@/components/section";
 import { SearchBar } from "@/components/search-bar";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { MapSection } from "@/components/map-section";
-
-const CATEGORY_ICONS: Record<string, React.ReactNode> = {
-  hebergement: <Bed size={26} />,
-  restaurant: <Utensils size={26} />,
-  activite: <Waves size={26} />,
-  shopping: <ShoppingBag size={26} />,
-};
 
 export default async function HomePage({
   params,
@@ -32,34 +26,30 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [t, tCat, categoriesAll, establishmentsAll, articles, events, activeModules] = await Promise.all([
+  const [t, categoriesAll, establishmentsAll, articles, events, activeModules, allSubcategories] = await Promise.all([
     getTranslations("home"),
-    getTranslations("categories"),
     getCategories(),
     getEstablishments({ limit: 12 }),
     getArticles({ limit: 3 }),
     getEvents({ limit: 3 }),
     getActiveModuleKeys(),
+    getAllSubcategories(),
   ]);
+  const subcategoryMap = buildSubcategoryMap(allSubcategories);
 
-  const categoryActive = (type: string) => {
-    const key = CATEGORY_MODULE_KEY[type];
-    return !key || activeModules.has(key);
-  };
-
-  const categories = categoriesAll.filter((c) => categoryActive(c.type));
+  const categories = categoriesAll.filter((c) => c.status === "active");
   const categoryById = new Map(categoriesAll.map((c) => [c.id, c]));
   const establishments = establishmentsAll
     .filter((e) => {
       const cat = categoryById.get(e.categoryId);
-      return cat && categoryActive(cat.type);
+      return cat && cat.status === "active";
     })
     .slice(0, 6);
   const mapPoints = establishments
     .filter((e) => e.lat && e.lng)
     .map((e) => {
       const cat = categoryById.get(e.categoryId);
-      const path = cat ? CATEGORY_TYPE_TO_PATH[cat.type] : "";
+      const path = cat ? cat.slug : "";
       return {
         lat: e.lat as number,
         lng: e.lng as number,
@@ -84,18 +74,19 @@ export default async function HomePage({
 
       <Section title={t("categories")}>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {categories.map((c) => (
-            <Link
-              key={c.id}
-              href={`/${locale}/${CATEGORY_TYPE_TO_PATH[c.type]}`}
-              className="flex flex-col items-center gap-3 rounded-2xl border border-black/10 bg-white p-6 text-center sm:transition-colors sm:hover:border-ocean-dark/30"
-            >
-              <span className="text-ocean-dark">{CATEGORY_ICONS[c.type]}</span>
-              <span className="text-sm font-semibold text-ocean-dark">
-                {tCat(c.type as "hebergement" | "restaurant" | "activite" | "shopping")}
-              </span>
-            </Link>
-          ))}
+          {categories.map((c) => {
+            const Icon = getCategoryIcon(c.icon);
+            return (
+              <Link
+                key={c.id}
+                href={`/${locale}/${c.slug}`}
+                className="flex flex-col items-center gap-3 rounded-2xl border border-black/10 bg-white p-6 text-center sm:transition-colors sm:hover:border-ocean-dark/30"
+              >
+                <span className="text-ocean-dark"><Icon size={26} /></span>
+                <span className="text-sm font-semibold text-ocean-dark">{c.name[locale] ?? c.name.fr}</span>
+              </Link>
+            );
+          })}
         </div>
       </Section>
 
@@ -110,14 +101,14 @@ export default async function HomePage({
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {establishments.map((e) => {
             const cat = categoryById.get(e.categoryId);
-            const path = cat ? CATEGORY_TYPE_TO_PATH[cat.type] : "";
+            const path = cat ? cat.slug : "";
             return (
               <EstablishmentCard
                 key={e.id}
                 href={`/${locale}/${path}/${e.slug}`}
                 name={e.name[locale] ?? e.name.fr}
                 image={e.images?.[0]}
-                subcategory={subcategoryLabel(e.subcategory, locale)}
+                subcategory={subcategoryLabel(subcategoryMap, e.subcategory, locale)}
                 address={e.address}
                 priceLevel={e.priceLevel}
                 badge={e.badge}

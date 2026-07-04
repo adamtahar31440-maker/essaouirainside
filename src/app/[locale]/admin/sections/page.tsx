@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { adminGetSiteSections, adminCountContentPagesBySection } from "@/lib/admin-data";
-import { deleteSiteSection } from "@/lib/admin-actions";
+import { deleteSiteSection, moveSiteSection } from "@/lib/admin-actions";
 import { ConfirmSubmitButton } from "@/components/admin/confirm-button";
 
 export default async function AdminSectionsPage({
@@ -34,6 +34,7 @@ export default async function AdminSectionsPage({
         <table className="w-full text-left text-sm">
           <thead className="border-b border-black/5 bg-sand/30 text-xs uppercase text-foreground/60">
             <tr>
+              <th className="px-4 py-3">Ordre</th>
               <th className="px-4 py-3">Nom</th>
               <th className="px-4 py-3">Adresse web</th>
               <th className="px-4 py-3">Pages</th>
@@ -43,6 +44,30 @@ export default async function AdminSectionsPage({
           <tbody>
             {items.map((s, i) => (
               <tr key={s.id} className="border-b border-black/5 last:border-0">
+                <td className="px-4 py-3">
+                  <div className="flex items-center gap-1">
+                    <form action={moveSiteSection.bind(null, s.id, "up")}>
+                      <button
+                        type="submit"
+                        disabled={i === 0}
+                        className="rounded border border-black/10 px-1.5 py-0.5 text-xs text-foreground/60 hover:bg-sand/40 disabled:opacity-30"
+                        aria-label="Monter"
+                      >
+                        ▲
+                      </button>
+                    </form>
+                    <form action={moveSiteSection.bind(null, s.id, "down")}>
+                      <button
+                        type="submit"
+                        disabled={i === items.length - 1}
+                        className="rounded border border-black/10 px-1.5 py-0.5 text-xs text-foreground/60 hover:bg-sand/40 disabled:opacity-30"
+                        aria-label="Descendre"
+                      >
+                        ▼
+                      </button>
+                    </form>
+                  </div>
+                </td>
                 <td className="px-4 py-3 font-medium text-ocean-dark">{s.name.fr}</td>
                 <td className="px-4 py-3 text-foreground/70">essaouirainside.com/{s.slug}</td>
                 <td className="px-4 py-3 text-foreground/70">{counts[i]}</td>

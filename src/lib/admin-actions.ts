@@ -4,13 +4,15 @@ import { clerkClient } from "@clerk/nextjs/server";
 import { safeCurrentUser as currentUser } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, asc, ne } from "drizzle-orm";
 import { getDb } from "@/db";
 import {
   establishments,
   articles,
   contentPages,
   events,
+  categories,
+  subcategories,
   professionals,
   subscriptions,
   invoices,
@@ -34,6 +36,8 @@ import { slugify } from "@/lib/slug";
 import { readLocalized, ALL_LOCALES } from "@/lib/localized-form";
 import { translateFields } from "@/lib/translate";
 import { RESERVED_TOP_LEVEL_SLUGS } from "@/lib/categories";
+import { adminCountEstablishmentsByCategory, adminCountEstablishmentsBySubcategory } from "@/lib/admin-data";
+import { getNavItems } from "@/lib/nav";
 
 async function requireRole(section: Parameters<typeof can>[1]) {
   const user = await currentUser();
@@ -236,6 +240,10 @@ export async function upsertSiteSection(formData: FormData) {
       `"${requestedSlug}" est déjà utilisé par une page du site et ne peut pas servir de section. Choisissez un autre nom.`
     );
   }
+  const slugTakenByCategory = await db.select().from(categories).where(eq(categories.slug, requestedSlug));
+  if (slugTakenByCategory.length > 0) {
+    throw new Error(`"${requestedSlug}" est déjà utilisé par une catégorie. Choisissez un autre nom.`);
+  }
 
   const targetLocales = ALL_LOCALES.filter((l) => l !== "fr");
   const translations = await translateFields({ name }, targetLocales, "fr");
@@ -248,7 +256,9 @@ export async function upsertSiteSection(formData: FormData) {
   if (id) {
     await db.update(siteSections).set(data).where(eq(siteSections.id, id));
   } else {
-    await db.insert(siteSections).values(data);
+    const existing = await db.select({ order: siteSections.order }).from(siteSections);
+    const nextOrder = existing.reduce((max, s) => Math.max(max, s.order ?? 0), 0) + 10;
+    await db.insert(siteSections).values({ ...data, order: nextOrder });
   }
   revalidatePath("/", "layout");
   redirect(`/${formData.get("locale")}/admin/sections`);
@@ -258,6 +268,206 @@ export async function deleteSiteSection(id: number) {
   await requireRole("articles");
   const db = getDb();
   await db.delete(siteSections).where(eq(siteSections.id, id));
+  revalidatePath("/", "layout");
+}
+
+export async function moveSiteSection(id: number, direction: "up" | "down") {
+  await requireRole("articles");
+  const db = getDb();
+  const all = await db.select().from(siteSections).orderBy(asc(siteSections.order), desc(siteSections.id));
+  const index = all.findIndex((s) => s.id === id);
+  const swapIndex = direction === "up" ? index - 1 : index + 1;
+  if (index === -1 || swapIndex < 0 || swapIndex >= all.length) return;
+
+  const current = all[index];
+  const swap = all[swapIndex];
+  await db.update(siteSections).set({ order: swap.order }).where(eq(siteSections.id, current.id));
+  await db.update(siteSections).set({ order: current.order }).where(eq(siteSections.id, swap.id));
+  revalidatePath("/", "layout");
+}
+
+// ---- Categories ----
+export async function upsertCategory(formData: FormData) {
+  await requireRole("categories");
+  const db = getDb();
+  const id = formData.get("id") ? Number(formData.get("id")) : null;
+
+  const name = String(formData.get("name") ?? "");
+  const icon = String(formData.get("icon") ?? "") || null;
+  const requestedSlug = slugify(String(formData.get("slug") ?? "") || name);
+
+  if (RESERVED_TOP_LEVEL_SLUGS.includes(requestedSlug)) {
+    throw new Error(
+      `"${requestedSlug}" est déjà utilisé par une page du site et ne peut pas servir de catégorie. Choisissez un autre nom.`
+    );
+  }
+  const slugTakenByCategory = await db
+    .select()
+    .from(categories)
+    .where(and(eq(categories.slug, requestedSlug), id ? ne(categories.id, id) : undefined));
+  const slugTakenBySection = await db.select().from(siteSections).where(eq(siteSections.slug, requestedSlug));
+  if (slugTakenByCategory.length > 0 || slugTakenBySection.length > 0) {
+    throw new Error(`"${requestedSlug}" est déjà utilisé ailleurs sur le site. Choisissez un autre nom.`);
+  }
+
+  const targetLocales = ALL_LOCALES.filter((l) => l !== "fr");
+  const translations = await translateFields({ name }, targetLocales, "fr");
+  const localizedName = { fr: name, ...translations.name };
+
+  if (id) {
+    await db.update(categories).set({ name: localizedName, icon, slug: requestedSlug }).where(eq(categories.id, id));
+  } else {
+    const existing = await db.select({ order: categories.order }).from(categories);
+    const nextOrder = existing.reduce((max, c) => Math.max(max, c.order ?? 0), 0) + 10;
+    await db.insert(categories).values({
+      type: requestedSlug,
+      slug: requestedSlug,
+      name: localizedName,
+      icon,
+      order: nextOrder,
+      status: "active",
+    });
+  }
+  revalidatePath("/", "layout");
+  redirect(`/${formData.get("locale")}/admin/categories`);
+}
+
+export async function deleteCategory(id: number) {
+  await requireRole("categories");
+  const db = getDb();
+  const count = await adminCountEstablishmentsByCategory(id);
+  if (count > 0) {
+    throw new Error(
+      `Cette catégorie contient encore ${count} établissement(s). Déplacez-les vers une autre catégorie ou supprimez-les avant de pouvoir supprimer la catégorie.`
+    );
+  }
+  await db.delete(subcategories).where(eq(subcategories.categoryId, id));
+  await db.delete(categories).where(eq(categories.id, id));
+  revalidatePath("/", "layout");
+}
+
+export async function setCategoryStatus(id: number, status: "active" | "inactive") {
+  await requireRole("categories");
+  const db = getDb();
+  await db.update(categories).set({ status }).where(eq(categories.id, id));
+  revalidatePath("/", "layout");
+}
+
+export async function moveCategory(id: number, direction: "up" | "down") {
+  await requireRole("categories");
+  const db = getDb();
+  const all = await db.select().from(categories).orderBy(asc(categories.order), asc(categories.id));
+  const index = all.findIndex((c) => c.id === id);
+  const swapIndex = direction === "up" ? index - 1 : index + 1;
+  if (index === -1 || swapIndex < 0 || swapIndex >= all.length) return;
+
+  const current = all[index];
+  const swap = all[swapIndex];
+  await db.update(categories).set({ order: swap.order }).where(eq(categories.id, current.id));
+  await db.update(categories).set({ order: current.order }).where(eq(categories.id, swap.id));
+  revalidatePath("/", "layout");
+}
+
+// ---- Subcategories ----
+export async function upsertSubcategory(formData: FormData) {
+  await requireRole("categories");
+  const db = getDb();
+  const id = formData.get("id") ? Number(formData.get("id")) : null;
+  const categoryId = Number(formData.get("categoryId"));
+  const name = String(formData.get("name") ?? "");
+  const requestedSlug = slugify(String(formData.get("slug") ?? "") || name);
+
+  const targetLocales = ALL_LOCALES.filter((l) => l !== "fr");
+  const translations = await translateFields({ name }, targetLocales, "fr");
+  const localizedName = { fr: name, ...translations.name };
+
+  if (id) {
+    await db.update(subcategories).set({ name: localizedName, slug: requestedSlug }).where(eq(subcategories.id, id));
+  } else {
+    const existing = await db.select({ order: subcategories.order }).from(subcategories).where(eq(subcategories.categoryId, categoryId));
+    const nextOrder = existing.reduce((max, s) => Math.max(max, s.order ?? 0), 0) + 10;
+    await db.insert(subcategories).values({ categoryId, slug: requestedSlug, name: localizedName, order: nextOrder });
+  }
+  revalidatePath("/", "layout");
+  redirect(`/${formData.get("locale")}/admin/categories/${categoryId}`);
+}
+
+export async function deleteSubcategory(id: number) {
+  await requireRole("categories");
+  const db = getDb();
+  const rows = await db.select().from(subcategories).where(eq(subcategories.id, id));
+  const sub = rows[0];
+  if (!sub) return;
+
+  const count = await adminCountEstablishmentsBySubcategory(sub.categoryId, sub.slug);
+  if (count > 0) {
+    throw new Error(
+      `Cette sous-catégorie contient encore ${count} établissement(s). Changez leur sous-catégorie avant de pouvoir la supprimer.`
+    );
+  }
+  await db.delete(subcategories).where(eq(subcategories.id, id));
+  revalidatePath("/", "layout");
+}
+
+export async function moveSubcategory(id: number, direction: "up" | "down") {
+  await requireRole("categories");
+  const db = getDb();
+  const rows = await db.select().from(subcategories).where(eq(subcategories.id, id));
+  const sub = rows[0];
+  if (!sub) return;
+
+  const all = await db
+    .select()
+    .from(subcategories)
+    .where(eq(subcategories.categoryId, sub.categoryId))
+    .orderBy(asc(subcategories.order), asc(subcategories.id));
+  const index = all.findIndex((s) => s.id === id);
+  const swapIndex = direction === "up" ? index - 1 : index + 1;
+  if (index === -1 || swapIndex < 0 || swapIndex >= all.length) return;
+
+  const current = all[index];
+  const swap = all[swapIndex];
+  await db.update(subcategories).set({ order: swap.order }).where(eq(subcategories.id, current.id));
+  await db.update(subcategories).set({ order: current.order }).where(eq(subcategories.id, swap.id));
+  revalidatePath("/", "layout");
+}
+
+// ---- Nav (unified builtin + category + section ordering) ----
+export async function setBuiltinNavLabel(formData: FormData) {
+  await requireRole("nav");
+  const db = getDb();
+  const key = String(formData.get("key") ?? "");
+  const name = String(formData.get("name") ?? "");
+
+  if (!name.trim()) {
+    await db.update(modules).set({ label: null }).where(eq(modules.key, key));
+  } else {
+    const targetLocales = ALL_LOCALES.filter((l) => l !== "fr");
+    const translations = await translateFields({ name }, targetLocales, "fr");
+    await db.update(modules).set({ label: { fr: name, ...translations.name } }).where(eq(modules.key, key));
+  }
+  revalidatePath("/", "layout");
+  redirect(`/${formData.get("locale")}/admin/nav`);
+}
+
+async function setNavItemOrder(item: { type: "builtin" | "category" | "section"; id: number }, order: number) {
+  const db = getDb();
+  if (item.type === "builtin") await db.update(modules).set({ order }).where(eq(modules.id, item.id));
+  else if (item.type === "category") await db.update(categories).set({ order }).where(eq(categories.id, item.id));
+  else await db.update(siteSections).set({ order }).where(eq(siteSections.id, item.id));
+}
+
+export async function moveNavItem(type: "builtin" | "category" | "section", id: number, direction: "up" | "down") {
+  await requireRole("nav");
+  const all = await getNavItems();
+  const index = all.findIndex((item) => item.type === type && item.id === id);
+  const swapIndex = direction === "up" ? index - 1 : index + 1;
+  if (index === -1 || swapIndex < 0 || swapIndex >= all.length) return;
+
+  const current = all[index];
+  const swap = all[swapIndex];
+  await setNavItemOrder(current, swap.order);
+  await setNavItemOrder(swap, current.order);
   revalidatePath("/", "layout");
 }
 

@@ -8,26 +8,33 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { can, type Role, type Permission } from "@/lib/roles";
 
-const SECTIONS: { href: string; label: string; permission?: Permission }[] = [
+const SECTIONS: { href: string; label: string; permission?: Permission; group?: string }[] = [
   { href: "", label: "Dashboard" },
-  { href: "/utilisateurs", label: "Utilisateurs", permission: "users" },
-  { href: "/professionnels", label: "Professionnels", permission: "professionals" },
-  { href: "/establissements", label: "Établissements", permission: "establishments" },
-  { href: "/immobilier", label: "Immobilier", permission: "realEstate" },
-  { href: "/evenements", label: "Événements", permission: "events" },
-  { href: "/articles", label: "Articles", permission: "articles" },
-  { href: "/pages", label: "Pages", permission: "articles" },
-  { href: "/sections", label: "Sections personnalisées", permission: "articles" },
-  { href: "/assistance", label: "Assistance & Urgences", permission: "assistance" },
-  { href: "/label-candidatures", label: "Candidatures Label", permission: "label" },
-  { href: "/avis", label: "Avis", permission: "reviews" },
-  { href: "/publicites", label: "Publicités", permission: "ads" },
-  { href: "/abonnements", label: "Abonnements", permission: "subscriptions" },
-  { href: "/paiements", label: "Paiements & Factures", permission: "payments" },
-  { href: "/newsletter", label: "Newsletter", permission: "newsletter" },
-  { href: "/seo", label: "SEO", permission: "seo" },
-  { href: "/modules", label: "Modules", permission: "modules" },
-  { href: "/parametres", label: "Paramètres", permission: "settings" },
+
+  { href: "/pages", label: "Pages", permission: "articles", group: "Contenu & Navigation" },
+  { href: "/sections", label: "Sections personnalisées", permission: "articles", group: "Contenu & Navigation" },
+  { href: "/categories", label: "Catégories", permission: "categories", group: "Contenu & Navigation" },
+  { href: "/nav", label: "Navigation", permission: "nav", group: "Contenu & Navigation" },
+  { href: "/articles", label: "Articles", permission: "articles", group: "Contenu & Navigation" },
+  { href: "/evenements", label: "Événements", permission: "events", group: "Contenu & Navigation" },
+
+  { href: "/establissements", label: "Établissements", permission: "establishments", group: "Établissements" },
+  { href: "/immobilier", label: "Immobilier", permission: "realEstate", group: "Établissements" },
+  { href: "/label-candidatures", label: "Candidatures Label", permission: "label", group: "Établissements" },
+  { href: "/avis", label: "Avis", permission: "reviews", group: "Établissements" },
+
+  { href: "/utilisateurs", label: "Utilisateurs", permission: "users", group: "Utilisateurs & Pros" },
+  { href: "/professionnels", label: "Professionnels", permission: "professionals", group: "Utilisateurs & Pros" },
+
+  { href: "/abonnements", label: "Abonnements", permission: "subscriptions", group: "Finance" },
+  { href: "/paiements", label: "Paiements & Factures", permission: "payments", group: "Finance" },
+  { href: "/publicites", label: "Publicités", permission: "ads", group: "Finance" },
+
+  { href: "/assistance", label: "Assistance & Urgences", permission: "assistance", group: "Système" },
+  { href: "/newsletter", label: "Newsletter", permission: "newsletter", group: "Système" },
+  { href: "/seo", label: "SEO", permission: "seo", group: "Système" },
+  { href: "/modules", label: "Modules", permission: "modules", group: "Système" },
+  { href: "/parametres", label: "Paramètres", permission: "settings", group: "Système" },
 ];
 
 export function AdminSidebar({ locale, role }: { locale: string; role: Role }) {
@@ -36,27 +43,38 @@ export function AdminSidebar({ locale, role }: { locale: string; role: Role }) {
   const [open, setOpen] = useState(false);
   const sections = SECTIONS.filter((s) => !s.permission || can(role, s.permission));
 
-  const nav = (onNavigate?: () => void) => (
-    <nav className="flex-1 space-y-0.5 overflow-y-auto p-3">
-      {sections.map((s) => {
-        const href = `${base}${s.href}`;
-        const active = pathname === href;
-        return (
-          <Link
-            key={s.href}
-            href={href}
-            onClick={onNavigate}
-            className={cn(
-              "block rounded-lg px-3 py-2 text-sm font-medium transition",
-              active ? "bg-white/15 text-white" : "text-white/70 hover:bg-white/10 hover:text-white"
-            )}
-          >
-            {s.label}
-          </Link>
-        );
-      })}
-    </nav>
-  );
+  const nav = (onNavigate?: () => void) => {
+    let lastGroup: string | undefined;
+    return (
+      <nav className="flex-1 space-y-0.5 overflow-y-auto p-3">
+        {sections.map((s) => {
+          const href = `${base}${s.href}`;
+          const active = pathname === href;
+          const showGroupHeader = s.group && s.group !== lastGroup;
+          lastGroup = s.group;
+          return (
+            <div key={s.href}>
+              {showGroupHeader && (
+                <p className="mt-4 mb-1 px-3 text-xs font-semibold uppercase tracking-wide text-white/40 first:mt-1">
+                  {s.group}
+                </p>
+              )}
+              <Link
+                href={href}
+                onClick={onNavigate}
+                className={cn(
+                  "block rounded-lg px-3 py-2 text-sm font-medium transition",
+                  active ? "bg-white/15 text-white" : "text-white/70 hover:bg-white/10 hover:text-white"
+                )}
+              >
+                {s.label}
+              </Link>
+            </div>
+          );
+        })}
+      </nav>
+    );
+  };
 
   return (
     <>

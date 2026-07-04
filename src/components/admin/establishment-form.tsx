@@ -1,9 +1,10 @@
 import { upsertEstablishment } from "@/lib/admin-actions";
-import { CATEGORY_SUBCATEGORIES } from "@/lib/categories";
 import { PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
 import { SubmitButton } from "@/components/submit-button";
+import { CategorySubcategoryPicker } from "@/components/category-subcategory-picker";
 
 type Category = { id: number; type: string; name: Record<string, string> };
+type Subcategory = { slug: string; name: Record<string, string> };
 type Professional = { id: number; companyName: string; status: string };
 type Establishment = {
   id: number;
@@ -39,11 +40,13 @@ const labelClass = "mb-1 block text-xs font-semibold text-foreground/60";
 export function EstablishmentForm({
   locale,
   categories,
+  subcategoriesByCategory,
   professionals,
   establishment,
 }: {
   locale: string;
   categories: Category[];
+  subcategoriesByCategory: Record<number, Subcategory[]>;
   professionals?: Professional[];
   establishment?: Establishment;
 }) {
@@ -53,31 +56,12 @@ export function EstablishmentForm({
       {establishment && <input type="hidden" name="id" value={establishment.id} />}
       {establishment && <input type="hidden" name="slug" value={establishment.slug} />}
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div>
-          <label className={labelClass}>Catégorie</label>
-          <select name="categoryId" defaultValue={establishment?.categoryId} className={inputClass} required>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name.fr}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className={labelClass}>Sous-catégorie</label>
-          <select name="subcategory" defaultValue={establishment?.subcategory} className={inputClass} required>
-            {Object.values(CATEGORY_SUBCATEGORIES)
-              .flat()
-              .filter((v, i, arr) => arr.indexOf(v) === i)
-              .map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-          </select>
-        </div>
-      </section>
+      <CategorySubcategoryPicker
+        categories={categories}
+        subcategoriesByCategory={subcategoriesByCategory}
+        defaultCategoryId={establishment?.categoryId}
+        defaultSubcategory={establishment?.subcategory}
+      />
 
       {professionals && (
         <section>

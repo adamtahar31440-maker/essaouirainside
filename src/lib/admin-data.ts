@@ -22,8 +22,9 @@ import {
   labelBadges,
   labelApplications,
   siteSections,
+  subcategories,
 } from "@/db/schema";
-import { desc, eq, count } from "drizzle-orm";
+import { desc, eq, count, asc, and } from "drizzle-orm";
 
 // ---- Dashboard stats ----
 export async function getDashboardStats() {
@@ -124,6 +125,42 @@ export async function getAllCategories() {
   return db.select().from(categories);
 }
 
+// ---- Categories & subcategories (admin-manageable) ----
+export async function adminGetCategories() {
+  const db = getDb();
+  return db.select().from(categories).orderBy(asc(categories.order), asc(categories.id));
+}
+
+export async function adminGetCategoryById(id: number) {
+  const db = getDb();
+  const rows = await db.select().from(categories).where(eq(categories.id, id));
+  return rows[0] ?? null;
+}
+
+export async function adminGetSubcategories(categoryId: number) {
+  const db = getDb();
+  return db
+    .select()
+    .from(subcategories)
+    .where(eq(subcategories.categoryId, categoryId))
+    .orderBy(asc(subcategories.order), asc(subcategories.id));
+}
+
+export async function adminCountEstablishmentsByCategory(categoryId: number) {
+  const db = getDb();
+  const rows = await db.select({ value: count() }).from(establishments).where(eq(establishments.categoryId, categoryId));
+  return rows[0]?.value ?? 0;
+}
+
+export async function adminCountEstablishmentsBySubcategory(categoryId: number, subcategorySlug: string) {
+  const db = getDb();
+  const rows = await db
+    .select({ value: count() })
+    .from(establishments)
+    .where(and(eq(establishments.categoryId, categoryId), eq(establishments.subcategory, subcategorySlug)));
+  return rows[0]?.value ?? 0;
+}
+
 // ---- Articles ----
 export async function adminGetArticles() {
   const db = getDb();
@@ -151,7 +188,7 @@ export async function adminGetContentPageById(id: number) {
 // ---- Site sections (custom nav sections for content pages) ----
 export async function adminGetSiteSections() {
   const db = getDb();
-  return db.select().from(siteSections).orderBy(desc(siteSections.id));
+  return db.select().from(siteSections).orderBy(asc(siteSections.order), desc(siteSections.id));
 }
 
 export async function adminGetSiteSectionById(id: number) {

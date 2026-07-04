@@ -7,6 +7,7 @@ import {
   events,
   emergencyContacts,
   siteSections,
+  subcategories,
 } from "@/db/schema";
 import { desc, eq, and, asc } from "drizzle-orm";
 
@@ -19,6 +20,26 @@ export async function getCategoryByType(type: string) {
   const db = getDb();
   const rows = await db.select().from(categories).where(eq(categories.type, type));
   return rows[0] ?? null;
+}
+
+export async function getCategoryBySlug(slug: string) {
+  const db = getDb();
+  const rows = await db.select().from(categories).where(eq(categories.slug, slug));
+  return rows[0] ?? null;
+}
+
+export async function getSubcategories(categoryId: number) {
+  const db = getDb();
+  return db
+    .select()
+    .from(subcategories)
+    .where(eq(subcategories.categoryId, categoryId))
+    .orderBy(asc(subcategories.order), asc(subcategories.id));
+}
+
+export async function getAllSubcategories() {
+  const db = getDb();
+  return db.select().from(subcategories);
 }
 
 export async function getEstablishments(opts: {

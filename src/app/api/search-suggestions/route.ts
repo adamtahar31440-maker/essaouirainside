@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { getAllEstablishments, getCategories } from "@/lib/data";
-import { CATEGORY_TYPE_TO_PATH } from "@/lib/categories";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -22,7 +21,7 @@ export async function GET(req: Request) {
     .slice(0, 6)
     .map((e) => {
       const cat = categoryById.get(e.categoryId);
-      const path = cat ? CATEGORY_TYPE_TO_PATH[cat.type] : "";
+      const path = cat ? cat.slug : "";
       return {
         id: e.id,
         name: e.name[locale] ?? e.name.fr,

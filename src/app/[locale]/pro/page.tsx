@@ -11,6 +11,7 @@ import {
   getLabelApplicationByEstablishmentId,
   getLabelBadges,
   getAllCategories,
+  adminGetSubcategories,
 } from "@/lib/admin-data";
 import { applyAsProfessional, requestMarketplaceService, applyForLabel, updateOwnEstablishment } from "@/lib/pro-actions";
 import { SubscriptionPlans } from "@/components/subscription-plans";
@@ -21,7 +22,7 @@ import { ImageUploader } from "@/components/image-uploader";
 import { HoursEditor } from "@/components/hours-editor";
 import { ProductsEditor } from "@/components/products-editor";
 import { UpdateSuccessBanner } from "@/components/update-success-banner";
-import { PRICE_LEVELS, priceLevelLabel, subcategoryLabel } from "@/lib/labels";
+import { PRICE_LEVELS, priceLevelLabel, buildSubcategoryMap, subcategoryLabel } from "@/lib/labels";
 import { AiDescriptionField } from "@/components/ai-description-field";
 import { ALL_LOCALES } from "@/lib/localized-form";
 import { localeNames } from "@/i18n/routing";
@@ -54,7 +55,17 @@ export default async function ProDashboardPage({
 
   if (!professional) {
     const categories = await getAllCategories();
-    return <ProApplicationForm action={applyAsProfessional} categories={categories} defaultLocale={locale} />;
+    const subcategoriesByCategory = Object.fromEntries(
+      await Promise.all(categories.map(async (c) => [c.id, await adminGetSubcategories(c.id)]))
+    );
+    return (
+      <ProApplicationForm
+        action={applyAsProfessional}
+        categories={categories}
+        subcategoriesByCategory={subcategoriesByCategory}
+        defaultLocale={locale}
+      />
+    );
   }
 
   const langSwitcher = <DashboardLangSwitcher locale={locale} label={t("language")} />;
@@ -97,6 +108,8 @@ export default async function ProDashboardPage({
   const myEstablishment = allEstablishments.find((e) => e.professionalId === professional.id);
   const currentPlanKey = subscription?.status === "active" ? subscription.planKey : "starter";
   const maxPhotos = plans.find((p) => p.key === currentPlanKey)?.maxPhotos ?? null;
+  const myEstablishmentSubcategories = myEstablishment ? await adminGetSubcategories(myEstablishment.categoryId) : [];
+  const subcategoryMap = buildSubcategoryMap(myEstablishmentSubcategories);
 
   const [labelApplication, labelBadges] = myEstablishment
     ? await Promise.all([
@@ -184,7 +197,7 @@ export default async function ProDashboardPage({
               defaultValue={myEstablishment.description.fr}
               locale={locale}
               businessName={myEstablishment.name.fr}
-              category={subcategoryLabel(myEstablishment.subcategory, locale)}
+              category={subcategoryLabel(subcategoryMap, myEstablishment.subcategory, locale)}
               generateLabel={t("generateDescriptionButton")}
               generatePendingLabel={t("generateDescriptionButtonPending")}
               emptyErrorText={t("generateDescriptionEmptyError")}

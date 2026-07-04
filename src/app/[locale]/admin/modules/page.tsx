@@ -13,8 +13,13 @@ const STATUS_COLORS: Record<string, string> = {
   maintenance: "bg-amber-100 text-amber-700",
 };
 
+// These are now managed as categories (with per-category active/inactive
+// status) from /admin/categories instead of via this generic modules toggle.
+const SUPERSEDED_BY_CATEGORIES = ["restaurants", "activites", "shopping"];
+
 export default async function AdminModulesPage() {
-  const modules = await getModules();
+  const allModules = await getModules();
+  const modules = allModules.filter((m) => !SUPERSEDED_BY_CATEGORIES.includes(m.key));
 
   return (
     <div>

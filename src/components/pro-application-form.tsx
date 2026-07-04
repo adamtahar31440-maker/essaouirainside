@@ -4,9 +4,9 @@ import { useRef, useState } from "react";
 import { Sparkles, Loader2 } from "lucide-react";
 import { ALL_LOCALES, LOCALE_LABELS } from "@/lib/localized-form";
 import { PRO_FORM_STRINGS } from "@/lib/pro-form-i18n";
-import { CATEGORY_SUBCATEGORIES } from "@/lib/categories";
-import { subcategoryLabel, PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
+import { PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
 import { AddressLocationPicker } from "@/components/address-location-picker";
+import { CategorySubcategoryPicker } from "@/components/category-subcategory-picker";
 import { ImageUploader } from "@/components/image-uploader";
 import { PhoneField } from "@/components/phone-field";
 import { SubmitButton } from "@/components/submit-button";
@@ -19,10 +19,12 @@ const labelClass = "mb-1 block text-xs font-semibold text-foreground/60";
 export function ProApplicationForm({
   action,
   categories,
+  subcategoriesByCategory,
   defaultLocale,
 }: {
   action: (formData: FormData) => void;
   categories: { id: number; name: Record<string, string> }[];
+  subcategoriesByCategory: Record<number, { slug: string; name: Record<string, string> }[]>;
   defaultLocale: string;
 }) {
   const [lang, setLang] = useState(ALL_LOCALES.includes(defaultLocale) ? defaultLocale : "fr");
@@ -34,10 +36,6 @@ export function ProApplicationForm({
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const [generatingDescription, setGeneratingDescription] = useState(false);
   const [generateError, setGenerateError] = useState<string | null>(null);
-
-  const subcategories = Object.values(CATEGORY_SUBCATEGORIES)
-    .flat()
-    .filter((v, i, arr) => arr.indexOf(v) === i);
 
   async function handleGenerateDescription() {
     const keywords = descriptionRef.current?.value.trim() ?? "";
@@ -100,28 +98,14 @@ export function ProApplicationForm({
           <input name="contactName" className={inputClass} required />
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div>
-            <label className={labelClass}>{t.category}</label>
-            <select name="categoryId" ref={categorySelectRef} className={inputClass} required>
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name[lang] ?? c.name.fr}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className={labelClass}>{t.subcategory}</label>
-            <select name="subcategory" className={inputClass} required>
-              {subcategories.map((s) => (
-                <option key={s} value={s}>
-                  {subcategoryLabel(s, lang)}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+        <CategorySubcategoryPicker
+          categories={categories}
+          subcategoriesByCategory={subcategoriesByCategory}
+          locale={lang}
+          categoryRef={categorySelectRef}
+          categoryLabel={t.category}
+          subcategoryLabel={t.subcategory}
+        />
 
         <div>
           <label className={labelClass}>{t.name}</label>

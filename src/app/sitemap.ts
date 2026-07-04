@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
-import { CATEGORY_TYPE_TO_PATH } from "@/lib/categories";
 import {
   getAllEstablishments,
   getCategories,
@@ -14,10 +13,6 @@ const BASE_URL = "https://essaouirainside.com";
 const STATIC_PATHS = [
   "",
   "/decouvrir",
-  "/hebergements",
-  "/restaurants",
-  "/activites",
-  "/shopping",
   "/vivre-a-essaouira",
   "/blog",
   "/agenda",
@@ -42,9 +37,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const path of STATIC_PATHS) {
       entries.push({ url: `${BASE_URL}/${locale}${path}`, changeFrequency: "weekly" });
     }
+    for (const c of categories) {
+      entries.push({ url: `${BASE_URL}/${locale}/${c.slug}`, changeFrequency: "weekly" });
+    }
     for (const e of establishments) {
       const cat = categoryById.get(e.categoryId);
-      const path = cat ? CATEGORY_TYPE_TO_PATH[cat.type] : null;
+      const path = cat ? cat.slug : null;
       if (!path) continue;
       entries.push({ url: `${BASE_URL}/${locale}/${path}/${e.slug}`, changeFrequency: "monthly" });
     }

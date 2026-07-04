@@ -13,10 +13,3 @@ export async function isModuleActive(key: string): Promise<boolean> {
   const active = await getActiveModuleKeys();
   return active.has(key);
 }
-
-// Maps our route-level categories to their module key in the modules table.
-export const CATEGORY_MODULE_KEY: Record<string, string> = {
-  restaurant: "restaurants",
-  activite: "activites",
-  shopping: "shopping",
-};

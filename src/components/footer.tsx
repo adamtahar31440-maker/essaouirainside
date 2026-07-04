@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
 
-export function Footer({ activeModules = [] }: { activeModules?: string[] }) {
+export function Footer({
+  activeModules = [],
+  navLinks = [],
+}: {
+  activeModules?: string[];
+  navLinks?: { href: string; label: string }[];
+}) {
   const t = useTranslations("footer");
   const nav = useTranslations("nav");
   const locale = useLocale();
@@ -10,17 +16,9 @@ export function Footer({ activeModules = [] }: { activeModules?: string[] }) {
   const isActive = (key?: string) => !key || activeModules.includes(key);
 
   const exploreLinks = [
-    { href: "/decouvrir", label: nav("discover") },
-    { href: "/hebergements", label: nav("stays") },
-    { href: "/restaurants", label: nav("restaurants"), moduleKey: "restaurants" },
-    { href: "/activites", label: nav("activities"), moduleKey: "activites" },
-    { href: "/shopping", label: nav("shopping"), moduleKey: "shopping" },
-    { href: "/immobilier", label: nav("realEstate"), moduleKey: "immobilier" },
-    { href: "/vivre-a-essaouira", label: nav("living") },
-    { href: "/blog", label: nav("blog"), moduleKey: "blog" },
-    { href: "/agenda", label: nav("agenda") },
-    { href: "/assistance", label: nav("assistance"), moduleKey: "assistance" },
-  ].filter((l) => isActive(l.moduleKey));
+    ...navLinks,
+    ...(isActive("assistance") ? [{ href: "/assistance", label: nav("assistance") }] : []),
+  ];
 
   return (
     <footer className="mt-24 border-t border-black/5 bg-ocean-dark text-white">

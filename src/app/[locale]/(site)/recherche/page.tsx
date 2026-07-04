@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { getAllEstablishments, getCategories } from "@/lib/data";
-import { CATEGORY_TYPE_TO_PATH } from "@/lib/categories";
-import { subcategoryLabel, priceLevelLabel } from "@/lib/labels";
+import { getAllEstablishments, getCategories, getAllSubcategories } from "@/lib/data";
+import { buildSubcategoryMap, subcategoryLabel, priceLevelLabel } from "@/lib/labels";
 import { EstablishmentCard } from "@/components/establishment-card";
 import { MapSection } from "@/components/map-section";
 import { cn } from "@/lib/utils";
@@ -29,12 +28,13 @@ export default async function SearchPage({
   const { q, type, price, sort } = await searchParams;
   setRequestLocale(locale);
 
-  const [t, tCat, categories, all] = await Promise.all([
+  const [t, categories, all, allSubcategories] = await Promise.all([
     getTranslations("search"),
-    getTranslations("categories"),
     getCategories(),
     getAllEstablishments(),
+    getAllSubcategories(),
   ]);
+  const subcategoryMap = buildSubcategoryMap(allSubcategories);
 
   const categoryById = new Map(categories.map((c) => [c.id, c]));
 
@@ -68,7 +68,7 @@ export default async function SearchPage({
     .filter((e) => e.lat && e.lng)
     .map((e) => {
       const cat = categoryById.get(e.categoryId);
-      const path = cat ? CATEGORY_TYPE_TO_PATH[cat.type] : "";
+      const path = cat ? cat.slug : "";
       return {
         lat: e.lat as number,
         lng: e.lng as number,
@@ -114,7 +114,7 @@ export default async function SearchPage({
                     type === c.type ? "border-ocean-dark bg-ocean-dark text-white" : "border-black/10 text-foreground/70"
                   )}
                 >
-                  {tCat(c.type as "hebergement" | "restaurant" | "activite" | "shopping")}
+                  {c.name[locale] ?? c.name.fr}
                 </Link>
               ))}
             </div>
@@ -167,14 +167,14 @@ export default async function SearchPage({
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {results.map((e) => {
                 const cat = categoryById.get(e.categoryId);
-                const path = cat ? CATEGORY_TYPE_TO_PATH[cat.type] : "";
+                const path = cat ? cat.slug : "";
                 return (
                   <EstablishmentCard
                     key={e.id}
                     href={`/${locale}/${path}/${e.slug}`}
                     name={e.name[locale] ?? e.name.fr}
                     image={e.images?.[0]}
-                    subcategory={subcategoryLabel(e.subcategory, locale)}
+                    subcategory={subcategoryLabel(subcategoryMap, e.subcategory, locale)}
                     address={e.address}
                     priceLevel={e.priceLevel}
                     badge={e.badge}

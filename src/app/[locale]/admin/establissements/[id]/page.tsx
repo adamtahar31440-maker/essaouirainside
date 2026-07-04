@@ -6,6 +6,7 @@ import {
   adminGetLabelEvaluations,
   getLabelBadges,
   adminGetProfessionals,
+  adminGetSubcategories,
 } from "@/lib/admin-data";
 import { setLabelStatus } from "@/lib/admin-actions";
 import { EstablishmentForm } from "@/components/admin/establishment-form";
@@ -40,6 +41,9 @@ export default async function EditEstablishmentPage({
     adminGetProfessionals(),
   ]);
   if (!establishment) notFound();
+  const subcategoriesByCategory = Object.fromEntries(
+    await Promise.all(categories.map(async (c) => [c.id, await adminGetSubcategories(c.id)]))
+  );
 
   return (
     <div className="space-y-10">
@@ -47,7 +51,13 @@ export default async function EditEstablishmentPage({
         <h1 className="mb-6 text-2xl font-semibold text-ocean-dark">
           Modifier : {establishment.name.fr}
         </h1>
-        <EstablishmentForm locale={locale} categories={categories} professionals={professionals} establishment={establishment} />
+        <EstablishmentForm
+          locale={locale}
+          categories={categories}
+          subcategoriesByCategory={subcategoriesByCategory}
+          professionals={professionals}
+          establishment={establishment}
+        />
       </div>
 
       <section className="space-y-6 border-t border-black/10 pt-8">

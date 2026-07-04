@@ -18,11 +18,16 @@ import {
   Snowflake,
   PawPrint,
 } from "lucide-react";
-import { CATEGORY_PATH_TO_TYPE } from "@/lib/categories";
-import { subcategoryLabel, priceLevelLabel } from "@/lib/labels";
-import { getEstablishmentBySlug, getSimilarEstablishments, getSiteSectionBySlug, getContentPageBySlug } from "@/lib/data";
+import { buildSubcategoryMap, subcategoryLabel, priceLevelLabel } from "@/lib/labels";
+import {
+  getEstablishmentBySlug,
+  getSimilarEstablishments,
+  getSiteSectionBySlug,
+  getContentPageBySlug,
+  getCategoryBySlug,
+  getSubcategories,
+} from "@/lib/data";
 import { getLabelBadges, getApprovedReviewsForEstablishment } from "@/lib/admin-data";
-import { isModuleActive, CATEGORY_MODULE_KEY } from "@/lib/modules";
 import { EstablishmentCard } from "@/components/establishment-card";
 import { Section } from "@/components/section";
 import { MapSection } from "@/components/map-section";
@@ -39,8 +44,8 @@ export async function generateMetadata({
   params: Promise<{ locale: string; category: string; slug: string }>;
 }): Promise<Metadata> {
   const { locale, category, slug } = await params;
-  const type = CATEGORY_PATH_TO_TYPE[category];
-  if (!type) {
+  const cat = await getCategoryBySlug(category);
+  if (!cat) {
     const section = await getSiteSectionBySlug(category);
     if (!section) return {};
     const page = await getContentPageBySlug(category, slug);
@@ -76,8 +81,8 @@ export default async function EstablishmentPage({
   const { locale, category, slug } = await params;
   setRequestLocale(locale);
 
-  const type = CATEGORY_PATH_TO_TYPE[category];
-  if (!type) {
+  const cat = await getCategoryBySlug(category);
+  if (!cat) {
     const section = await getSiteSectionBySlug(category);
     if (!section) notFound();
     const page = await getContentPageBySlug(category, slug);
@@ -111,21 +116,21 @@ export default async function EstablishmentPage({
     );
   }
 
-  const moduleKey = CATEGORY_MODULE_KEY[type];
-  if (moduleKey && !(await isModuleActive(moduleKey))) notFound();
+  if (cat.status !== "active") notFound();
 
   const e = await getEstablishmentBySlug(slug);
   if (!e) notFound();
 
-  const [t, tCat, tNav, tDash, similar, badges, reviews] = await Promise.all([
+  const [t, tNav, tDash, similar, badges, reviews, subcategories] = await Promise.all([
     getTranslations("establishment"),
-    getTranslations("categories"),
     getTranslations("nav"),
     getTranslations("dashboard"),
     getSimilarEstablishments(e.categoryId, e.slug),
     getLabelBadges(e.id),
     getApprovedReviewsForEstablishment(e.id),
+    getSubcategories(cat.id),
   ]);
+  const subcategoryMap = buildSubcategoryMap(subcategories);
   const activeBadges = badges.filter((b) => b.status === "active");
   const avgRating = reviews.length > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length : null;
 
@@ -177,7 +182,7 @@ export default async function EstablishmentPage({
           <Link href={`/${locale}`} className="hover:text-ocean-dark">{tNav("home")}</Link>
           <ChevronRight size={12} className="rtl:rotate-180" />
           <Link href={`/${locale}/${category}`} className="hover:text-ocean-dark">
-            {tCat(type as "hebergement" | "restaurant" | "activite" | "shopping")}
+            {cat.name[locale] ?? cat.name.fr}
           </Link>
           <ChevronRight size={12} className="rtl:rotate-180" />
           <span className="truncate text-foreground/70">{name}</span>
@@ -193,7 +198,7 @@ export default async function EstablishmentPage({
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 py-10 sm:px-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <p className="text-sm font-semibold uppercase tracking-wide text-azur">
-            {subcategoryLabel(e.subcategory, locale)}
+            {subcategoryLabel(subcategoryMap, e.subcategory, locale)}
           </p>
           <h1 className="mt-1 text-3xl font-semibold text-ocean-dark sm:text-4xl">{name}</h1>
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
@@ -478,7 +483,7 @@ export default async function EstablishmentPage({
                 href={`/${locale}/${category}/${s.slug}`}
                 name={s.name[locale] ?? s.name.fr}
                 image={s.images?.[0]}
-                subcategory={subcategoryLabel(s.subcategory, locale)}
+                subcategory={subcategoryLabel(subcategoryMap, s.subcategory, locale)}
                 address={s.address}
                 priceLevel={s.priceLevel}
                 badge={s.badge}

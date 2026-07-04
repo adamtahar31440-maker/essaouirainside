@@ -28,6 +28,8 @@ export const PERMISSIONS: Record<
   | "realEstate"
   | "events"
   | "articles"
+  | "categories"
+  | "nav"
   | "reviews"
   | "comments"
   | "media"
@@ -49,6 +51,8 @@ export const PERMISSIONS: Record<
   realEstate: ["admin", "sales"],
   events: ["admin", "editor"],
   articles: ["admin", "editor"],
+  categories: ["admin"],
+  nav: ["admin"],
   reviews: ["admin", "moderator"],
   comments: ["admin", "moderator"],
   media: ["admin", "moderator"],
