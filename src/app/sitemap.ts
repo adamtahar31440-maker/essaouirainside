@@ -1,31 +1,21 @@
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
-import {
-  getAllEstablishments,
-  getCategories,
-  getArticles,
-  getContentPages,
-  getEvents,
-} from "@/lib/data";
+import { getAllEstablishments, getCategories, getArticles, getEvents } from "@/lib/data";
 
 const BASE_URL = "https://essaouirainside.com";
 
 const STATIC_PATHS = [
   "",
-  "/decouvrir",
-  "/vivre-a-essaouira",
   "/blog",
   "/agenda",
   "/recherche",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [establishments, categories, articles, decouvrir, vivre, events] = await Promise.all([
+  const [establishments, categories, articles, events] = await Promise.all([
     getAllEstablishments(),
     getCategories(),
     getArticles(),
-    getContentPages("decouvrir"),
-    getContentPages("vivre"),
     getEvents(),
   ]);
 
@@ -48,12 +38,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
     for (const a of articles) {
       entries.push({ url: `${BASE_URL}/${locale}/blog/${a.slug}`, changeFrequency: "monthly" });
-    }
-    for (const p of decouvrir) {
-      entries.push({ url: `${BASE_URL}/${locale}/decouvrir/${p.slug}`, changeFrequency: "yearly" });
-    }
-    for (const p of vivre) {
-      entries.push({ url: `${BASE_URL}/${locale}/vivre-a-essaouira/${p.slug}`, changeFrequency: "yearly" });
     }
     for (const ev of events) {
       entries.push({ url: `${BASE_URL}/${locale}/agenda/${ev.slug}`, changeFrequency: "weekly" });

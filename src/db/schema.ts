@@ -93,7 +93,7 @@ export const articles = pgTable("articles", {
 
 export const contentPages = pgTable("content_pages", {
   id: serial("id").primaryKey(),
-  section: varchar("section", { length: 32 }).notNull(), // decouvrir | vivre
+  section: varchar("section", { length: 32 }).notNull(), // matches a site_sections.slug, or "assistance-guides"
   slug: varchar("slug", { length: 160 }).notNull().unique(),
   title: jsonb("title").$type<Localized>().notNull(),
   body: jsonb("body").$type<Localized>().notNull(),
@@ -251,9 +251,9 @@ export const modules = pgTable("modules", {
   id: serial("id").primaryKey(),
   key: varchar("key", { length: 32 }).notNull().unique(),
   status: varchar("status", { length: 16 }).notNull().default("active"), // active|inactive|maintenance
-  // Nav-manageable builtin pages (decouvrir, vivre-a-essaouira, immobilier, blog,
-  // agenda) additionally use these two columns so an admin can rename/reorder
-  // them in the flat nav without ever being able to delete the underlying page.
+  // Nav-manageable builtin pages (immobilier, blog, agenda) additionally use
+  // these two columns so an admin can rename/reorder them in the flat nav
+  // without ever being able to delete the underlying page.
   label: jsonb("label").$type<Localized | null>(),
   order: integer("order").default(0),
 });

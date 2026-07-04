@@ -46,9 +46,7 @@ export function ContentPageForm({
             + Créer une nouvelle section
           </Link>
         </div>
-        <select name="section" defaultValue={page?.section ?? "decouvrir"} className={inputClass}>
-          <option value="decouvrir">Découvrir</option>
-          <option value="vivre">Vivre à Essaouira</option>
+        <select name="section" defaultValue={page?.section ?? "assistance-guides"} className={inputClass}>
           <option value="assistance-guides">Assistance — Guides pratiques</option>
           {customSections.map((s) => (
             <option key={s.slug} value={s.slug}>

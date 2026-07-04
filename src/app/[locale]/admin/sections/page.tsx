@@ -18,7 +18,7 @@ export default async function AdminSectionsPage({
         <div>
           <h1 className="text-2xl font-semibold text-ocean-dark">Sections personnalisées</h1>
           <p className="mt-1 text-sm text-foreground/60">
-            Apparaissent dans le menu &quot;Vivre à Essaouira&quot;, à côté de Blog et Agenda. Les pages elles-mêmes
+            Apparaissent comme des liens dans la barre de navigation du site. Les pages elles-mêmes
             se gèrent depuis <Link href={`/${locale}/admin/pages`} className="text-azur hover:underline">Pages</Link>.
           </p>
         </div>

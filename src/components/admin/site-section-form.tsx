@@ -18,8 +18,8 @@ export function SiteSectionForm({ locale, section }: { locale: string; section?:
       {section && <input type="hidden" name="id" value={section.id} />}
 
       <p className="rounded-lg bg-ocean-dark/5 px-3 py-2 text-xs text-foreground/60">
-        Une section apparaît comme un nouveau lien dans le menu &quot;Vivre à Essaouira&quot;, à côté de Blog et
-        Agenda. Rédigez en français : les autres langues seront traduites automatiquement.
+        Une section apparaît comme un nouveau lien dans la barre de navigation du site.
+        Rédigez en français : les autres langues seront traduites automatiquement.
       </p>
 
       <div>

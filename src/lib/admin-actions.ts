@@ -207,7 +207,7 @@ export async function upsertContentPage(formData: FormData) {
   }
 
   const data = {
-    section: String(formData.get("section") ?? "decouvrir"),
+    section: String(formData.get("section") ?? "assistance-guides"),
     slug: id ? String(formData.get("slug")) : slugify(title),
     title: { fr: title, ...translations.title },
     body: { fr: body, ...translations.body },

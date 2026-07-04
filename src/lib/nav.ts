@@ -8,8 +8,6 @@ import { inArray } from "drizzle-orm";
 // Tarifs and Assistance are deliberately excluded: they stay exactly as
 // hardcoded, unmanaged links (explicit request from the site owner).
 export const BUILTIN_NAV_DEFAULTS: Record<string, { href: string; i18nKey: string }> = {
-  decouvrir: { href: "/decouvrir", i18nKey: "discover" },
-  "vivre-a-essaouira": { href: "/vivre-a-essaouira", i18nKey: "living" },
   immobilier: { href: "/immobilier", i18nKey: "realEstate" },
   blog: { href: "/blog", i18nKey: "blog" },
   agenda: { href: "/agenda", i18nKey: "agenda" },

@@ -4,8 +4,6 @@
 // [category] dynamic route. Existing DB-driven categories/site-sections are
 // checked for slug collisions directly against the database at creation time.
 export const RESERVED_TOP_LEVEL_SLUGS = [
-  "decouvrir",
-  "vivre-a-essaouira",
   "assistance",
   "blog",
   "agenda",
