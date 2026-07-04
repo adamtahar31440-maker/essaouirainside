@@ -2,9 +2,7 @@ import { getDb } from "@/db";
 import {
   categories,
   establishments,
-  articles,
   contentPages,
-  events,
   emergencyContacts,
   siteSections,
   subcategories,
@@ -103,23 +101,6 @@ export async function getAllEstablishments() {
     .orderBy(desc(establishments.createdAt));
 }
 
-export async function getArticles(opts: { category?: string; limit?: number } = {}) {
-  const db = getDb();
-  const query = db
-    .select()
-    .from(articles)
-    .where(opts.category ? eq(articles.category, opts.category) : undefined)
-    .orderBy(desc(articles.publishedAt));
-  if (opts.limit) return query.limit(opts.limit);
-  return query;
-}
-
-export async function getArticleBySlug(slug: string) {
-  const db = getDb();
-  const rows = await db.select().from(articles).where(eq(articles.slug, slug));
-  return rows[0] ?? null;
-}
-
 export async function getContentPages(section: string) {
   const db = getDb();
   return db
@@ -146,23 +127,6 @@ export async function getContentPageBySlug(section: string, slug: string) {
     .select()
     .from(contentPages)
     .where(and(eq(contentPages.section, section), eq(contentPages.slug, slug)));
-  return rows[0] ?? null;
-}
-
-export async function getEvents(opts: { category?: string; limit?: number } = {}) {
-  const db = getDb();
-  const query = db
-    .select()
-    .from(events)
-    .where(opts.category ? eq(events.category, opts.category) : undefined)
-    .orderBy(asc(events.startDate));
-  if (opts.limit) return query.limit(opts.limit);
-  return query;
-}
-
-export async function getEventBySlug(slug: string) {
-  const db = getDb();
-  const rows = await db.select().from(events).where(eq(events.slug, slug));
   return rows[0] ?? null;
 }
 

@@ -8,16 +8,13 @@ import { eq, desc, and, asc, ne } from "drizzle-orm";
 import { getDb } from "@/db";
 import {
   establishments,
-  articles,
   contentPages,
-  events,
   categories,
   subcategories,
   professionals,
   subscriptions,
   invoices,
   serviceOrders,
-  realEstateListings,
   reviews,
   favorites,
   modules,
@@ -130,37 +127,6 @@ export async function upsertEstablishment(formData: FormData) {
   redirect(`/${formData.get("locale")}/admin/establissements`);
 }
 
-// ---- Articles ----
-export async function deleteArticle(id: number) {
-  await requireRole("articles");
-  const db = getDb();
-  await db.delete(articles).where(eq(articles.id, id));
-  revalidatePath("/", "layout");
-}
-
-export async function upsertArticle(formData: FormData) {
-  await requireRole("articles");
-  const db = getDb();
-  const id = formData.get("id") ? Number(formData.get("id")) : null;
-  const titleFr = String(formData.get("title_fr") ?? "");
-
-  const data = {
-    category: String(formData.get("category") ?? "guides"),
-    slug: id ? String(formData.get("slug")) : slugify(titleFr),
-    title: readLocalized(formData, "title"),
-    excerpt: readLocalized(formData, "excerpt"),
-    body: readLocalized(formData, "body"),
-    coverImage: String(formData.get("coverImage") ?? "") || null,
-  };
-
-  if (id) {
-    await db.update(articles).set(data).where(eq(articles.id, id));
-  } else {
-    await db.insert(articles).values(data);
-  }
-  revalidatePath("/", "layout");
-  redirect(`/${formData.get("locale")}/admin/articles`);
-}
 
 // ---- Content pages ----
 export async function deleteContentPage(id: number) {
@@ -471,40 +437,6 @@ export async function moveNavItem(type: "builtin" | "category" | "section", id: 
   revalidatePath("/", "layout");
 }
 
-// ---- Events ----
-export async function deleteEvent(id: number) {
-  await requireRole("events");
-  const db = getDb();
-  await db.delete(events).where(eq(events.id, id));
-  revalidatePath("/", "layout");
-}
-
-export async function upsertEvent(formData: FormData) {
-  await requireRole("events");
-  const db = getDb();
-  const id = formData.get("id") ? Number(formData.get("id")) : null;
-  const titleFr = String(formData.get("title_fr") ?? "");
-
-  const data = {
-    category: String(formData.get("category") ?? "festivals"),
-    slug: id ? String(formData.get("slug")) : slugify(titleFr),
-    title: readLocalized(formData, "title"),
-    description: readLocalized(formData, "description"),
-    startDate: new Date(String(formData.get("startDate"))),
-    endDate: formData.get("endDate") ? new Date(String(formData.get("endDate"))) : null,
-    location: String(formData.get("location") ?? ""),
-    image: String(formData.get("image") ?? "") || null,
-  };
-
-  if (id) {
-    await db.update(events).set(data).where(eq(events.id, id));
-  } else {
-    await db.insert(events).values(data);
-  }
-  revalidatePath("/", "layout");
-  redirect(`/${formData.get("locale")}/admin/evenements`);
-}
-
 // ---- Professionals ----
 export async function setProfessionalStatus(
   id: number,
@@ -596,63 +528,6 @@ export async function changeSubscriptionPlan(
     });
   }
   revalidatePath("/", "layout");
-}
-
-// ---- Real estate ----
-export async function setRealEstateStatus(id: number, status: "pending" | "validated" | "refused") {
-  await requireRole("realEstate");
-  const db = getDb();
-  await db.update(realEstateListings).set({ status }).where(eq(realEstateListings.id, id));
-  revalidatePath("/", "layout");
-}
-
-export async function toggleRealEstateFeatured(id: number, featured: boolean) {
-  await requireRole("realEstate");
-  const db = getDb();
-  await db.update(realEstateListings).set({ featured }).where(eq(realEstateListings.id, id));
-  revalidatePath("/", "layout");
-}
-
-export async function deleteRealEstate(id: number) {
-  await requireRole("realEstate");
-  const db = getDb();
-  await db.delete(realEstateListings).where(eq(realEstateListings.id, id));
-  revalidatePath("/", "layout");
-}
-
-export async function upsertRealEstate(formData: FormData) {
-  await requireRole("realEstate");
-  const db = getDb();
-  const id = formData.get("id") ? Number(formData.get("id")) : null;
-  const titleFr = String(formData.get("title_fr") ?? "");
-
-  const data = {
-    listingType: String(formData.get("listingType") ?? "vente"),
-    category: String(formData.get("category") ?? "villa"),
-    slug: id ? String(formData.get("slug")) : slugify(titleFr),
-    title: readLocalized(formData, "title"),
-    description: readLocalized(formData, "description"),
-    priceMad: formData.get("priceMad") ? Number(formData.get("priceMad")) : null,
-    surfaceM2: formData.get("surfaceM2") ? Number(formData.get("surfaceM2")) : null,
-    rooms: formData.get("rooms") ? Number(formData.get("rooms")) : null,
-    address: String(formData.get("address") ?? ""),
-    lat: formData.get("lat") ? Number(formData.get("lat")) : null,
-    lng: formData.get("lng") ? Number(formData.get("lng")) : null,
-    status: (formData.get("status") as "pending" | "validated" | "refused") ?? "pending",
-    featured: formData.get("featured") === "on",
-    images: String(formData.get("images") ?? "")
-      .split(/\r?\n/)
-      .map((s) => s.trim())
-      .filter(Boolean),
-  };
-
-  if (id) {
-    await db.update(realEstateListings).set(data).where(eq(realEstateListings.id, id));
-  } else {
-    await db.insert(realEstateListings).values(data);
-  }
-  revalidatePath("/", "layout");
-  redirect(`/${formData.get("locale")}/admin/immobilier`);
 }
 
 // ---- Reviews ----

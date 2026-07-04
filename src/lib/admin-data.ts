@@ -2,14 +2,11 @@ import { getDb } from "@/db";
 import {
   establishments,
   categories,
-  articles,
   contentPages,
-  events,
   professionals,
   subscriptionPlans,
   subscriptions,
   invoices,
-  realEstateListings,
   adCampaigns,
   reviews,
   favorites,
@@ -32,17 +29,13 @@ export async function getDashboardStats() {
   const [
     establishmentsCount,
     professionalsCount,
-    articlesCount,
     reviewsPending,
-    realEstateCount,
     subscriptionsActive,
     newsletterCount,
   ] = await Promise.all([
     db.select({ c: count() }).from(establishments),
     db.select({ c: count() }).from(professionals),
-    db.select({ c: count() }).from(articles),
     db.select({ c: count() }).from(reviews).where(eq(reviews.status, "pending")),
-    db.select({ c: count() }).from(realEstateListings),
     db.select({ c: count() }).from(subscriptions).where(eq(subscriptions.status, "active")),
     db.select({ c: count() }).from(newsletterSubscribers),
   ]);
@@ -50,9 +43,7 @@ export async function getDashboardStats() {
   return {
     establishments: establishmentsCount[0]?.c ?? 0,
     professionals: professionalsCount[0]?.c ?? 0,
-    articles: articlesCount[0]?.c ?? 0,
     reviewsPending: reviewsPending[0]?.c ?? 0,
-    realEstate: realEstateCount[0]?.c ?? 0,
     activeSubscriptions: subscriptionsActive[0]?.c ?? 0,
     newsletterSubscribers: newsletterCount[0]?.c ?? 0,
   };
@@ -161,18 +152,6 @@ export async function adminCountEstablishmentsBySubcategory(categoryId: number, 
   return rows[0]?.value ?? 0;
 }
 
-// ---- Articles ----
-export async function adminGetArticles() {
-  const db = getDb();
-  return db.select().from(articles).orderBy(desc(articles.publishedAt));
-}
-
-export async function adminGetArticleById(id: number) {
-  const db = getDb();
-  const rows = await db.select().from(articles).where(eq(articles.id, id));
-  return rows[0] ?? null;
-}
-
 // ---- Content pages ----
 export async function adminGetContentPages() {
   const db = getDb();
@@ -201,18 +180,6 @@ export async function adminCountContentPagesBySection(section: string) {
   const db = getDb();
   const rows = await db.select({ value: count() }).from(contentPages).where(eq(contentPages.section, section));
   return rows[0]?.value ?? 0;
-}
-
-// ---- Events ----
-export async function adminGetEvents() {
-  const db = getDb();
-  return db.select().from(events).orderBy(desc(events.startDate));
-}
-
-export async function adminGetEventById(id: number) {
-  const db = getDb();
-  const rows = await db.select().from(events).where(eq(events.id, id));
-  return rows[0] ?? null;
 }
 
 // ---- Professionals ----
@@ -267,30 +234,6 @@ export async function getInvoicesByProfessionalId(professionalId: number) {
     .from(invoices)
     .where(eq(invoices.professionalId, professionalId))
     .orderBy(desc(invoices.issuedAt));
-}
-
-// ---- Real estate ----
-export async function adminGetRealEstateListings() {
-  const db = getDb();
-  return db.select().from(realEstateListings).orderBy(desc(realEstateListings.createdAt));
-}
-
-export async function adminGetRealEstateById(id: number) {
-  const db = getDb();
-  const rows = await db.select().from(realEstateListings).where(eq(realEstateListings.id, id));
-  return rows[0] ?? null;
-}
-
-export async function getPublicRealEstateListings(listingType?: string) {
-  const db = getDb();
-  const rows = await db.select().from(realEstateListings).where(eq(realEstateListings.status, "validated"));
-  return listingType ? rows.filter((r) => r.listingType === listingType) : rows;
-}
-
-export async function getRealEstateBySlug(slug: string) {
-  const db = getDb();
-  const rows = await db.select().from(realEstateListings).where(eq(realEstateListings.slug, slug));
-  return rows[0] ?? null;
 }
 
 // ---- Ads ----

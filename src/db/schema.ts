@@ -80,17 +80,6 @@ export const establishments = pgTable("establishments", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const articles = pgTable("articles", {
-  id: serial("id").primaryKey(),
-  category: varchar("category", { length: 32 }).notNull(), // guides | actualites | conseils | interviews | reportages
-  slug: varchar("slug", { length: 160 }).notNull().unique(),
-  title: jsonb("title").$type<Localized>().notNull(),
-  excerpt: jsonb("excerpt").$type<Localized>().notNull(),
-  body: jsonb("body").$type<Localized>().notNull(),
-  coverImage: varchar("cover_image", { length: 255 }),
-  publishedAt: timestamp("published_at").defaultNow(),
-});
-
 export const contentPages = pgTable("content_pages", {
   id: serial("id").primaryKey(),
   section: varchar("section", { length: 32 }).notNull(), // matches a site_sections.slug, or "assistance-guides"
@@ -115,18 +104,6 @@ export const siteSections = pgTable("site_sections", {
   slug: varchar("slug", { length: 64 }).notNull().unique(),
   name: jsonb("name").$type<Localized>().notNull(),
   order: integer("order").default(0),
-});
-
-export const events = pgTable("events", {
-  id: serial("id").primaryKey(),
-  category: varchar("category", { length: 32 }).notNull(), // festivals | concerts | marches | expositions
-  slug: varchar("slug", { length: 160 }).notNull().unique(),
-  title: jsonb("title").$type<Localized>().notNull(),
-  description: jsonb("description").$type<Localized>().notNull(),
-  startDate: timestamp("start_date").notNull(),
-  endDate: timestamp("end_date"),
-  location: varchar("location", { length: 255 }),
-  image: varchar("image", { length: 255 }),
 });
 
 export const newsletterSubscribers = pgTable("newsletter_subscribers", {
