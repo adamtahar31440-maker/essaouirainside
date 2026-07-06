@@ -21,6 +21,15 @@ export function Header({
   const locale = useLocale();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+
+  const toggleExpanded = (href: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(href)) next.delete(href);
+      else next.add(href);
+      return next;
+    });
 
   const isActive = (key?: string) => !key || activeModules.includes(key);
 
@@ -120,31 +129,56 @@ export function Header({
             >
               {t("home")}
             </Link>
-            {navLinks.map((link) => (
-              <div key={link.href}>
+            {navLinks.map((link) =>
+              link.pages && link.pages.length > 0 ? (
+                <div key={link.href}>
+                  <div className="flex items-center rounded-md hover:bg-sand/50">
+                    <Link
+                      href={localePrefixed(link.href)}
+                      onClick={() => setOpen(false)}
+                      className="flex-1 px-2 py-2 text-sm font-medium text-foreground/80"
+                    >
+                      {link.label}
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => toggleExpanded(link.href)}
+                      aria-label={link.label}
+                      aria-expanded={expanded.has(link.href)}
+                      className="p-2 text-foreground/60"
+                    >
+                      <ChevronDown
+                        size={16}
+                        className={cn("transition", expanded.has(link.href) && "rotate-180")}
+                      />
+                    </button>
+                  </div>
+                  {expanded.has(link.href) && (
+                    <div className="ms-3 flex flex-col gap-0.5 border-s border-black/10 ps-3">
+                      {link.pages.map((p) => (
+                        <Link
+                          key={p.href}
+                          href={localePrefixed(p.href)}
+                          onClick={() => setOpen(false)}
+                          className="rounded-md px-2 py-1.5 text-sm text-foreground/60 hover:bg-sand/50"
+                        >
+                          {p.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
                 <Link
+                  key={link.href}
                   href={localePrefixed(link.href)}
                   onClick={() => setOpen(false)}
-                  className="block rounded-md px-2 py-2 text-sm font-medium text-foreground/80 hover:bg-sand/50"
+                  className="rounded-md px-2 py-2 text-sm font-medium text-foreground/80 hover:bg-sand/50"
                 >
                   {link.label}
                 </Link>
-                {link.pages && link.pages.length > 0 && (
-                  <div className="ms-3 flex flex-col gap-0.5 border-s border-black/10 ps-3">
-                    {link.pages.map((p) => (
-                      <Link
-                        key={p.href}
-                        href={localePrefixed(p.href)}
-                        onClick={() => setOpen(false)}
-                        className="rounded-md px-2 py-1.5 text-sm text-foreground/60 hover:bg-sand/50"
-                      >
-                        {p.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+              )
+            )}
             {isActive("tarifs") && (
               <Link
                 href={localePrefixed("/tarifs")}
