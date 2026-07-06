@@ -1,5 +1,8 @@
 import { upsertSiteSection } from "@/lib/admin-actions";
 import { SubmitButton } from "@/components/submit-button";
+import { ALL_LOCALES, LOCALE_LABELS } from "@/lib/localized-form";
+
+const TRANSLATING_LOCALE_NAMES = ALL_LOCALES.filter((l) => l !== "fr").map((l) => LOCALE_LABELS[l]);
 
 type SiteSection = {
   id: number;
@@ -40,7 +43,11 @@ export function SiteSectionForm({ locale, section }: { locale: string; section?:
         </p>
       </div>
 
-      <SubmitButton label="Enregistrer" pendingLabel="Traduction et enregistrement en cours..." />
+      <SubmitButton
+        label="Enregistrer"
+        pendingLabel="Traduction et enregistrement en cours..."
+        translatingLocales={TRANSLATING_LOCALE_NAMES}
+      />
     </form>
   );
 }

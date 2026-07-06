@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { upsertContentPage } from "@/lib/admin-actions";
 import { SubmitButton } from "@/components/submit-button";
+import { ALL_LOCALES, LOCALE_LABELS } from "@/lib/localized-form";
+
+const TRANSLATING_LOCALE_NAMES = ALL_LOCALES.filter((l) => l !== "fr").map((l) => LOCALE_LABELS[l]);
 import { ProductsEditor } from "@/components/products-editor";
 import { ImageUploader } from "@/components/image-uploader";
 import { MapSectionToggle } from "@/components/admin/map-section-toggle";
@@ -116,7 +119,11 @@ export function ContentPageForm({
         />
       </MapSectionToggle>
 
-      <SubmitButton label="Enregistrer" pendingLabel="Traduction et enregistrement en cours..." />
+      <SubmitButton
+        label="Enregistrer"
+        pendingLabel="Traduction et enregistrement en cours..."
+        translatingLocales={TRANSLATING_LOCALE_NAMES}
+      />
     </form>
   );
 }

@@ -31,7 +31,7 @@ export function ContentDetail({
     <div>
       {coverImage && (
         <div className="relative h-64 w-full overflow-hidden bg-sand sm:h-96">
-          <Image src={coverImage} alt={title} fill className="object-cover" priority />
+          <Image src={coverImage} alt={title} fill className="object-contain" priority />
         </div>
       )}
       <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
