@@ -216,8 +216,9 @@ export async function upsertContentPage(formData: FormData) {
     mapPoints = [];
   }
 
+  const section = String(formData.get("section") ?? "assistance-guides");
   const data = {
-    section: String(formData.get("section") ?? "assistance-guides"),
+    section,
     slug: id ? String(formData.get("slug")) : slugify(title),
     title: { fr: title, ...translations.title },
     body: { fr: body, ...translations.body },
@@ -230,7 +231,12 @@ export async function upsertContentPage(formData: FormData) {
   if (id) {
     await db.update(contentPages).set(data).where(eq(contentPages.id, id));
   } else {
-    await db.insert(contentPages).values(data);
+    const existingInSection = await db
+      .select({ order: contentPages.order })
+      .from(contentPages)
+      .where(eq(contentPages.section, section));
+    const nextOrder = existingInSection.reduce((max, p) => Math.max(max, p.order ?? 0), 0) + 10;
+    await db.insert(contentPages).values({ ...data, order: nextOrder });
   }
   revalidatePath("/", "layout");
 }
