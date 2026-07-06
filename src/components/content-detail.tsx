@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { ProductCategoryList } from "@/components/product-category-list";
@@ -30,8 +29,10 @@ export function ContentDetail({
   return (
     <div>
       {coverImage && (
-        <div className="relative h-64 w-full overflow-hidden bg-sand sm:h-96">
-          <Image src={coverImage} alt={title} fill className="object-contain" priority />
+        <div className="w-full overflow-hidden bg-sand">
+          {/* Natural aspect ratio (unknown dimensions) — no crop, no empty bars. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={coverImage} alt={title} className="h-auto w-full" />
         </div>
       )}
       <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
