@@ -151,13 +151,35 @@ export async function upsertContentPage(formData: FormData) {
     pricesInput = [];
   }
 
+  let clientTranslations: Record<string, Record<string, string>> = {};
+  try {
+    clientTranslations = JSON.parse(String(formData.get("translations") ?? "{}"));
+  } catch {
+    clientTranslations = {};
+  }
+
   const targetLocales = ALL_LOCALES.filter((l) => l !== "fr");
   const translationFields: Record<string, string> = { title, body };
   pricesInput.forEach((p, i) => {
     translationFields[`price_${i}`] = p.name;
     if (p.category) translationFields[`priceCategory_${i}`] = p.category;
   });
-  const translations = await translateFields(translationFields, targetLocales, "fr");
+
+  // The form already translates language by language client-side (for a real
+  // progress indicator) before submitting. Only fall back to a server-side batch
+  // translation for locales the client didn't supply (JS disabled, a request failed).
+  const missingLocales = targetLocales.filter((l) => !clientTranslations[l]);
+  const serverTranslations =
+    missingLocales.length > 0 ? await translateFields(translationFields, missingLocales, "fr") : {};
+
+  const translations: Record<string, Record<string, string>> = {};
+  for (const field of Object.keys(translationFields)) {
+    translations[field] = {};
+    for (const l of targetLocales) {
+      const value = clientTranslations[l]?.[field] || serverTranslations[field]?.[l];
+      if (value) translations[field][l] = value;
+    }
+  }
 
   const prices = pricesInput.map((p, i) => ({
     name: { fr: p.name, ...translations[`price_${i}`] },
@@ -189,7 +211,6 @@ export async function upsertContentPage(formData: FormData) {
     await db.insert(contentPages).values(data);
   }
   revalidatePath("/", "layout");
-  redirect(`/${formData.get("locale")}/admin/pages`);
 }
 
 // ---- Site sections ----
@@ -211,12 +232,27 @@ export async function upsertSiteSection(formData: FormData) {
     throw new Error(`"${requestedSlug}" est déjà utilisé par une catégorie. Choisissez un autre nom.`);
   }
 
+  let clientTranslations: Record<string, Record<string, string>> = {};
+  try {
+    clientTranslations = JSON.parse(String(formData.get("translations") ?? "{}"));
+  } catch {
+    clientTranslations = {};
+  }
+
   const targetLocales = ALL_LOCALES.filter((l) => l !== "fr");
-  const translations = await translateFields({ name }, targetLocales, "fr");
+  const missingLocales = targetLocales.filter((l) => !clientTranslations[l]);
+  const serverTranslations =
+    missingLocales.length > 0 ? await translateFields({ name }, missingLocales, "fr") : {};
+
+  const nameTranslations: Record<string, string> = {};
+  for (const l of targetLocales) {
+    const value = clientTranslations[l]?.name || serverTranslations.name?.[l];
+    if (value) nameTranslations[l] = value;
+  }
 
   const data = {
     slug: requestedSlug,
-    name: { fr: name, ...translations.name },
+    name: { fr: name, ...nameTranslations },
   };
 
   if (id) {
@@ -227,7 +263,6 @@ export async function upsertSiteSection(formData: FormData) {
     await db.insert(siteSections).values({ ...data, order: nextOrder });
   }
   revalidatePath("/", "layout");
-  redirect(`/${formData.get("locale")}/admin/sections`);
 }
 
 export async function deleteSiteSection(id: number) {
