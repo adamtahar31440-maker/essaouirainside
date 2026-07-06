@@ -8,12 +8,14 @@ import { Menu, X, Search, Globe, ChevronDown } from "lucide-react";
 import { localeNames, routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
+type NavLink = { href: string; label: string; pages?: { href: string; label: string }[] };
+
 export function Header({
   activeModules = [],
   navLinks = [],
 }: {
   activeModules?: string[];
-  navLinks?: { href: string; label: string }[];
+  navLinks?: NavLink[];
 }) {
   const t = useTranslations("nav");
   const locale = useLocale();
@@ -36,15 +38,40 @@ export function Header({
           <Link href={`/${locale}`} className="text-sm font-medium text-foreground/80 transition hover:text-ocean-dark">
             {t("home")}
           </Link>
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={localePrefixed(link.href)}
-              className="text-sm font-medium text-foreground/80 transition hover:text-ocean-dark"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) =>
+            link.pages && link.pages.length > 0 ? (
+              <div key={link.href} className="group relative">
+                <Link
+                  href={localePrefixed(link.href)}
+                  className="flex items-center gap-1 text-sm font-medium text-foreground/80 transition hover:text-ocean-dark"
+                >
+                  {link.label}
+                  <ChevronDown size={14} className="transition group-hover:rotate-180" />
+                </Link>
+                <div className="invisible absolute left-0 top-full z-20 pt-2 opacity-0 transition group-hover:visible group-hover:opacity-100 rtl:left-auto rtl:right-0">
+                  <div className="w-56 rounded-xl border border-black/10 bg-white p-2 shadow-lg">
+                    {link.pages.map((p) => (
+                      <Link
+                        key={p.href}
+                        href={localePrefixed(p.href)}
+                        className="block rounded-lg px-3 py-2 text-sm text-foreground/70 hover:bg-sand/50 hover:text-ocean-dark"
+                      >
+                        {p.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Link
+                key={link.href}
+                href={localePrefixed(link.href)}
+                className="text-sm font-medium text-foreground/80 transition hover:text-ocean-dark"
+              >
+                {link.label}
+              </Link>
+            )
+          )}
           {isActive("tarifs") && (
             <Link href={localePrefixed("/tarifs")} className="text-sm font-medium text-foreground/80 transition hover:text-ocean-dark">
               {t("pricing")}
@@ -94,14 +121,29 @@ export function Header({
               {t("home")}
             </Link>
             {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={localePrefixed(link.href)}
-                onClick={() => setOpen(false)}
-                className="rounded-md px-2 py-2 text-sm font-medium text-foreground/80 hover:bg-sand/50"
-              >
-                {link.label}
-              </Link>
+              <div key={link.href}>
+                <Link
+                  href={localePrefixed(link.href)}
+                  onClick={() => setOpen(false)}
+                  className="block rounded-md px-2 py-2 text-sm font-medium text-foreground/80 hover:bg-sand/50"
+                >
+                  {link.label}
+                </Link>
+                {link.pages && link.pages.length > 0 && (
+                  <div className="ms-3 flex flex-col gap-0.5 border-s border-black/10 ps-3">
+                    {link.pages.map((p) => (
+                      <Link
+                        key={p.href}
+                        href={localePrefixed(p.href)}
+                        onClick={() => setOpen(false)}
+                        className="rounded-md px-2 py-1.5 text-sm text-foreground/60 hover:bg-sand/50"
+                      >
+                        {p.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
             {isActive("tarifs") && (
               <Link

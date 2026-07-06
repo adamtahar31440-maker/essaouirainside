@@ -26,6 +26,10 @@ export default async function SiteLayout({
     .map((item) => ({
       href: item.href,
       label: item.label?.[locale] ?? item.label?.fr ?? (item.i18nKey ? tNav(item.i18nKey as never) : item.key),
+      pages: item.pages?.map((p) => ({
+        href: `${item.href}/${p.slug}`,
+        label: p.label[locale] ?? p.label.fr,
+      })),
     }));
 
   return (

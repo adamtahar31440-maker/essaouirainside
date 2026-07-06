@@ -136,6 +136,28 @@ export async function deleteContentPage(id: number) {
   revalidatePath("/", "layout");
 }
 
+export async function moveContentPage(id: number, direction: "up" | "down") {
+  await requireRole("articles");
+  const db = getDb();
+  const [page] = await db.select().from(contentPages).where(eq(contentPages.id, id));
+  if (!page) return;
+
+  const siblings = await db
+    .select()
+    .from(contentPages)
+    .where(eq(contentPages.section, page.section))
+    .orderBy(asc(contentPages.order), desc(contentPages.id));
+  const index = siblings.findIndex((p) => p.id === id);
+  const swapIndex = direction === "up" ? index - 1 : index + 1;
+  if (index === -1 || swapIndex < 0 || swapIndex >= siblings.length) return;
+
+  const current = siblings[index];
+  const swap = siblings[swapIndex];
+  await db.update(contentPages).set({ order: swap.order }).where(eq(contentPages.id, current.id));
+  await db.update(contentPages).set({ order: current.order }).where(eq(contentPages.id, swap.id));
+  revalidatePath("/", "layout");
+}
+
 export async function upsertContentPage(formData: FormData) {
   await requireRole("articles");
   const db = getDb();

@@ -1,6 +1,6 @@
 import { getDb } from "@/db";
-import { modules, categories, siteSections } from "@/db/schema";
-import { inArray } from "drizzle-orm";
+import { modules, categories, siteSections, contentPages } from "@/db/schema";
+import { inArray, asc } from "drizzle-orm";
 
 // Builtin pages the admin can rename, reorder and hide from the flat nav via
 // /admin/nav — but never delete, since that would take down the feature
@@ -18,6 +18,7 @@ export type NavItem = {
   order: number;
   active: boolean;
   deletable: boolean;
+  pages?: { slug: string; label: Record<string, string> }[];
 };
 
 export async function getNavItems(): Promise<NavItem[]> {
@@ -57,6 +58,16 @@ export async function getNavItems(): Promise<NavItem[]> {
       deletable: true,
     });
   }
+  const sectionSlugs = sectionRows.map((s) => s.slug);
+  const pageRows =
+    sectionSlugs.length > 0
+      ? await db
+          .select()
+          .from(contentPages)
+          .where(inArray(contentPages.section, sectionSlugs))
+          .orderBy(asc(contentPages.order))
+      : [];
+
   for (const s of sectionRows) {
     items.push({
       type: "section",
@@ -67,6 +78,7 @@ export async function getNavItems(): Promise<NavItem[]> {
       order: s.order ?? 0,
       active: true,
       deletable: true,
+      pages: pageRows.filter((p) => p.section === s.slug).map((p) => ({ slug: p.slug, label: p.title })),
     });
   }
 

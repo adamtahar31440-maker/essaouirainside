@@ -155,7 +155,7 @@ export async function adminCountEstablishmentsBySubcategory(categoryId: number, 
 // ---- Content pages ----
 export async function adminGetContentPages() {
   const db = getDb();
-  return db.select().from(contentPages).orderBy(desc(contentPages.id));
+  return db.select().from(contentPages).orderBy(asc(contentPages.section), asc(contentPages.order), desc(contentPages.id));
 }
 
 export async function adminGetContentPageById(id: number) {
