@@ -73,7 +73,11 @@ export function ContentPageForm({
 
     // Changing just the cover image (or another non-text field) shouldn't re-translate
     // text that hasn't changed — reuse the page's existing translations instead of
-    // making 11 AI calls for nothing.
+    // making 11 AI calls for nothing. Compare with line endings normalized: a <textarea>
+    // read back via FormData always reports "\n", but content saved before this browser
+    // normalization kicked in (or entered on Windows) can still have stored "\r\n", which
+    // made this comparison spuriously fail and fall through to the slow path every time.
+    const normalizeText = (s: string) => s.replace(/\r\n/g, "\n");
     const originalPrices = (page?.prices ?? []).map((p) => ({
       name: p.name.fr,
       price: p.price,
@@ -81,8 +85,8 @@ export function ContentPageForm({
     }));
     const textUnchanged =
       !!page &&
-      title === page.title.fr &&
-      body === page.body.fr &&
+      normalizeText(title) === normalizeText(page.title.fr) &&
+      normalizeText(body) === normalizeText(page.body.fr) &&
       JSON.stringify(pricesInput) === JSON.stringify(originalPrices);
 
     const allTranslations: Record<string, Record<string, string>> = {};

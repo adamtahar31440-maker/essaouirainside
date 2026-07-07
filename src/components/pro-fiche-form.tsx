@@ -67,7 +67,11 @@ export function ProFicheForm({
 
     // Changing just the photos (or another non-text field) shouldn't re-translate
     // text that hasn't changed — reuse the establishment's existing translations
-    // instead of making an AI call per language for nothing.
+    // instead of making an AI call per language for nothing. Compare with line endings
+    // normalized: a <textarea> read back via FormData always reports "\n", but
+    // description text saved before this normalization (or entered on Windows) can
+    // still have stored "\r\n", which made this comparison spuriously fail.
+    const normalizeText = (s: string) => s.replace(/\r\n/g, "\n");
     const originalProducts = (establishment?.products ?? []).map((p) => ({
       name: p.name.fr,
       price: p.price,
@@ -75,8 +79,8 @@ export function ProFicheForm({
     }));
     const textUnchanged =
       !!establishment &&
-      name === establishment.name.fr &&
-      description === establishment.description.fr &&
+      normalizeText(name) === normalizeText(establishment.name.fr) &&
+      normalizeText(description) === normalizeText(establishment.description.fr) &&
       hours === (establishment.hours?.fr ?? "") &&
       JSON.stringify(productsInput) === JSON.stringify(originalProducts);
 
