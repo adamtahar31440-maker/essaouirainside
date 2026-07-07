@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
+import { safeCurrentUser } from "@/lib/auth";
 
 export default async function ProLayout({
   children,
@@ -9,6 +10,7 @@ export default async function ProLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const user = await safeCurrentUser();
 
   return (
     <div className="min-h-screen bg-sand/20">
@@ -16,9 +18,15 @@ export default async function ProLayout({
         <Link href={`/${locale}/pro`} className="text-sm font-semibold text-ocean-dark">
           Essaouira Inside — <span className="text-terracotta">Espace Pro</span>
         </Link>
-        <UserButton />
+        {user ? (
+          <UserButton />
+        ) : (
+          <Link href={`/${locale}/sign-in`} className="text-sm font-medium text-ocean-dark hover:underline">
+            Se connecter
+          </Link>
+        )}
       </header>
-      <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">{children}</div>
+      {children}
     </div>
   );
 }

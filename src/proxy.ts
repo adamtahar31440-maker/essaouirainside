@@ -5,7 +5,7 @@ import { routing } from "./i18n/routing";
 
 const intlMiddleware = createIntlMiddleware(routing);
 
-const isProtectedRoute = createRouteMatcher(["/:locale/admin(.*)", "/:locale/pro(.*)"]);
+const isProtectedRoute = createRouteMatcher(["/:locale/admin(.*)", "/:locale/pro/dashboard(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
   // API routes need Clerk's auth context (for currentUser()/auth() inside route

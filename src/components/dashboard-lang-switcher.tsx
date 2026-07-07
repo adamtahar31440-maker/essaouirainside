@@ -11,7 +11,7 @@ export function DashboardLangSwitcher({ locale, label }: { locale: string; label
       <label className="text-xs font-semibold text-foreground/60">{label}</label>
       <select
         value={locale}
-        onChange={(e) => router.push(`/${e.target.value}/pro`)}
+        onChange={(e) => router.push(`/${e.target.value}/pro/dashboard`)}
         className="rounded-lg border border-black/10 px-3 py-1.5 text-sm outline-none focus:border-ocean-dark"
       >
         {ALL_LOCALES.map((l) => (

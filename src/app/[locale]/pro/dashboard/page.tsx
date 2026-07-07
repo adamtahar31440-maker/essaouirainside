@@ -1,0 +1,536 @@
+import Link from "next/link";
+import { safeCurrentUser } from "@/lib/auth";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import {
+  getProfessionalByClerkId,
+  getSubscriptionByProfessionalId,
+  getInvoicesByProfessionalId,
+  getServiceOrdersByProfessionalId,
+  adminGetEstablishments,
+  getSubscriptionPlans,
+  getLabelApplicationByEstablishmentId,
+  getLabelBadges,
+  getAllCategories,
+  adminGetSubcategories,
+} from "@/lib/admin-data";
+import { applyAsProfessional, requestMarketplaceService, applyForLabel, updateOwnEstablishment } from "@/lib/pro-actions";
+import { SubscriptionPlans } from "@/components/subscription-plans";
+import { LabelBadgeHistory } from "@/components/label-badge-history";
+import { ProApplicationForm } from "@/components/pro-application-form";
+import { DashboardLangSwitcher } from "@/components/dashboard-lang-switcher";
+import { ImageUploader } from "@/components/image-uploader";
+import { HoursEditor } from "@/components/hours-editor";
+import { ProductsEditor } from "@/components/products-editor";
+import { UpdateSuccessBanner } from "@/components/update-success-banner";
+import { PRICE_LEVELS, priceLevelLabel, buildSubcategoryMap, subcategoryLabel } from "@/lib/labels";
+import { AiDescriptionField } from "@/components/ai-description-field";
+import { ALL_LOCALES } from "@/lib/localized-form";
+import { localeNames } from "@/i18n/routing";
+import { ProFicheForm } from "@/components/pro-fiche-form";
+import { AddressLocationPicker } from "@/components/address-location-picker";
+
+const TRANSLATING_LOCALES = ALL_LOCALES.filter((l) => l !== "fr").map((l) => ({
+  code: l,
+  name: localeNames[l],
+}));
+
+const OPEN_LABEL_APPLICATION_STATUSES = ["pending", "info_requested", "visit_scheduled", "on_hold"];
+
+const inputClass = "w-full rounded-lg border border-black/10 px-3 py-2 text-sm outline-none focus:border-ocean-dark";
+const labelClass = "mb-1 block text-xs font-semibold text-foreground/60";
+
+export default async function ProDashboardPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ updated?: string }>;
+}) {
+  const { locale } = await params;
+  const { updated } = await searchParams;
+  setRequestLocale(locale);
+  const t = await getTranslations("dashboard");
+  const user = await safeCurrentUser();
+  const professional = user ? await getProfessionalByClerkId(user.id) : null;
+
+  if (!professional) {
+    const categories = await getAllCategories();
+    const subcategoriesByCategory = Object.fromEntries(
+      await Promise.all(categories.map(async (c) => [c.id, await adminGetSubcategories(c.id)]))
+    );
+    return (
+      <ProApplicationForm
+        action={applyAsProfessional}
+        categories={categories}
+        subcategoriesByCategory={subcategoriesByCategory}
+        defaultLocale={locale}
+      />
+    );
+  }
+
+  const langSwitcher = <DashboardLangSwitcher locale={locale} label={t("language")} />;
+
+  if (professional.status === "pending") {
+    return (
+      <div className="space-y-4">
+        <div className="flex justify-end">{langSwitcher}</div>
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
+          <p className="font-semibold text-amber-800">{t("pendingTitle")}</p>
+          <p className="mt-1 text-sm text-amber-700">
+            {t("pendingBody", { name: professional.contactName || professional.companyName })}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (professional.status === "refused" || professional.status === "suspended") {
+    return (
+      <div className="space-y-4">
+        <div className="flex justify-end">{langSwitcher}</div>
+        <div className="rounded-2xl border border-red-200 bg-red-50 p-6">
+          <p className="font-semibold text-red-800">
+            {professional.status === "refused" ? t("refusedTitle") : t("suspendedTitle")}
+          </p>
+          <p className="mt-1 text-sm text-red-700">{t("refusedSuspendedBody")}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const [subscription, invoices, serviceOrders, allEstablishments, plans] = await Promise.all([
+    getSubscriptionByProfessionalId(professional.id),
+    getInvoicesByProfessionalId(professional.id),
+    getServiceOrdersByProfessionalId(professional.id),
+    adminGetEstablishments(),
+    getSubscriptionPlans(),
+  ]);
+  const myEstablishment = allEstablishments.find((e) => e.professionalId === professional.id);
+  const currentPlanKey = subscription?.status === "active" ? subscription.planKey : "starter";
+  const maxPhotos = plans.find((p) => p.key === currentPlanKey)?.maxPhotos ?? null;
+  const myEstablishmentSubcategories = myEstablishment ? await adminGetSubcategories(myEstablishment.categoryId) : [];
+  const subcategoryMap = buildSubcategoryMap(myEstablishmentSubcategories);
+
+  const [labelApplication, labelBadges] = myEstablishment
+    ? await Promise.all([
+        getLabelApplicationByEstablishmentId(myEstablishment.id),
+        getLabelBadges(myEstablishment.id),
+      ])
+    : [null, []];
+  const labelApplicationOpen = labelApplication && OPEN_LABEL_APPLICATION_STATUSES.includes(labelApplication.status);
+
+  const LABEL_APPLICATION_STATUS_LABELS: Record<string, string> = {
+    pending: t("labelStatusPending"),
+    info_requested: t("labelStatusInfoRequested"),
+    visit_scheduled: t("labelStatusVisitScheduled"),
+    on_hold: t("labelStatusOnHold"),
+  };
+
+  const SERVICES = [
+    { key: "shooting_photo", label: t("serviceShootingPhoto") },
+    { key: "video", label: t("serviceVideo") },
+    { key: "article_seo", label: t("serviceArticleSeo") },
+    { key: "social_media", label: t("serviceSocialMedia") },
+    { key: "ad_campaign", label: t("serviceAdCampaign") },
+    { key: "newsletter_feature", label: t("serviceNewsletterFeature") },
+    { key: "content_creation", label: t("serviceContentCreation") },
+    { key: "marketing", label: t("serviceMarketing") },
+  ];
+
+  return (
+    <div className="space-y-10">
+      {updated === "1" && <UpdateSuccessBanner message={t("updateSuccess")} />}
+
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold text-ocean-dark">{t("greeting", { name: professional.companyName })}</h1>
+          <p className="text-sm text-foreground/60">{t("tagline")}</p>
+        </div>
+        {langSwitcher}
+      </div>
+
+      <section className="rounded-2xl border border-black/5 bg-white p-6">
+        <h2 className="mb-3 text-sm font-semibold text-ocean-dark">{t("subscriptionTitle")}</h2>
+        {subscription && subscription.status === "active" ? (
+          <p className="mb-4 text-sm text-foreground/70">
+            {t("subscriptionActive", {
+              plan: subscription.planKey,
+              cycle: subscription.billingCycle,
+              status: subscription.status,
+            })}
+          </p>
+        ) : (
+          <p className="mb-4 text-sm text-foreground/60">{t("subscriptionFree")}</p>
+        )}
+        <SubscriptionPlans plans={plans} currentPlanKey={subscription?.status === "active" ? subscription.planKey : undefined} />
+      </section>
+
+      <section className="rounded-2xl border border-black/5 bg-white p-6">
+        <h2 className="mb-3 text-sm font-semibold text-ocean-dark">{t("establishmentTitle")}</h2>
+        {myEstablishment ? (
+          <ProFicheForm
+            action={updateOwnEstablishment}
+            translatingLocales={TRANSLATING_LOCALES}
+            establishment={{
+              name: myEstablishment.name,
+              description: myEstablishment.description,
+              hours: myEstablishment.hours,
+              products: myEstablishment.products,
+            }}
+            saveLabel={t("save")}
+            savePendingLabel={t("savePending")}
+            saveErrorLabel={t("saveError")}
+            locale={locale}
+          >
+            <input type="hidden" name="id" value={myEstablishment.id} />
+
+            {myEstablishment.status !== "active" && (
+              <p className="rounded-lg bg-amber-50 px-3 py-2 text-xs font-medium text-amber-700">
+                {t("establishmentStatusNote", {
+                  status: myEstablishment.status === "pending" ? t("statusPending") : t("statusDisabled"),
+                })}
+              </p>
+            )}
+
+            <p className="rounded-lg bg-ocean-dark/5 px-3 py-2 text-xs text-foreground/60">{t("editHint")}</p>
+
+            <div>
+              <label className={labelClass}>{t("fieldName")}</label>
+              <input name="name" defaultValue={myEstablishment.name.fr} className={inputClass} required />
+            </div>
+            <AiDescriptionField
+              label={t("fieldDescription")}
+              defaultValue={myEstablishment.description.fr}
+              locale={locale}
+              businessName={myEstablishment.name.fr}
+              category={subcategoryLabel(subcategoryMap, myEstablishment.subcategory, locale)}
+              generateLabel={t("generateDescriptionButton")}
+              generatePendingLabel={t("generateDescriptionButtonPending")}
+              emptyErrorText={t("generateDescriptionEmptyError")}
+              errorText={t("generateDescriptionError")}
+              placeholder={t("generateDescriptionPlaceholder")}
+              labelClassName={labelClass}
+              inputClassName={inputClass}
+            />
+            <div>
+              <label className={labelClass}>{t("fieldHours")}</label>
+              <HoursEditor
+                name="hours"
+                defaultValue={myEstablishment.hours?.fr ?? ""}
+                dayLabels={[
+                  t("dayMon"),
+                  t("dayTue"),
+                  t("dayWed"),
+                  t("dayThu"),
+                  t("dayFri"),
+                  t("daySat"),
+                  t("daySun"),
+                ]}
+                copyLabel={t("hoursCopyPrevious")}
+                closedLabel={t("hoursClosed")}
+                openLabel={t("hoursOpenDay")}
+                addRangeLabel={t("hoursAddRange")}
+              />
+            </div>
+
+            <div>
+              <label className={labelClass}>{t("fieldAddress")}</label>
+              <AddressLocationPicker
+                className={inputClass}
+                defaultAddress={myEstablishment.address ?? ""}
+                defaultLat={myEstablishment.lat}
+                defaultLng={myEstablishment.lng}
+              />
+            </div>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <div>
+                <label className={labelClass}>{t("fieldPhone")}</label>
+                <input name="phone" defaultValue={myEstablishment.phone ?? ""} className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>{t("fieldWhatsapp")}</label>
+                <input name="whatsapp" defaultValue={myEstablishment.whatsapp ?? ""} className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>{t("fieldWebsite")}</label>
+                <input name="website" defaultValue={myEstablishment.website ?? ""} className={inputClass} />
+              </div>
+            </div>
+
+            <div>
+              <label className={labelClass}>{t("fieldSocialReviews")}</label>
+              <p className="mb-2 text-xs text-foreground/50">{t("socialReviewsHint")}</p>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className={labelClass}>Instagram</label>
+                  <input
+                    name="instagram"
+                    defaultValue={myEstablishment.instagram ?? ""}
+                    placeholder="https://instagram.com/..."
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>Facebook</label>
+                  <input
+                    name="facebook"
+                    defaultValue={myEstablishment.facebook ?? ""}
+                    placeholder="https://facebook.com/..."
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>{t("googleReviewsLabel")}</label>
+                  <input
+                    name="googleReviewsUrl"
+                    defaultValue={myEstablishment.googleReviewsUrl ?? ""}
+                    placeholder="https://g.page/r/..."
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>{t("tripadvisorLabel")}</label>
+                  <input
+                    name="tripadvisorUrl"
+                    defaultValue={myEstablishment.tripadvisorUrl ?? ""}
+                    placeholder="https://tripadvisor.com/..."
+                    className={inputClass}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className={labelClass}>{t("fieldPriceLevel")}</label>
+              <select name="priceLevel" defaultValue={myEstablishment.priceLevel ?? "€€"} className={inputClass}>
+                {PRICE_LEVELS.map((level) => (
+                  <option key={level} value={level}>
+                    {priceLevelLabel(level)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className={labelClass}>{t("fieldProducts")}</label>
+              <p className="mb-2 text-xs text-foreground/50">{t("productsHint")}</p>
+              <ProductsEditor
+                name="products"
+                defaultProducts={(myEstablishment.products ?? []).map((p) => ({
+                  name: p.name.fr,
+                  price: p.price,
+                  category: p.category?.fr ?? null,
+                }))}
+                namePlaceholder={t("productNamePlaceholder")}
+                pricePlaceholder={t("productPricePlaceholder")}
+                categoryPlaceholder={t("productCategoryPlaceholder")}
+                addLabel={t("addProduct")}
+                scanLabel={t("scanDocument")}
+                scanningLabel={t("scanning")}
+                scanHint={t("scanHint")}
+                scanErrorText={t("scanError")}
+                scanSuccessTemplate={t.raw("scanSuccess")}
+              />
+            </div>
+
+            <div>
+              <label className={labelClass}>{t("fieldAmenities")}</label>
+              <div className="flex flex-wrap gap-x-6 gap-y-2">
+                <label className="flex items-center gap-2 text-sm text-foreground/80">
+                  <input type="checkbox" name="wifi" defaultChecked={!!myEstablishment.wifi} /> {t("amenityWifi")}
+                </label>
+                <label className="flex items-center gap-2 text-sm text-foreground/80">
+                  <input type="checkbox" name="parking" defaultChecked={!!myEstablishment.parking} /> {t("amenityParking")}
+                </label>
+                <label className="flex items-center gap-2 text-sm text-foreground/80">
+                  <input type="checkbox" name="pool" defaultChecked={!!myEstablishment.pool} /> {t("amenityPool")}
+                </label>
+                <label className="flex items-center gap-2 text-sm text-foreground/80">
+                  <input type="checkbox" name="airConditioning" defaultChecked={!!myEstablishment.airConditioning} />{" "}
+                  {t("amenityAirConditioning")}
+                </label>
+                <label className="flex items-center gap-2 text-sm text-foreground/80">
+                  <input type="checkbox" name="accessibility" defaultChecked={!!myEstablishment.accessibility} />{" "}
+                  {t("amenityAccessibility")}
+                </label>
+                <label className="flex items-center gap-2 text-sm text-foreground/80">
+                  <input type="checkbox" name="petsAllowed" defaultChecked={!!myEstablishment.petsAllowed} />{" "}
+                  {t("amenityPetsAllowed")}
+                </label>
+              </div>
+            </div>
+
+            <ImageUploader
+              label={t("fieldImages")}
+              defaultImages={myEstablishment.images ?? []}
+              max={maxPhotos}
+              limitReachedText={typeof maxPhotos === "number" ? t("imagesLimitReached", { max: maxPhotos }) : undefined}
+              unsupportedFormatText={t("imagesUnsupportedFormat")}
+            />
+
+          </ProFicheForm>
+        ) : (
+          <p className="text-sm text-foreground/60">{t("noEstablishment")}</p>
+        )}
+      </section>
+
+      {myEstablishment && (
+        <section className="rounded-2xl border border-black/5 bg-white p-6">
+          <h2 className="mb-3 text-sm font-semibold text-ocean-dark">{t("labelTitle")}</h2>
+
+          {labelBadges.length > 0 && (
+            <div className="mb-5">
+              <LabelBadgeHistory badges={labelBadges.filter((b) => b.status === "active")} />
+              {(() => {
+                const latestActive = [...labelBadges]
+                  .filter((b) => b.status === "active")
+                  .sort((a, b) => b.year - a.year)[0];
+                if (!latestActive) return null;
+                return (
+                  <div className="mt-3 flex flex-wrap gap-3">
+                    <a
+                      href={`/api/label/certificate/${myEstablishment.id}?year=${latestActive.year}`}
+                      download
+                      className="rounded-full bg-ocean-dark px-4 py-2 text-xs font-semibold text-white hover:bg-ocean"
+                    >
+                      {t("downloadCertificate")}
+                    </a>
+                    <a
+                      href={`/api/label/badge/${myEstablishment.id}?year=${latestActive.year}`}
+                      download
+                      className="rounded-full border border-black/10 px-4 py-2 text-xs font-semibold text-foreground/70 hover:bg-black/5"
+                    >
+                      {t("downloadBadge")}
+                    </a>
+                    <Link
+                      href={`/${locale}/approved/${myEstablishment.slug}`}
+                      className="rounded-full border border-black/10 px-4 py-2 text-xs font-semibold text-foreground/70 hover:bg-black/5"
+                    >
+                      {t("viewOfficialPage")}
+                    </Link>
+                  </div>
+                );
+              })()}
+            </div>
+          )}
+
+          {labelApplicationOpen ? (
+            <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+              <p className="text-sm font-semibold text-amber-800">
+                {LABEL_APPLICATION_STATUS_LABELS[labelApplication!.status]}
+              </p>
+              <p className="mt-1 text-sm text-amber-700">
+                {t("labelApplicationDate", {
+                  date: labelApplication!.createdAt
+                    ? new Date(labelApplication!.createdAt).toLocaleDateString(locale)
+                    : "",
+                })}
+              </p>
+            </div>
+          ) : (
+            <details className="group">
+              <summary className="cursor-pointer list-none rounded-full bg-terracotta px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90 inline-block">
+                {t("requestLabel")}
+              </summary>
+              <form action={applyForLabel} className="mt-5 max-w-2xl space-y-4">
+                <input type="hidden" name="establishmentId" value={myEstablishment.id} />
+                <div>
+                  <label className={labelClass}>{t("labelContactName")}</label>
+                  <input name="contactName" defaultValue={professional.contactName ?? ""} className={inputClass} />
+                </div>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className={labelClass}>{t("fieldPhone")}</label>
+                    <input name="phone" defaultValue={professional.phone ?? ""} className={inputClass} />
+                  </div>
+                  <div>
+                    <label className={labelClass}>{t("labelEmail")}</label>
+                    <input name="email" defaultValue={professional.email ?? ""} className={inputClass} />
+                  </div>
+                </div>
+                <div>
+                  <label className={labelClass}>{t("fieldAddress")}</label>
+                  <input name="address" defaultValue={myEstablishment.address ?? ""} className={inputClass} />
+                </div>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className={labelClass}>{t("fieldWebsite")}</label>
+                    <input name="website" defaultValue={professional.website ?? ""} className={inputClass} />
+                  </div>
+                  <div>
+                    <label className={labelClass}>{t("labelSocialLinks")}</label>
+                    <input name="socialLinks" className={inputClass} placeholder="Instagram, Facebook..." />
+                  </div>
+                </div>
+                <div>
+                  <label className={labelClass}>{t("labelActivityDescription")}</label>
+                  <textarea name="activityDescription" rows={3} className={inputClass} />
+                </div>
+                <div>
+                  <label className={labelClass}>{t("labelGallery")}</label>
+                  <textarea name="images" rows={3} className={inputClass} placeholder="https://..." />
+                </div>
+                <div>
+                  <label className={labelClass}>{t("labelMotivation")}</label>
+                  <textarea name="motivation" rows={3} className={inputClass} required />
+                </div>
+                <label className="flex items-start gap-2 text-sm text-foreground/70">
+                  <input type="checkbox" name="charterAccepted" required className="mt-0.5" />
+                  {t("labelCharter")}
+                </label>
+                <button type="submit" className="rounded-full bg-ocean-dark px-6 py-2.5 text-sm font-semibold text-white hover:bg-ocean">
+                  {t("submitLabelApplication")}
+                </button>
+              </form>
+            </details>
+          )}
+        </section>
+      )}
+
+      <section className="rounded-2xl border border-black/5 bg-white p-6">
+        <h2 className="mb-3 text-sm font-semibold text-ocean-dark">{t("invoicesTitle")}</h2>
+        {invoices.length === 0 ? (
+          <p className="text-sm text-foreground/60">{t("noInvoices")}</p>
+        ) : (
+          <ul className="space-y-1 text-sm text-foreground/70">
+            {invoices.map((inv) => (
+              <li key={inv.id}>
+                {inv.amountMad} MAD — {inv.status} —{" "}
+                {inv.issuedAt ? new Date(inv.issuedAt).toLocaleDateString(locale) : ""}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section className="rounded-2xl border border-black/5 bg-white p-6">
+        <h2 className="mb-3 text-sm font-semibold text-ocean-dark">{t("marketplaceTitle")}</h2>
+        <form action={requestMarketplaceService} className="flex flex-col gap-3 sm:flex-row sm:items-end">
+          <div className="flex-1">
+            <label className={labelClass}>{t("serviceLabel")}</label>
+            <select name="serviceKey" className={inputClass}>
+              {SERVICES.map((s) => (
+                <option key={s.key} value={s.key}>{s.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex-1">
+            <label className={labelClass}>{t("notesLabel")}</label>
+            <input name="notes" className={inputClass} placeholder={t("notesPlaceholder")} />
+          </div>
+          <button type="submit" className="rounded-full bg-terracotta px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90">
+            {t("order")}
+          </button>
+        </form>
+        {serviceOrders.length > 0 && (
+          <ul className="mt-4 space-y-1 text-sm text-foreground/70">
+            {serviceOrders.map((o) => (
+              <li key={o.id}>
+                {SERVICES.find((s) => s.key === o.serviceKey)?.label ?? o.serviceKey} — {o.status}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </div>
+  );
+}

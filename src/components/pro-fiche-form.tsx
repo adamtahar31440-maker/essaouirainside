@@ -135,7 +135,7 @@ export function ProFicheForm({
       // here — it was previously only reset in the catch branch, leaving the button
       // stuck on "saving" forever even though the save had already succeeded.
       setSaving(false);
-      router.push(`/${locale}/pro?updated=1`);
+      router.push(`/${locale}/pro/dashboard?updated=1`);
       router.refresh();
     } catch (err) {
       console.error("Save failed:", err);
