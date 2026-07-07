@@ -6,9 +6,17 @@ import { Check, Loader2 } from "lucide-react";
 
 type LocaleStatus = "pending" | "loading" | "done" | "error";
 
+type Establishment = {
+  name: Record<string, string>;
+  description: Record<string, string>;
+  hours?: Record<string, string> | null;
+  products?: { name: Record<string, string>; price: number | null; category: Record<string, string> | null }[] | null;
+};
+
 export function ProFicheForm({
   action,
   translatingLocales,
+  establishment,
   saveLabel,
   savePendingLabel,
   saveErrorLabel,
@@ -17,6 +25,7 @@ export function ProFicheForm({
 }: {
   action: (formData: FormData) => Promise<void>;
   translatingLocales: { code: string; name: string }[];
+  establishment?: Establishment;
   saveLabel: string;
   savePendingLabel: string;
   saveErrorLabel: string;
@@ -56,24 +65,55 @@ export function ProFicheForm({
       if (p.category) fields[`category_${i}`] = p.category;
     });
 
-    // Translate one language at a time so the checklist below reflects what the
-    // server has actually finished, not a simulated timer.
+    // Changing just the photos (or another non-text field) shouldn't re-translate
+    // text that hasn't changed — reuse the establishment's existing translations
+    // instead of making an AI call per language for nothing.
+    const originalProducts = (establishment?.products ?? []).map((p) => ({
+      name: p.name.fr,
+      price: p.price,
+      category: p.category?.fr ?? null,
+    }));
+    const textUnchanged =
+      !!establishment &&
+      name === establishment.name.fr &&
+      description === establishment.description.fr &&
+      hours === (establishment.hours?.fr ?? "") &&
+      JSON.stringify(productsInput) === JSON.stringify(originalProducts);
+
     const allTranslations: Record<string, Record<string, string>> = {};
-    for (let i = 0; i < translatingLocales.length; i++) {
-      const locale = translatingLocales[i].code;
-      setStatuses((prev) => prev.map((s, idx) => (idx === i ? "loading" : s)));
-      try {
-        const res = await fetch("/api/pro/translate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fields, locale }),
+    if (textUnchanged && establishment) {
+      for (const { code } of translatingLocales) {
+        const flat: Record<string, string> = {
+          name: establishment.name[code] ?? establishment.name.fr,
+          description: establishment.description[code] ?? establishment.description.fr,
+          hours: establishment.hours?.[code] ?? establishment.hours?.fr ?? "",
+        };
+        (establishment.products ?? []).forEach((p, i) => {
+          if (p.name[code]) flat[`product_${i}`] = p.name[code];
+          if (p.category?.[code]) flat[`category_${i}`] = p.category[code];
         });
-        const data = res.ok ? await res.json() : { translations: {} };
-        allTranslations[locale] = data.translations ?? {};
-        setStatuses((prev) => prev.map((s, idx) => (idx === i ? "done" : s)));
-      } catch {
-        allTranslations[locale] = {};
-        setStatuses((prev) => prev.map((s, idx) => (idx === i ? "error" : s)));
+        allTranslations[code] = flat;
+      }
+      setStatuses(translatingLocales.map(() => "done"));
+    } else {
+      // Translate one language at a time so the checklist below reflects what the
+      // server has actually finished, not a simulated timer.
+      for (let i = 0; i < translatingLocales.length; i++) {
+        const locale = translatingLocales[i].code;
+        setStatuses((prev) => prev.map((s, idx) => (idx === i ? "loading" : s)));
+        try {
+          const res = await fetch("/api/pro/translate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ fields, locale }),
+          });
+          const data = res.ok ? await res.json() : { translations: {} };
+          allTranslations[locale] = data.translations ?? {};
+          setStatuses((prev) => prev.map((s, idx) => (idx === i ? "done" : s)));
+        } catch {
+          allTranslations[locale] = {};
+          setStatuses((prev) => prev.map((s, idx) => (idx === i ? "error" : s)));
+        }
       }
     }
 

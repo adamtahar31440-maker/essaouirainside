@@ -171,6 +171,12 @@ export default async function ProDashboardPage({
           <ProFicheForm
             action={updateOwnEstablishment}
             translatingLocales={TRANSLATING_LOCALES}
+            establishment={{
+              name: myEstablishment.name,
+              description: myEstablishment.description,
+              hours: myEstablishment.hours,
+              products: myEstablishment.products,
+            }}
             saveLabel={t("save")}
             savePendingLabel={t("savePending")}
             saveErrorLabel={t("saveError")}

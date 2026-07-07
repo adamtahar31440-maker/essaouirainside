@@ -71,28 +71,57 @@ export function ContentPageForm({
       if (p.category) fields[`priceCategory_${i}`] = p.category;
     });
 
-    // Translate one language at a time so the checklist below reflects what the
-    // server has actually finished, not a simulated timer.
+    // Changing just the cover image (or another non-text field) shouldn't re-translate
+    // text that hasn't changed — reuse the page's existing translations instead of
+    // making 11 AI calls for nothing.
+    const originalPrices = (page?.prices ?? []).map((p) => ({
+      name: p.name.fr,
+      price: p.price,
+      category: p.category?.fr ?? null,
+    }));
+    const textUnchanged =
+      !!page &&
+      title === page.title.fr &&
+      body === page.body.fr &&
+      JSON.stringify(pricesInput) === JSON.stringify(originalPrices);
+
     const allTranslations: Record<string, Record<string, string>> = {};
-    for (let i = 0; i < TARGET_LOCALES.length; i++) {
-      const targetLocale = TARGET_LOCALES[i];
-      setStatuses((prev) => prev.map((s, idx) => (idx === i ? "loading" : s)));
-      try {
-        const res = await fetch("/api/admin/translate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fields, locales: [targetLocale] }),
+    if (textUnchanged && page) {
+      for (const targetLocale of TARGET_LOCALES) {
+        const flat: Record<string, string> = {
+          title: page.title[targetLocale] ?? page.title.fr,
+          body: page.body[targetLocale] ?? page.body.fr,
+        };
+        (page.prices ?? []).forEach((p, i) => {
+          if (p.name[targetLocale]) flat[`price_${i}`] = p.name[targetLocale];
+          if (p.category?.[targetLocale]) flat[`priceCategory_${i}`] = p.category[targetLocale];
         });
-        const data = res.ok ? ((await res.json()) as Record<string, Record<string, string>>) : {};
-        const flat: Record<string, string> = {};
-        for (const [field, byLocale] of Object.entries(data)) {
-          if (byLocale[targetLocale]) flat[field] = byLocale[targetLocale];
-        }
         allTranslations[targetLocale] = flat;
-        setStatuses((prev) => prev.map((s, idx) => (idx === i ? "done" : s)));
-      } catch {
-        allTranslations[targetLocale] = {};
-        setStatuses((prev) => prev.map((s, idx) => (idx === i ? "error" : s)));
+      }
+      setStatuses(TARGET_LOCALES.map(() => "done"));
+    } else {
+      // Translate one language at a time so the checklist below reflects what the
+      // server has actually finished, not a simulated timer.
+      for (let i = 0; i < TARGET_LOCALES.length; i++) {
+        const targetLocale = TARGET_LOCALES[i];
+        setStatuses((prev) => prev.map((s, idx) => (idx === i ? "loading" : s)));
+        try {
+          const res = await fetch("/api/admin/translate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ fields, locales: [targetLocale] }),
+          });
+          const data = res.ok ? ((await res.json()) as Record<string, Record<string, string>>) : {};
+          const flat: Record<string, string> = {};
+          for (const [field, byLocale] of Object.entries(data)) {
+            if (byLocale[targetLocale]) flat[field] = byLocale[targetLocale];
+          }
+          allTranslations[targetLocale] = flat;
+          setStatuses((prev) => prev.map((s, idx) => (idx === i ? "done" : s)));
+        } catch {
+          allTranslations[targetLocale] = {};
+          setStatuses((prev) => prev.map((s, idx) => (idx === i ? "error" : s)));
+        }
       }
     }
 
