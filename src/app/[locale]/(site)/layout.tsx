@@ -1,6 +1,7 @@
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { SosButton } from "@/components/sos-button";
+import { WeatherWidget } from "@/components/weather-widget";
 import { getActiveModuleKeys } from "@/lib/modules";
 import { getFeaturedEmergencyContacts } from "@/lib/data";
 import { getNavItems } from "@/lib/nav";
@@ -38,6 +39,7 @@ export default async function SiteLayout({
       <main className="flex-1">{children}</main>
       <Footer activeModules={Array.from(activeModules)} navLinks={navLinks} />
       {activeModules.has("assistance") && sosContacts.length > 0 && <SosButton contacts={sosContacts} />}
+      <WeatherWidget locale={locale} />
     </>
   );
 }

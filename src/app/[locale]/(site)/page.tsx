@@ -13,7 +13,6 @@ import { Section } from "@/components/section";
 import { SearchBar } from "@/components/search-bar";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { MapSection } from "@/components/map-section";
-import { WeatherWidget } from "@/components/weather-widget";
 
 export default async function HomePage({
   params,
@@ -131,8 +130,6 @@ export default async function HomePage({
           </div>
         </section>
       )}
-
-      <WeatherWidget locale={locale} />
     </div>
   );
 }
