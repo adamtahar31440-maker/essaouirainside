@@ -4,40 +4,44 @@ const ESSAOUIRA_LNG = -9.7595;
 export type WeatherConditions = {
   temperature: number | null;
   weatherCode: number | null;
+  isDay: boolean;
   windSpeed: number | null;
   waveHeight: number | null;
   swellPeriod: number | null;
   tides: { time: string; type: "high" | "low"; height: number }[] | null;
 };
 
-const WEATHER_LABELS: Record<number, { emoji: string; fr: string }> = {
-  0: { emoji: "☀️", fr: "Ciel dégagé" },
-  1: { emoji: "🌤️", fr: "Peu nuageux" },
-  2: { emoji: "⛅", fr: "Partiellement nuageux" },
-  3: { emoji: "☁️", fr: "Couvert" },
-  45: { emoji: "🌫️", fr: "Brouillard" },
-  48: { emoji: "🌫️", fr: "Brouillard givrant" },
-  51: { emoji: "🌦️", fr: "Bruine légère" },
-  61: { emoji: "🌧️", fr: "Pluie légère" },
-  63: { emoji: "🌧️", fr: "Pluie" },
-  65: { emoji: "🌧️", fr: "Forte pluie" },
-  80: { emoji: "🌦️", fr: "Averses" },
-  95: { emoji: "⛈️", fr: "Orage" },
+const WEATHER_LABELS: Record<number, { day: string; night: string; fr: string }> = {
+  0: { day: "☀️", night: "🌙", fr: "Ciel dégagé" },
+  1: { day: "🌤️", night: "🌙", fr: "Peu nuageux" },
+  2: { day: "⛅", night: "☁️", fr: "Partiellement nuageux" },
+  3: { day: "☁️", night: "☁️", fr: "Couvert" },
+  45: { day: "🌫️", night: "🌫️", fr: "Brouillard" },
+  48: { day: "🌫️", night: "🌫️", fr: "Brouillard givrant" },
+  51: { day: "🌦️", night: "🌧️", fr: "Bruine légère" },
+  61: { day: "🌧️", night: "🌧️", fr: "Pluie légère" },
+  63: { day: "🌧️", night: "🌧️", fr: "Pluie" },
+  65: { day: "🌧️", night: "🌧️", fr: "Forte pluie" },
+  80: { day: "🌦️", night: "🌧️", fr: "Averses" },
+  95: { day: "⛈️", night: "⛈️", fr: "Orage" },
 };
 
-export function weatherLabel(code: number | null) {
+export function weatherLabel(code: number | null, isDay: boolean) {
   if (code === null) return { emoji: "🌡️", fr: "Météo" };
-  return WEATHER_LABELS[code] ?? { emoji: "🌡️", fr: "Météo" };
+  const entry = WEATHER_LABELS[code];
+  if (!entry) return { emoji: "🌡️", fr: "Météo" };
+  return { emoji: isDay ? entry.day : entry.night, fr: entry.fr };
 }
 
 async function fetchWeather() {
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${ESSAOUIRA_LAT}&longitude=${ESSAOUIRA_LNG}&current=temperature_2m,weather_code,wind_speed_10m&models=ecmwf_ifs025&timezone=auto`;
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${ESSAOUIRA_LAT}&longitude=${ESSAOUIRA_LNG}&current=temperature_2m,weather_code,wind_speed_10m,is_day&models=ecmwf_ifs025&timezone=auto`;
   const res = await fetch(url, { next: { revalidate: 3600 } });
   if (!res.ok) throw new Error("weather fetch failed");
   const data = await res.json();
   return {
     temperature: data.current?.temperature_2m ?? null,
     weatherCode: data.current?.weather_code ?? null,
+    isDay: data.current?.is_day !== 0,
     windSpeed: data.current?.wind_speed_10m ?? null,
   };
 }
@@ -60,10 +64,12 @@ async function fetchTides() {
   const key = process.env.STORMGLASS_API_KEY;
   if (!key) return null;
 
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
-  const end = new Date(start);
-  end.setDate(end.getDate() + 1);
+  // Morocco is UTC+1 year-round (no DST since 2018) — compute "today" in that
+  // offset rather than the server's UTC clock, so the window doesn't drift by
+  // an hour and drop the last tide of the day right when it's needed.
+  const nowInMorocco = new Date(Date.now() + 60 * 60 * 1000);
+  const start = new Date(Date.UTC(nowInMorocco.getUTCFullYear(), nowInMorocco.getUTCMonth(), nowInMorocco.getUTCDate()) - 60 * 60 * 1000);
+  const end = new Date(start.getTime() + 48 * 60 * 60 * 1000);
 
   const url = `https://api.stormglass.io/v2/tide/extremes/point?lat=${ESSAOUIRA_LAT}&lng=${ESSAOUIRA_LNG}&start=${start.toISOString()}&end=${end.toISOString()}`;
   const res = await fetch(url, {
@@ -89,6 +95,7 @@ export async function getEssaouiraConditions(): Promise<WeatherConditions> {
   return {
     temperature: weather?.temperature ?? null,
     weatherCode: weather?.weatherCode ?? null,
+    isDay: weather?.isDay ?? true,
     windSpeed: weather?.windSpeed ?? null,
     waveHeight: marine?.waveHeight ?? null,
     swellPeriod: marine?.swellPeriod ?? null,

@@ -4,7 +4,7 @@ import { WeatherWidgetToggle } from "@/components/weather-widget-toggle";
 
 export async function WeatherWidget({ locale }: { locale: string }) {
   const [t, conditions] = await Promise.all([getTranslations("weather"), getEssaouiraConditions()]);
-  const label = weatherLabel(conditions.weatherCode);
+  const label = weatherLabel(conditions.weatherCode, conditions.isDay);
 
   const nextTide = conditions.tides?.find((tide) => new Date(tide.time).getTime() >= Date.now());
   const timeFormatter = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit" });
