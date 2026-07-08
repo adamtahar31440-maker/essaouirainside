@@ -1,4 +1,4 @@
-export type LocationId = "essaouira" | "sidiKaouki" | "ghazoua" | "moulayBouzerktoune" | "diabat";
+export type LocationId = "essaouira" | "sidiKaouki" | "ghazoua" | "moulayBouzerktoune" | "diabat" | "airport";
 
 export type Location = { id: LocationId; label: string; lat: number; lng: number; coastal: boolean };
 
@@ -8,6 +8,7 @@ export const LOCATIONS: Location[] = [
   { id: "sidiKaouki", label: "Sidi Kaouki", lat: 31.393, lng: -9.7367, coastal: true },
   { id: "ghazoua", label: "Ghazoua", lat: 31.44982, lng: -9.73306, coastal: false },
   { id: "moulayBouzerktoune", label: "Moulay Bouzerktoune", lat: 31.645563, lng: -9.675993, coastal: true },
+  { id: "airport", label: "Aéroport d'Essaouira", lat: 31.3975, lng: -9.68167, coastal: false },
 ];
 
 export function getLocation(id: string | null): Location {
