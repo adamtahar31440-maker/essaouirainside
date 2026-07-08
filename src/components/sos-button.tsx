@@ -31,7 +31,7 @@ export function SosButton({ contacts }: { contacts: Contact[] }) {
 
       <div className="fixed bottom-4 right-4 z-[70] rtl:right-auto rtl:left-4">
         {open && (
-          <div className="mb-3 w-72 rounded-2xl border border-black/5 bg-white p-4 shadow-xl">
+          <div className="mb-3 w-72 rounded-2xl border border-black/10 bg-white p-4">
             <div className="mb-3 flex items-center justify-between">
               <p className="text-sm font-semibold text-ocean-dark">{t("sosTitle")}</p>
               <button onClick={() => setOpen(false)} aria-label="close">
@@ -64,7 +64,7 @@ export function SosButton({ contacts }: { contacts: Contact[] }) {
         <button
           onClick={() => setOpen((o) => !o)}
           aria-label={t("sos")}
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-red-600 text-white shadow-lg transition hover:bg-red-700 active:scale-95"
+          className="flex h-14 w-14 items-center justify-center rounded-full border border-red-700/30 bg-red-600 text-white transition hover:bg-red-700 active:scale-95"
         >
           <LifeBuoy size={26} />
         </button>

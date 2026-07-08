@@ -17,7 +17,7 @@ export function WeatherWidgetToggle({
   return (
     <div className="fixed bottom-24 right-4 z-40 rtl:right-auto rtl:left-4 sm:bottom-24 sm:right-6 rtl:sm:right-auto rtl:sm:left-6">
       {open ? (
-        <div className="relative w-72 rounded-2xl border border-black/10 bg-white p-4 shadow-xl">
+        <div className="relative w-72 rounded-2xl border border-black/10 bg-white p-4">
           <button
             type="button"
             onClick={() => setOpen(false)}
@@ -32,7 +32,7 @@ export function WeatherWidgetToggle({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2.5 text-sm font-semibold text-foreground shadow-lg hover:bg-sand/40"
+          className="flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-sand/40"
         >
           {badge}
         </button>
