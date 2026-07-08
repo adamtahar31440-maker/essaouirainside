@@ -239,6 +239,8 @@
     "highTide": "만조",
     "lowTide": "간조",
     "weeklyForecast": "7일 예보",
-    "hideForecast": "예보 숨기기"
+    "hideForecast": "예보 숨기기",
+    "upcomingTides": "예정된 조수",
+    "hideTides": "조수 숨기기"
   }
 }

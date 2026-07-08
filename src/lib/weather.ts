@@ -68,8 +68,10 @@ async function fetchMarine() {
 }
 
 // Tide predictions are astronomical (moon/sun position), not a weather model, so
-// they come from a separate provider (Stormglass) rather than Open-Meteo. Cached
-// for hours at a time to stay well within the free 50-requests/day quota.
+// they come from a separate provider (Stormglass) rather than Open-Meteo. Their
+// free tier is a hard 10 requests/day (not the 50/day originally assumed), so
+// this fetches a 4-day window in one call — enough for both "next tide" and a
+// short forecast — and caches for 12h (2 calls/day in steady state).
 async function fetchTides() {
   const key = process.env.STORMGLASS_API_KEY;
   if (!key) return null;
@@ -79,12 +81,12 @@ async function fetchTides() {
   // an hour and drop the last tide of the day right when it's needed.
   const nowInMorocco = new Date(Date.now() + 60 * 60 * 1000);
   const start = new Date(Date.UTC(nowInMorocco.getUTCFullYear(), nowInMorocco.getUTCMonth(), nowInMorocco.getUTCDate()) - 60 * 60 * 1000);
-  const end = new Date(start.getTime() + 48 * 60 * 60 * 1000);
+  const end = new Date(start.getTime() + 96 * 60 * 60 * 1000);
 
   const url = `https://api.stormglass.io/v2/tide/extremes/point?lat=${ESSAOUIRA_LAT}&lng=${ESSAOUIRA_LNG}&start=${start.toISOString()}&end=${end.toISOString()}`;
   const res = await fetch(url, {
     headers: { Authorization: key },
-    next: { revalidate: 21600 },
+    next: { revalidate: 43200 },
   });
   if (!res.ok) throw new Error("tide fetch failed");
   const data = await res.json();

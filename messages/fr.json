@@ -239,6 +239,8 @@
     "highTide": "Marée haute",
     "lowTide": "Marée basse",
     "weeklyForecast": "Prévisions 7 jours",
-    "hideForecast": "Masquer les prévisions"
+    "hideForecast": "Masquer les prévisions",
+    "upcomingTides": "Marées à venir",
+    "hideTides": "Masquer les marées"
   }
 }

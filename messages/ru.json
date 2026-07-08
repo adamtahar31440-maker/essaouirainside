@@ -239,6 +239,8 @@
     "highTide": "Прилив",
     "lowTide": "Отлив",
     "weeklyForecast": "Прогноз на 7 дней",
-    "hideForecast": "Скрыть прогноз"
+    "hideForecast": "Скрыть прогноз",
+    "upcomingTides": "Ближайшие приливы",
+    "hideTides": "Скрыть приливы"
   }
 }
