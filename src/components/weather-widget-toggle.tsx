@@ -15,16 +15,18 @@ export function WeatherWidgetToggle({
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="fixed bottom-24 right-4 z-40 rtl:right-auto rtl:left-4 sm:bottom-24 sm:right-6 rtl:sm:right-auto rtl:sm:left-6">
+    <>
+      {open && <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} />}
+      <div className="fixed bottom-24 right-4 z-40 rtl:right-auto rtl:left-4 sm:bottom-24 sm:right-6 rtl:sm:right-auto rtl:sm:left-6">
       {open ? (
         <div className="relative w-72 rounded-2xl border border-black/10 bg-white p-4">
           <button
             type="button"
             onClick={() => setOpen(false)}
             aria-label={closeLabel}
-            className="absolute right-3 top-3 rounded-full p-1 text-foreground/50 hover:bg-black/5 hover:text-foreground"
+            className="absolute right-1 top-1 flex h-10 w-10 items-center justify-center rounded-full text-foreground/50 hover:bg-black/5 hover:text-foreground"
           >
-            <X size={16} />
+            <X size={18} />
           </button>
           {children}
         </div>
@@ -37,6 +39,7 @@ export function WeatherWidgetToggle({
           {badge}
         </button>
       )}
-    </div>
+      </div>
+    </>
   );
 }
