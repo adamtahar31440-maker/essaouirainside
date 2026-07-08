@@ -35,6 +35,7 @@ export function WeatherContent({
   const location = LOCATIONS.find((l) => l.id === locationId) ?? LOCATIONS[0];
   const label = weatherLabel(conditions.weatherCode, conditions.isDay);
   const timeFormatter = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit" });
+  const numberFormatter = new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   const nextTide = conditions.tides?.find((tide) => new Date(tide.time).getTime() >= Date.now());
 
   async function selectLocation(id: LocationId) {
@@ -85,7 +86,7 @@ export function WeatherContent({
         <span className="text-2xl">{label.emoji}</span>
         <div>
           <p className="text-lg font-semibold text-foreground">
-            {conditions.temperature !== null ? `${Math.round(conditions.temperature)}°C` : strings.unavailable}
+            {conditions.temperature !== null ? `${numberFormatter.format(conditions.temperature)}°C` : strings.unavailable}
           </p>
           <p className="text-xs text-foreground/60">{label.fr}</p>
         </div>
@@ -96,7 +97,7 @@ export function WeatherContent({
           <div>
             <p className="text-xs font-semibold text-foreground/50">{strings.waves}</p>
             <p className="font-medium text-foreground">
-              {conditions.waveHeight !== null ? `${conditions.waveHeight.toFixed(1)} m` : strings.unavailable}
+              {conditions.waveHeight !== null ? `${numberFormatter.format(conditions.waveHeight)} m` : strings.unavailable}
             </p>
           </div>
           <div>
