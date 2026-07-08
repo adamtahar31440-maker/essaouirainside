@@ -19,16 +19,16 @@ export function WeatherWidgetToggle({
       {open && <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} />}
       <div className="fixed bottom-24 right-4 z-40 rtl:right-auto rtl:left-4 sm:bottom-24 sm:right-6 rtl:sm:right-auto rtl:sm:left-6">
       {open ? (
-        <div className="relative w-72 rounded-2xl border border-black/10 bg-white p-4">
+        <div className="w-72 overflow-hidden rounded-2xl border border-black/10 bg-white">
+          <div className="p-4">{children}</div>
           <button
             type="button"
             onClick={() => setOpen(false)}
-            aria-label={closeLabel}
-            className="absolute right-1 top-1 flex h-10 w-10 items-center justify-center rounded-full text-foreground/50 hover:bg-black/5 hover:text-foreground"
+            className="flex w-full items-center justify-center gap-1.5 border-t border-black/5 bg-sand/30 py-3 text-sm font-semibold text-foreground/70 hover:bg-sand/50"
           >
-            <X size={18} />
+            <X size={16} />
+            {closeLabel}
           </button>
-          {children}
         </div>
       ) : (
         <button
