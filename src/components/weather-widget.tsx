@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { getEssaouiraConditions, weatherLabel } from "@/lib/weather";
 import { WeatherWidgetToggle } from "@/components/weather-widget-toggle";
+import { WeatherForecast } from "@/components/weather-forecast";
 
 export async function WeatherWidget({ locale }: { locale: string }) {
   const [t, conditions] = await Promise.all([getTranslations("weather"), getEssaouiraConditions()]);
@@ -47,6 +48,15 @@ export async function WeatherWidget({ locale }: { locale: string }) {
             )}
           </div>
         </div>
+
+        {conditions.daily && conditions.daily.length > 0 && (
+          <WeatherForecast
+            daily={conditions.daily}
+            locale={locale}
+            showLabel={t("weeklyForecast")}
+            hideLabel={t("hideForecast")}
+          />
+        )}
       </div>
     </WeatherWidgetToggle>
   );

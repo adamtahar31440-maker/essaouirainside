@@ -237,6 +237,8 @@
     "waves": "Waves",
     "tide": "Tide",
     "highTide": "High tide",
-    "lowTide": "Low tide"
+    "lowTide": "Low tide",
+    "weeklyForecast": "7-day forecast",
+    "hideForecast": "Hide forecast"
   }
 }

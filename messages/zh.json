@@ -237,6 +237,8 @@
     "waves": "海浪",
     "tide": "潮汐",
     "highTide": "满潮",
-    "lowTide": "退潮"
+    "lowTide": "退潮",
+    "weeklyForecast": "7天预报",
+    "hideForecast": "隐藏预报"
   }
 }

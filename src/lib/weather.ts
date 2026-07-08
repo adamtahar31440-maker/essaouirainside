@@ -1,6 +1,8 @@
 const ESSAOUIRA_LAT = 31.5085;
 const ESSAOUIRA_LNG = -9.7595;
 
+export type DailyForecast = { date: string; weatherCode: number | null; tempMax: number; tempMin: number };
+
 export type WeatherConditions = {
   temperature: number | null;
   weatherCode: number | null;
@@ -9,6 +11,7 @@ export type WeatherConditions = {
   waveHeight: number | null;
   swellPeriod: number | null;
   tides: { time: string; type: "high" | "low"; height: number }[] | null;
+  daily: DailyForecast[] | null;
 };
 
 const WEATHER_LABELS: Record<number, { day: string; night: string; fr: string }> = {
@@ -34,15 +37,22 @@ export function weatherLabel(code: number | null, isDay: boolean) {
 }
 
 async function fetchWeather() {
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${ESSAOUIRA_LAT}&longitude=${ESSAOUIRA_LNG}&current=temperature_2m,weather_code,wind_speed_10m,is_day&models=ecmwf_ifs025&timezone=auto`;
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${ESSAOUIRA_LAT}&longitude=${ESSAOUIRA_LNG}&current=temperature_2m,weather_code,wind_speed_10m,is_day&daily=weather_code,temperature_2m_max,temperature_2m_min&forecast_days=7&models=ecmwf_ifs025&timezone=auto`;
   const res = await fetch(url, { next: { revalidate: 3600 } });
   if (!res.ok) throw new Error("weather fetch failed");
   const data = await res.json();
+  const daily: DailyForecast[] = (data.daily?.time ?? []).map((date: string, i: number) => ({
+    date,
+    weatherCode: data.daily?.weather_code?.[i] ?? null,
+    tempMax: data.daily?.temperature_2m_max?.[i],
+    tempMin: data.daily?.temperature_2m_min?.[i],
+  }));
   return {
     temperature: data.current?.temperature_2m ?? null,
     weatherCode: data.current?.weather_code ?? null,
     isDay: data.current?.is_day !== 0,
     windSpeed: data.current?.wind_speed_10m ?? null,
+    daily,
   };
 }
 
@@ -100,5 +110,6 @@ export async function getEssaouiraConditions(): Promise<WeatherConditions> {
     waveHeight: marine?.waveHeight ?? null,
     swellPeriod: marine?.swellPeriod ?? null,
     tides: tides ?? null,
+    daily: weather?.daily ?? null,
   };
 }

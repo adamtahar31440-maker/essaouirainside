@@ -237,6 +237,8 @@
     "waves": "الأمواج",
     "tide": "المد والجزر",
     "highTide": "المد المرتفع",
-    "lowTide": "الجزر"
+    "lowTide": "الجزر",
+    "weeklyForecast": "توقعات 7 أيام",
+    "hideForecast": "إخفاء التوقعات"
   }
 }

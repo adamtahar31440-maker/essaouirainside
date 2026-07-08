@@ -237,6 +237,8 @@
     "waves": "Dalgalar",
     "tide": "Gelgit",
     "highTide": "Yüksek gelgit",
-    "lowTide": "Alçak gelgit"
+    "lowTide": "Alçak gelgit",
+    "weeklyForecast": "7 günlük tahmin",
+    "hideForecast": "Tahmini gizle"
   }
 }

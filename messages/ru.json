@@ -237,6 +237,8 @@
     "waves": "Волны",
     "tide": "Прилив",
     "highTide": "Прилив",
-    "lowTide": "Отлив"
+    "lowTide": "Отлив",
+    "weeklyForecast": "Прогноз на 7 дней",
+    "hideForecast": "Скрыть прогноз"
   }
 }

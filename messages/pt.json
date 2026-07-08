@@ -237,6 +237,8 @@
     "waves": "Ondas",
     "tide": "Maré",
     "highTide": "Maré alta",
-    "lowTide": "Maré baixa"
+    "lowTide": "Maré baixa",
+    "weeklyForecast": "Previsão de 7 dias",
+    "hideForecast": "Ocultar previsão"
   }
 }

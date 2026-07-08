@@ -237,6 +237,8 @@
     "waves": "파도",
     "tide": "조수",
     "highTide": "만조",
-    "lowTide": "간조"
+    "lowTide": "간조",
+    "weeklyForecast": "7일 예보",
+    "hideForecast": "예보 숨기기"
   }
 }

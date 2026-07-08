@@ -237,6 +237,8 @@
     "waves": "Onde",
     "tide": "Marea",
     "highTide": "Alta marea",
-    "lowTide": "Bassa marea"
+    "lowTide": "Bassa marea",
+    "weeklyForecast": "Previsioni 7 giorni",
+    "hideForecast": "Nascondi previsioni"
   }
 }

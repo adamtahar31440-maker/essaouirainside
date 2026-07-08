@@ -237,6 +237,8 @@
     "waves": "גלים",
     "tide": "גאות ושפל",
     "highTide": "גאות",
-    "lowTide": "שפל"
+    "lowTide": "שפל",
+    "weeklyForecast": "תחזית ל-7 ימים",
+    "hideForecast": "הסתר תחזית"
   }
 }

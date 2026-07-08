@@ -237,6 +237,8 @@
     "waves": "Wellen",
     "tide": "Gezeiten",
     "highTide": "Flut",
-    "lowTide": "Ebbe"
+    "lowTide": "Ebbe",
+    "weeklyForecast": "7-Tage-Vorhersage",
+    "hideForecast": "Vorhersage ausblenden"
   }
 }
