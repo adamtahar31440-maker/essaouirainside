@@ -15,7 +15,7 @@ export function WeatherWidgetToggle({
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="fixed bottom-4 right-4 z-40 sm:bottom-6 sm:right-6">
+    <div className="fixed bottom-24 right-4 z-40 rtl:right-auto rtl:left-4 sm:bottom-24 sm:right-6 rtl:sm:right-auto rtl:sm:left-6">
       {open ? (
         <div className="relative w-72 rounded-2xl border border-black/10 bg-white p-4 shadow-xl">
           <button
