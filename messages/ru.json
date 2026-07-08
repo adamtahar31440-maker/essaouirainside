@@ -254,6 +254,8 @@
     "codeHeavyRain": "Сильный дождь",
     "codeShowers": "Ливни",
     "codeThunderstorm": "Гроза",
-    "codeUnknown": "Погода"
+    "codeUnknown": "Погода",
+    "wind": "Ветер",
+    "seaTemperature": "Море"
   }
 }

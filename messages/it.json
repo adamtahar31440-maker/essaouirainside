@@ -254,6 +254,8 @@
     "codeHeavyRain": "Pioggia forte",
     "codeShowers": "Rovesci",
     "codeThunderstorm": "Temporale",
-    "codeUnknown": "Meteo"
+    "codeUnknown": "Meteo",
+    "wind": "Vento",
+    "seaTemperature": "Mare"
   }
 }

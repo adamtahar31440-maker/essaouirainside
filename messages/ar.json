@@ -254,6 +254,8 @@
     "codeHeavyRain": "مطر غزير",
     "codeShowers": "زخات مطر",
     "codeThunderstorm": "عاصفة رعدية",
-    "codeUnknown": "الطقس"
+    "codeUnknown": "الطقس",
+    "wind": "الرياح",
+    "seaTemperature": "البحر"
   }
 }

@@ -254,6 +254,8 @@
     "codeHeavyRain": "大雨",
     "codeShowers": "阵雨",
     "codeThunderstorm": "雷暴",
-    "codeUnknown": "天气"
+    "codeUnknown": "天气",
+    "wind": "风速",
+    "seaTemperature": "海水"
   }
 }

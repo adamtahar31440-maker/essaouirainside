@@ -47,6 +47,8 @@ export async function WeatherWidget({ locale }: { locale: string }) {
           hideForecast: t("hideForecast"),
           upcomingTides: t("upcomingTides"),
           hideTides: t("hideTides"),
+          wind: t("wind"),
+          seaTemperature: t("seaTemperature"),
         }}
       />
     </WeatherWidgetToggle>

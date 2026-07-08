@@ -254,6 +254,8 @@
     "codeHeavyRain": "Chuva forte",
     "codeShowers": "Aguaceiros",
     "codeThunderstorm": "Trovoada",
-    "codeUnknown": "Clima"
+    "codeUnknown": "Clima",
+    "wind": "Vento",
+    "seaTemperature": "Mar"
   }
 }

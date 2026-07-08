@@ -254,6 +254,8 @@
     "codeHeavyRain": "Heavy rain",
     "codeShowers": "Showers",
     "codeThunderstorm": "Thunderstorm",
-    "codeUnknown": "Weather"
+    "codeUnknown": "Weather",
+    "wind": "Wind",
+    "seaTemperature": "Sea"
   }
 }

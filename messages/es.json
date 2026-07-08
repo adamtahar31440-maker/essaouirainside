@@ -254,6 +254,8 @@
     "codeHeavyRain": "Lluvia fuerte",
     "codeShowers": "Chubascos",
     "codeThunderstorm": "Tormenta",
-    "codeUnknown": "Clima"
+    "codeUnknown": "Clima",
+    "wind": "Viento",
+    "seaTemperature": "Mar"
   }
 }

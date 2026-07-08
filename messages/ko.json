@@ -254,6 +254,8 @@
     "codeHeavyRain": "강한 비",
     "codeShowers": "소나기",
     "codeThunderstorm": "뇌우",
-    "codeUnknown": "날씨"
+    "codeUnknown": "날씨",
+    "wind": "바람",
+    "seaTemperature": "바다"
   }
 }

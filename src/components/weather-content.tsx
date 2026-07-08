@@ -26,6 +26,8 @@ export function WeatherContent({
     hideForecast: string;
     upcomingTides: string;
     hideTides: string;
+    wind: string;
+    seaTemperature: string;
   };
   codeLabels: Record<string, string>;
 }) {
@@ -85,22 +87,36 @@ export function WeatherContent({
         )}
       </div>
 
-      <div className={"flex items-center gap-2" + (loading ? " opacity-50" : "")}>
-        <span className="text-2xl">{label.emoji}</span>
-        <div>
-          <p className="text-lg font-semibold text-foreground">
-            {conditions.temperature !== null ? `${numberFormatter.format(conditions.temperature)}°C` : strings.unavailable}
+      <div className={"flex items-center justify-between gap-2" + (loading ? " opacity-50" : "")}>
+        <div className="flex items-center gap-2">
+          <span className="text-2xl">{label.emoji}</span>
+          <div>
+            <p className="text-lg font-semibold text-foreground">
+              {conditions.temperature !== null ? `${numberFormatter.format(conditions.temperature)}°C` : strings.unavailable}
+            </p>
+            <p className="text-xs text-foreground/60">{labelText}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-xs font-semibold text-foreground/50">{strings.wind}</p>
+          <p className="text-sm font-medium text-foreground">
+            {conditions.windSpeed !== null ? `${Math.round(conditions.windSpeed)} km/h` : strings.unavailable}
           </p>
-          <p className="text-xs text-foreground/60">{labelText}</p>
         </div>
       </div>
 
       {location.coastal && (
-        <div className={"grid grid-cols-2 gap-3 border-t border-black/5 pt-3 text-sm" + (loading ? " opacity-50" : "")}>
+        <div className={"grid grid-cols-3 gap-3 border-t border-black/5 pt-3 text-sm" + (loading ? " opacity-50" : "")}>
           <div>
             <p className="text-xs font-semibold text-foreground/50">{strings.waves}</p>
             <p className="font-medium text-foreground">
               {conditions.waveHeight !== null ? `${numberFormatter.format(conditions.waveHeight)} m` : strings.unavailable}
+            </p>
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-foreground/50">{strings.seaTemperature}</p>
+            <p className="font-medium text-foreground">
+              {conditions.seaTemperature !== null ? `${numberFormatter.format(conditions.seaTemperature)}°C` : strings.unavailable}
             </p>
           </div>
           <div>

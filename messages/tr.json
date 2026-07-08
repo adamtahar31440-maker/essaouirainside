@@ -254,6 +254,8 @@
     "codeHeavyRain": "Şiddetli yağmur",
     "codeShowers": "Sağanak yağış",
     "codeThunderstorm": "Gök gürültülü fırtına",
-    "codeUnknown": "Hava durumu"
+    "codeUnknown": "Hava durumu",
+    "wind": "Rüzgar",
+    "seaTemperature": "Deniz"
   }
 }

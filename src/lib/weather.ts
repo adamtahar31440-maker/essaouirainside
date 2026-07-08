@@ -22,6 +22,7 @@ export type WeatherConditions = {
   windSpeed: number | null;
   waveHeight: number | null;
   swellPeriod: number | null;
+  seaTemperature: number | null;
   tides: { time: string; type: "high" | "low"; height: number }[] | null;
   daily: DailyForecast[] | null;
 };
@@ -71,13 +72,14 @@ async function fetchWeather(lat: number, lng: number) {
 }
 
 async function fetchMarine(lat: number, lng: number) {
-  const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lng}&current=wave_height,swell_wave_period&timezone=auto`;
+  const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lng}&current=wave_height,swell_wave_period,sea_surface_temperature&timezone=auto`;
   const res = await fetch(url, { next: { revalidate: 3600 } });
   if (!res.ok) throw new Error("marine fetch failed");
   const data = await res.json();
   return {
     waveHeight: data.current?.wave_height ?? null,
     swellPeriod: data.current?.swell_wave_period ?? null,
+    seaTemperature: data.current?.sea_surface_temperature ?? null,
   };
 }
 
@@ -126,6 +128,7 @@ export async function getConditionsFor(locationId: string): Promise<WeatherCondi
     windSpeed: weather?.windSpeed ?? null,
     waveHeight: marine?.waveHeight ?? null,
     swellPeriod: marine?.swellPeriod ?? null,
+    seaTemperature: marine?.seaTemperature ?? null,
     tides: tides ?? null,
     daily: weather?.daily ?? null,
   };

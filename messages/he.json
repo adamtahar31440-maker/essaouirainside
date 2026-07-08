@@ -254,6 +254,8 @@
     "codeHeavyRain": "גשם חזק",
     "codeShowers": "ממטרים",
     "codeThunderstorm": "סופת רעמים",
-    "codeUnknown": "מזג אוויר"
+    "codeUnknown": "מזג אוויר",
+    "wind": "רוח",
+    "seaTemperature": "ים"
   }
 }
