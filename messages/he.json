@@ -230,5 +230,13 @@
     "serviceNewsletterFeature": "הצגה בניוזלטר",
     "serviceContentCreation": "יצירת תוכן",
     "serviceMarketing": "ליווי שיווקי"
+  },
+  "weather": {
+    "close": "סגור",
+    "unavailable": "לא זמין",
+    "waves": "גלים",
+    "tide": "גאות ושפל",
+    "highTide": "גאות",
+    "lowTide": "שפל"
   }
 }

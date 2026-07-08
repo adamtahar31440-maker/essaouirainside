@@ -230,5 +230,13 @@
     "serviceNewsletterFeature": "Newsletter feature",
     "serviceContentCreation": "Content creation",
     "serviceMarketing": "Marketing support"
+  },
+  "weather": {
+    "close": "Close",
+    "unavailable": "Unavailable",
+    "waves": "Waves",
+    "tide": "Tide",
+    "highTide": "High tide",
+    "lowTide": "Low tide"
   }
 }

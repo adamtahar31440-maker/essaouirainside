@@ -230,5 +230,13 @@
     "serviceNewsletterFeature": "إبراز في النشرة الإخبارية",
     "serviceContentCreation": "إنشاء محتوى",
     "serviceMarketing": "مرافقة تسويقية"
+  },
+  "weather": {
+    "close": "إغلاق",
+    "unavailable": "غير متوفر",
+    "waves": "الأمواج",
+    "tide": "المد والجزر",
+    "highTide": "المد المرتفع",
+    "lowTide": "الجزر"
   }
 }

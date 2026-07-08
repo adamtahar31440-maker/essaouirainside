@@ -230,5 +230,13 @@
     "serviceNewsletterFeature": "Destacado en el boletín",
     "serviceContentCreation": "Creación de contenido",
     "serviceMarketing": "Acompañamiento de marketing"
+  },
+  "weather": {
+    "close": "Cerrar",
+    "unavailable": "No disponible",
+    "waves": "Olas",
+    "tide": "Marea",
+    "highTide": "Marea alta",
+    "lowTide": "Marea baja"
   }
 }

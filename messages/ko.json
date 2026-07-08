@@ -230,5 +230,13 @@
     "serviceNewsletterFeature": "뉴스레터 소개",
     "serviceContentCreation": "콘텐츠 제작",
     "serviceMarketing": "마케팅 지원"
+  },
+  "weather": {
+    "close": "닫기",
+    "unavailable": "정보 없음",
+    "waves": "파도",
+    "tide": "조수",
+    "highTide": "만조",
+    "lowTide": "간조"
   }
 }

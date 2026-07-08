@@ -230,5 +230,13 @@
     "serviceNewsletterFeature": "Размещение в рассылке",
     "serviceContentCreation": "Создание контента",
     "serviceMarketing": "Маркетинговое сопровождение"
+  },
+  "weather": {
+    "close": "Закрыть",
+    "unavailable": "Недоступно",
+    "waves": "Волны",
+    "tide": "Прилив",
+    "highTide": "Прилив",
+    "lowTide": "Отлив"
   }
 }

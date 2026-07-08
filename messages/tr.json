@@ -230,5 +230,13 @@
     "serviceNewsletterFeature": "Bültende öne çıkarma",
     "serviceContentCreation": "İçerik oluşturma",
     "serviceMarketing": "Pazarlama desteği"
+  },
+  "weather": {
+    "close": "Kapat",
+    "unavailable": "Kullanılamıyor",
+    "waves": "Dalgalar",
+    "tide": "Gelgit",
+    "highTide": "Yüksek gelgit",
+    "lowTide": "Alçak gelgit"
   }
 }

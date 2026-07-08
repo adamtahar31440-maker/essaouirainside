@@ -230,5 +230,13 @@
     "serviceNewsletterFeature": "电子报重点推荐",
     "serviceContentCreation": "内容创作",
     "serviceMarketing": "营销顾问服务"
+  },
+  "weather": {
+    "close": "关闭",
+    "unavailable": "暂无数据",
+    "waves": "海浪",
+    "tide": "潮汐",
+    "highTide": "满潮",
+    "lowTide": "退潮"
   }
 }
