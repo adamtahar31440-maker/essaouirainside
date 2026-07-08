@@ -1,9 +1,10 @@
-export type LocationId = "essaouira" | "sidiKaouki" | "ghazoua" | "moulayBouzerktoune";
+export type LocationId = "essaouira" | "sidiKaouki" | "ghazoua" | "moulayBouzerktoune" | "diabat";
 
 export type Location = { id: LocationId; label: string; lat: number; lng: number; coastal: boolean };
 
 export const LOCATIONS: Location[] = [
   { id: "essaouira", label: "Essaouira", lat: 31.5085, lng: -9.7595, coastal: true },
+  { id: "diabat", label: "Diabat", lat: 31.47924, lng: -9.76554, coastal: true },
   { id: "sidiKaouki", label: "Sidi Kaouki", lat: 31.393, lng: -9.7367, coastal: true },
   { id: "ghazoua", label: "Ghazoua", lat: 31.44982, lng: -9.73306, coastal: false },
   { id: "moulayBouzerktoune", label: "Moulay Bouzerktoune", lat: 31.645563, lng: -9.675993, coastal: true },
@@ -85,9 +86,9 @@ async function fetchMarine(lat: number, lng: number) {
 
 // Tide predictions are astronomical (moon/sun position), not a weather model, so
 // they come from a separate provider (Stormglass) rather than Open-Meteo. Their
-// free tier is a hard 10 requests/day. Three coastal spots share that quota, so
-// each is cached for 8h (up to 3 calls/day per spot, 9/day total worst case),
-// comfortably under the cap.
+// free tier is a hard 10 requests/day. Four coastal spots share that quota, so
+// each is cached for 10h (up to ~2.4 calls/day per spot, ~9.6/day total worst
+// case if every spot gets checked), comfortably under the cap.
 async function fetchTides(lat: number, lng: number) {
   const key = process.env.STORMGLASS_API_KEY;
   if (!key) return null;
@@ -102,7 +103,7 @@ async function fetchTides(lat: number, lng: number) {
   const url = `https://api.stormglass.io/v2/tide/extremes/point?lat=${lat}&lng=${lng}&start=${start.toISOString()}&end=${end.toISOString()}`;
   const res = await fetch(url, {
     headers: { Authorization: key },
-    next: { revalidate: 28800 },
+    next: { revalidate: 36000 },
   });
   if (!res.ok) throw new Error("tide fetch failed");
   const data = await res.json();
