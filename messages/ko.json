@@ -241,6 +241,19 @@
     "weeklyForecast": "7일 예보",
     "hideForecast": "예보 숨기기",
     "upcomingTides": "예정된 조수",
-    "hideTides": "조수 숨기기"
+    "hideTides": "조수 숨기기",
+    "codeClear": "맑음",
+    "codeMostlyClear": "대체로 맑음",
+    "codePartlyCloudy": "부분적으로 흐림",
+    "codeCloudy": "흐림",
+    "codeFog": "안개",
+    "codeFreezingFog": "어는 안개",
+    "codeDrizzle": "약한 이슬비",
+    "codeLightRain": "약한 비",
+    "codeRain": "비",
+    "codeHeavyRain": "강한 비",
+    "codeShowers": "소나기",
+    "codeThunderstorm": "뇌우",
+    "codeUnknown": "날씨"
   }
 }

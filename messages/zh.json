@@ -241,6 +241,19 @@
     "weeklyForecast": "7天预报",
     "hideForecast": "隐藏预报",
     "upcomingTides": "潮汐预报",
-    "hideTides": "隐藏潮汐"
+    "hideTides": "隐藏潮汐",
+    "codeClear": "晴朗",
+    "codeMostlyClear": "大部晴朗",
+    "codePartlyCloudy": "局部多云",
+    "codeCloudy": "多云",
+    "codeFog": "雾",
+    "codeFreezingFog": "冻雾",
+    "codeDrizzle": "小毛毛雨",
+    "codeLightRain": "小雨",
+    "codeRain": "雨",
+    "codeHeavyRain": "大雨",
+    "codeShowers": "阵雨",
+    "codeThunderstorm": "雷暴",
+    "codeUnknown": "天气"
   }
 }

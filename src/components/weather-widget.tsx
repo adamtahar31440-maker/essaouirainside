@@ -14,12 +14,29 @@ export async function WeatherWidget({ locale }: { locale: string }) {
     </>
   );
 
+  const codeLabels = {
+    codeClear: t("codeClear"),
+    codeMostlyClear: t("codeMostlyClear"),
+    codePartlyCloudy: t("codePartlyCloudy"),
+    codeCloudy: t("codeCloudy"),
+    codeFog: t("codeFog"),
+    codeFreezingFog: t("codeFreezingFog"),
+    codeDrizzle: t("codeDrizzle"),
+    codeLightRain: t("codeLightRain"),
+    codeRain: t("codeRain"),
+    codeHeavyRain: t("codeHeavyRain"),
+    codeShowers: t("codeShowers"),
+    codeThunderstorm: t("codeThunderstorm"),
+    codeUnknown: t("codeUnknown"),
+  };
+
   return (
     <WeatherWidgetToggle badge={badge} closeLabel={t("close")}>
       <WeatherContent
         initialLocationId="essaouira"
         initialConditions={conditions}
         locale={locale}
+        codeLabels={codeLabels}
         strings={{
           unavailable: t("unavailable"),
           waves: t("waves"),

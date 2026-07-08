@@ -241,6 +241,19 @@
     "weeklyForecast": "توقعات 7 أيام",
     "hideForecast": "إخفاء التوقعات",
     "upcomingTides": "المد والجزر القادم",
-    "hideTides": "إخفاء المد والجزر"
+    "hideTides": "إخفاء المد والجزر",
+    "codeClear": "سماء صافية",
+    "codeMostlyClear": "صافٍ في الغالب",
+    "codePartlyCloudy": "غائم جزئياً",
+    "codeCloudy": "غائم",
+    "codeFog": "ضباب",
+    "codeFreezingFog": "ضباب متجمد",
+    "codeDrizzle": "رذاذ خفيف",
+    "codeLightRain": "مطر خفيف",
+    "codeRain": "مطر",
+    "codeHeavyRain": "مطر غزير",
+    "codeShowers": "زخات مطر",
+    "codeThunderstorm": "عاصفة رعدية",
+    "codeUnknown": "الطقس"
   }
 }

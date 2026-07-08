@@ -241,6 +241,19 @@
     "weeklyForecast": "7-Tage-Vorhersage",
     "hideForecast": "Vorhersage ausblenden",
     "upcomingTides": "Kommende Gezeiten",
-    "hideTides": "Gezeiten ausblenden"
+    "hideTides": "Gezeiten ausblenden",
+    "codeClear": "Klarer Himmel",
+    "codeMostlyClear": "Überwiegend klar",
+    "codePartlyCloudy": "Teilweise bewölkt",
+    "codeCloudy": "Bewölkt",
+    "codeFog": "Nebel",
+    "codeFreezingFog": "Gefrierender Nebel",
+    "codeDrizzle": "Leichter Nieselregen",
+    "codeLightRain": "Leichter Regen",
+    "codeRain": "Regen",
+    "codeHeavyRain": "Starker Regen",
+    "codeShowers": "Schauer",
+    "codeThunderstorm": "Gewitter",
+    "codeUnknown": "Wetter"
   }
 }

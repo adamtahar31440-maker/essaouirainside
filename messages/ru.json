@@ -241,6 +241,19 @@
     "weeklyForecast": "Прогноз на 7 дней",
     "hideForecast": "Скрыть прогноз",
     "upcomingTides": "Ближайшие приливы",
-    "hideTides": "Скрыть приливы"
+    "hideTides": "Скрыть приливы",
+    "codeClear": "Ясно",
+    "codeMostlyClear": "Малооблачно",
+    "codePartlyCloudy": "Переменная облачность",
+    "codeCloudy": "Облачно",
+    "codeFog": "Туман",
+    "codeFreezingFog": "Ледяной туман",
+    "codeDrizzle": "Лёгкая морось",
+    "codeLightRain": "Лёгкий дождь",
+    "codeRain": "Дождь",
+    "codeHeavyRain": "Сильный дождь",
+    "codeShowers": "Ливни",
+    "codeThunderstorm": "Гроза",
+    "codeUnknown": "Погода"
   }
 }

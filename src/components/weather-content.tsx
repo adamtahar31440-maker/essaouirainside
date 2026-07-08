@@ -11,6 +11,7 @@ export function WeatherContent({
   initialConditions,
   locale,
   strings,
+  codeLabels,
 }: {
   initialLocationId: LocationId;
   initialConditions: WeatherConditions;
@@ -26,6 +27,7 @@ export function WeatherContent({
     upcomingTides: string;
     hideTides: string;
   };
+  codeLabels: Record<string, string>;
 }) {
   const [locationId, setLocationId] = useState<LocationId>(initialLocationId);
   const [conditions, setConditions] = useState(initialConditions);
@@ -34,6 +36,7 @@ export function WeatherContent({
 
   const location = LOCATIONS.find((l) => l.id === locationId) ?? LOCATIONS[0];
   const label = weatherLabel(conditions.weatherCode, conditions.isDay);
+  const labelText = codeLabels[label.key] ?? codeLabels.codeUnknown;
   const timeFormatter = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit" });
   const numberFormatter = new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   const nextTide = conditions.tides?.find((tide) => new Date(tide.time).getTime() >= Date.now());
@@ -88,7 +91,7 @@ export function WeatherContent({
           <p className="text-lg font-semibold text-foreground">
             {conditions.temperature !== null ? `${numberFormatter.format(conditions.temperature)}°C` : strings.unavailable}
           </p>
-          <p className="text-xs text-foreground/60">{label.fr}</p>
+          <p className="text-xs text-foreground/60">{labelText}</p>
         </div>
       </div>
 

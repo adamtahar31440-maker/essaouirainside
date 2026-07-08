@@ -241,6 +241,19 @@
     "weeklyForecast": "Prévisions 7 jours",
     "hideForecast": "Masquer les prévisions",
     "upcomingTides": "Marées à venir",
-    "hideTides": "Masquer les marées"
+    "hideTides": "Masquer les marées",
+    "codeClear": "Ciel dégagé",
+    "codeMostlyClear": "Peu nuageux",
+    "codePartlyCloudy": "Partiellement nuageux",
+    "codeCloudy": "Couvert",
+    "codeFog": "Brouillard",
+    "codeFreezingFog": "Brouillard givrant",
+    "codeDrizzle": "Bruine légère",
+    "codeLightRain": "Pluie légère",
+    "codeRain": "Pluie",
+    "codeHeavyRain": "Forte pluie",
+    "codeShowers": "Averses",
+    "codeThunderstorm": "Orage",
+    "codeUnknown": "Météo"
   }
 }

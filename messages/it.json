@@ -241,6 +241,19 @@
     "weeklyForecast": "Previsioni 7 giorni",
     "hideForecast": "Nascondi previsioni",
     "upcomingTides": "Prossime maree",
-    "hideTides": "Nascondi maree"
+    "hideTides": "Nascondi maree",
+    "codeClear": "Cielo sereno",
+    "codeMostlyClear": "Poco nuvoloso",
+    "codePartlyCloudy": "Parzialmente nuvoloso",
+    "codeCloudy": "Nuvoloso",
+    "codeFog": "Nebbia",
+    "codeFreezingFog": "Nebbia gelata",
+    "codeDrizzle": "Pioviggine leggera",
+    "codeLightRain": "Pioggia leggera",
+    "codeRain": "Pioggia",
+    "codeHeavyRain": "Pioggia forte",
+    "codeShowers": "Rovesci",
+    "codeThunderstorm": "Temporale",
+    "codeUnknown": "Meteo"
   }
 }

@@ -241,6 +241,19 @@
     "weeklyForecast": "7-day forecast",
     "hideForecast": "Hide forecast",
     "upcomingTides": "Upcoming tides",
-    "hideTides": "Hide tides"
+    "hideTides": "Hide tides",
+    "codeClear": "Clear sky",
+    "codeMostlyClear": "Mostly clear",
+    "codePartlyCloudy": "Partly cloudy",
+    "codeCloudy": "Cloudy",
+    "codeFog": "Fog",
+    "codeFreezingFog": "Freezing fog",
+    "codeDrizzle": "Light drizzle",
+    "codeLightRain": "Light rain",
+    "codeRain": "Rain",
+    "codeHeavyRain": "Heavy rain",
+    "codeShowers": "Showers",
+    "codeThunderstorm": "Thunderstorm",
+    "codeUnknown": "Weather"
   }
 }

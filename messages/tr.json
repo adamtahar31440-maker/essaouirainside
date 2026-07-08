@@ -241,6 +241,19 @@
     "weeklyForecast": "7 günlük tahmin",
     "hideForecast": "Tahmini gizle",
     "upcomingTides": "Yaklaşan gelgitler",
-    "hideTides": "Gelgitleri gizle"
+    "hideTides": "Gelgitleri gizle",
+    "codeClear": "Açık hava",
+    "codeMostlyClear": "Çoğunlukla açık",
+    "codePartlyCloudy": "Parçalı bulutlu",
+    "codeCloudy": "Bulutlu",
+    "codeFog": "Sis",
+    "codeFreezingFog": "Dondurucu sis",
+    "codeDrizzle": "Hafif çisenti",
+    "codeLightRain": "Hafif yağmur",
+    "codeRain": "Yağmur",
+    "codeHeavyRain": "Şiddetli yağmur",
+    "codeShowers": "Sağanak yağış",
+    "codeThunderstorm": "Gök gürültülü fırtına",
+    "codeUnknown": "Hava durumu"
   }
 }

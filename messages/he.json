@@ -241,6 +241,19 @@
     "weeklyForecast": "תחזית ל-7 ימים",
     "hideForecast": "הסתר תחזית",
     "upcomingTides": "גאות ושפל קרובים",
-    "hideTides": "הסתר גאות ושפל"
+    "hideTides": "הסתר גאות ושפל",
+    "codeClear": "שמיים בהירים",
+    "codeMostlyClear": "בהיר ברובו",
+    "codePartlyCloudy": "מעונן חלקית",
+    "codeCloudy": "מעונן",
+    "codeFog": "ערפל",
+    "codeFreezingFog": "ערפל קפוא",
+    "codeDrizzle": "טפטוף קל",
+    "codeLightRain": "גשם קל",
+    "codeRain": "גשם",
+    "codeHeavyRain": "גשם חזק",
+    "codeShowers": "ממטרים",
+    "codeThunderstorm": "סופת רעמים",
+    "codeUnknown": "מזג אוויר"
   }
 }

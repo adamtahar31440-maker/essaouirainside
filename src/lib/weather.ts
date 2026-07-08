@@ -26,26 +26,28 @@ export type WeatherConditions = {
   daily: DailyForecast[] | null;
 };
 
-const WEATHER_LABELS: Record<number, { day: string; night: string; fr: string }> = {
-  0: { day: "☀️", night: "🌙", fr: "Ciel dégagé" },
-  1: { day: "🌤️", night: "🌙", fr: "Peu nuageux" },
-  2: { day: "⛅", night: "☁️", fr: "Partiellement nuageux" },
-  3: { day: "☁️", night: "☁️", fr: "Couvert" },
-  45: { day: "🌫️", night: "🌫️", fr: "Brouillard" },
-  48: { day: "🌫️", night: "🌫️", fr: "Brouillard givrant" },
-  51: { day: "🌦️", night: "🌧️", fr: "Bruine légère" },
-  61: { day: "🌧️", night: "🌧️", fr: "Pluie légère" },
-  63: { day: "🌧️", night: "🌧️", fr: "Pluie" },
-  65: { day: "🌧️", night: "🌧️", fr: "Forte pluie" },
-  80: { day: "🌦️", night: "🌧️", fr: "Averses" },
-  95: { day: "⛈️", night: "⛈️", fr: "Orage" },
+// "key" points at a "weather.codeXxx" translation key (see messages/*.json) —
+// the human-readable description must never be hardcoded in one language here,
+// it has to go through next-intl so every locale gets its own text.
+const WEATHER_LABELS: Record<number, { day: string; night: string; key: string }> = {
+  0: { day: "☀️", night: "🌙", key: "codeClear" },
+  1: { day: "🌤️", night: "🌙", key: "codeMostlyClear" },
+  2: { day: "⛅", night: "☁️", key: "codePartlyCloudy" },
+  3: { day: "☁️", night: "☁️", key: "codeCloudy" },
+  45: { day: "🌫️", night: "🌫️", key: "codeFog" },
+  48: { day: "🌫️", night: "🌫️", key: "codeFreezingFog" },
+  51: { day: "🌦️", night: "🌧️", key: "codeDrizzle" },
+  61: { day: "🌧️", night: "🌧️", key: "codeLightRain" },
+  63: { day: "🌧️", night: "🌧️", key: "codeRain" },
+  65: { day: "🌧️", night: "🌧️", key: "codeHeavyRain" },
+  80: { day: "🌦️", night: "🌧️", key: "codeShowers" },
+  95: { day: "⛈️", night: "⛈️", key: "codeThunderstorm" },
 };
 
 export function weatherLabel(code: number | null, isDay: boolean) {
-  if (code === null) return { emoji: "🌡️", fr: "Météo" };
-  const entry = WEATHER_LABELS[code];
-  if (!entry) return { emoji: "🌡️", fr: "Météo" };
-  return { emoji: isDay ? entry.day : entry.night, fr: entry.fr };
+  const entry = code !== null ? WEATHER_LABELS[code] : undefined;
+  if (!entry) return { emoji: "🌡️", key: "codeUnknown" };
+  return { emoji: isDay ? entry.day : entry.night, key: entry.key };
 }
 
 async function fetchWeather(lat: number, lng: number) {
