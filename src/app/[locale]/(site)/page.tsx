@@ -7,7 +7,6 @@ import {
   getAllSubcategories,
 } from "@/lib/data";
 import { buildSubcategoryMap, subcategoryLabel } from "@/lib/labels";
-import { getCategoryIcon } from "@/lib/category-icons";
 import { getActiveModuleKeys } from "@/lib/modules";
 import { EstablishmentCard } from "@/components/establishment-card";
 import { Section } from "@/components/section";
@@ -33,7 +32,6 @@ export default async function HomePage({
   ]);
   const subcategoryMap = buildSubcategoryMap(allSubcategories);
 
-  const categories = categoriesAll.filter((c) => c.status === "active");
   const categoryById = new Map(categoriesAll.map((c) => [c.id, c]));
   const establishments = establishmentsAll
     .filter((e) => {
@@ -66,24 +64,6 @@ export default async function HomePage({
           <SearchBar />
         </div>
       </section>
-
-      <Section title={t("categories")}>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {categories.map((c) => {
-            const Icon = getCategoryIcon(c.icon);
-            return (
-              <Link
-                key={c.id}
-                href={`/${locale}/${c.slug}`}
-                className="flex flex-col items-center gap-3 rounded-2xl border border-black/10 bg-white p-6 text-center sm:transition-colors sm:hover:border-ocean-dark/30"
-              >
-                <span className="text-ocean-dark"><Icon size={26} /></span>
-                <span className="text-sm font-semibold text-ocean-dark">{c.name[locale] ?? c.name.fr}</span>
-              </Link>
-            );
-          })}
-        </div>
-      </Section>
 
       <Section
         title={t("latestEstablishments")}
