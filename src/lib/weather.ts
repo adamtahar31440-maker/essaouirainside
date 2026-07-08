@@ -71,7 +71,8 @@ async function fetchMarine() {
 // they come from a separate provider (Stormglass) rather than Open-Meteo. Their
 // free tier is a hard 10 requests/day (not the 50/day originally assumed), so
 // this fetches a 4-day window in one call — enough for both "next tide" and a
-// short forecast — and caches for 12h (2 calls/day in steady state).
+// short forecast — and caches for 5h (up to ~4-5 calls/day under steady traffic,
+// fewer when traffic is quiet), comfortably under the 10/day cap.
 async function fetchTides() {
   const key = process.env.STORMGLASS_API_KEY;
   if (!key) return null;
@@ -86,7 +87,7 @@ async function fetchTides() {
   const url = `https://api.stormglass.io/v2/tide/extremes/point?lat=${ESSAOUIRA_LAT}&lng=${ESSAOUIRA_LNG}&start=${start.toISOString()}&end=${end.toISOString()}`;
   const res = await fetch(url, {
     headers: { Authorization: key },
-    next: { revalidate: 43200 },
+    next: { revalidate: 18000 },
   });
   if (!res.ok) throw new Error("tide fetch failed");
   const data = await res.json();
