@@ -1,3 +1,7 @@
+import { getDb } from "@/db";
+import { tideCache } from "@/db/schema";
+import { eq } from "drizzle-orm";
+
 export type LocationId = "essaouira" | "sidiKaouki" | "ghazoua" | "moulayBouzerktoune" | "diabat" | "airport";
 
 export type Location = { id: LocationId; label: string; lat: number; lng: number; coastal: boolean };
@@ -85,34 +89,63 @@ async function fetchMarine(lat: number, lng: number) {
   };
 }
 
+type Tide = { time: string; type: "high" | "low"; height: number };
+
 // Tide predictions are astronomical (moon/sun position), not a weather model, so
 // they come from a separate provider (Stormglass) rather than Open-Meteo. Their
-// free tier is a hard 10 requests/day. Four coastal spots share that quota, so
-// each is cached for 10h (up to ~2.4 calls/day per spot, ~9.6/day total worst
-// case if every spot gets checked), comfortably under the cap.
-async function fetchTides(lat: number, lng: number) {
+// free tier is a hard 10 requests/day, shared across every coastal spot AND
+// every deploy — Next's per-fetch `revalidate` cache resets on each deploy, and
+// this project redeploys often, so relying on it alone blew through the quota
+// (100+ requests logged against a 10/day cap). Postgres survives deploys, so
+// the real cache lives there: refresh at most once per TTL, and if Stormglass
+// is unreachable or quota-exhausted, keep serving the last known tides (stale
+// but real) instead of hiding the widget.
+const TIDE_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
+const TIDE_STALE_FALLBACK_MS = 4 * 24 * 60 * 60 * 1000;
+
+async function fetchTides(locationId: LocationId, lat: number, lng: number): Promise<Tide[] | null> {
+  const db = getDb();
+  const rows = await db.select().from(tideCache).where(eq(tideCache.locationId, locationId)).limit(1);
+  const cached = rows[0];
+  const cacheAgeMs = cached ? Date.now() - cached.fetchedAt.getTime() : Infinity;
+
+  if (cached && cacheAgeMs < TIDE_CACHE_TTL_MS) {
+    return cached.tides as Tide[];
+  }
+
   const key = process.env.STORMGLASS_API_KEY;
-  if (!key) return null;
+  if (!key) return (cached?.tides as Tide[]) ?? null;
 
-  // Morocco is UTC+1 year-round (no DST since 2018) — compute "today" in that
-  // offset rather than the server's UTC clock, so the window doesn't drift by
-  // an hour and drop the last tide of the day right when it's needed.
-  const nowInMorocco = new Date(Date.now() + 60 * 60 * 1000);
-  const start = new Date(Date.UTC(nowInMorocco.getUTCFullYear(), nowInMorocco.getUTCMonth(), nowInMorocco.getUTCDate()) - 60 * 60 * 1000);
-  const end = new Date(start.getTime() + 96 * 60 * 60 * 1000);
+  try {
+    // Morocco is UTC+1 year-round (no DST since 2018) — compute "today" in that
+    // offset rather than the server's UTC clock, so the window doesn't drift by
+    // an hour and drop the last tide of the day right when it's needed.
+    const nowInMorocco = new Date(Date.now() + 60 * 60 * 1000);
+    const start = new Date(Date.UTC(nowInMorocco.getUTCFullYear(), nowInMorocco.getUTCMonth(), nowInMorocco.getUTCDate()) - 60 * 60 * 1000);
+    const end = new Date(start.getTime() + 96 * 60 * 60 * 1000);
 
-  const url = `https://api.stormglass.io/v2/tide/extremes/point?lat=${lat}&lng=${lng}&start=${start.toISOString()}&end=${end.toISOString()}`;
-  const res = await fetch(url, {
-    headers: { Authorization: key },
-    next: { revalidate: 36000 },
-  });
-  if (!res.ok) throw new Error("tide fetch failed");
-  const data = await res.json();
-  return (data.data ?? []).map((t: { time: string; type: string; height: number }) => ({
-    time: t.time,
-    type: t.type === "high" ? "high" : "low",
-    height: t.height,
-  }));
+    const url = `https://api.stormglass.io/v2/tide/extremes/point?lat=${lat}&lng=${lng}&start=${start.toISOString()}&end=${end.toISOString()}`;
+    const res = await fetch(url, { headers: { Authorization: key }, cache: "no-store" });
+    if (!res.ok) throw new Error("tide fetch failed");
+    const data = await res.json();
+    const tides: Tide[] = (data.data ?? []).map((t: { time: string; type: string; height: number }) => ({
+      time: t.time,
+      type: t.type === "high" ? "high" : "low",
+      height: t.height,
+    }));
+
+    await db
+      .insert(tideCache)
+      .values({ locationId, tides, fetchedAt: new Date() })
+      .onConflictDoUpdate({ target: tideCache.locationId, set: { tides, fetchedAt: new Date() } });
+
+    return tides;
+  } catch {
+    // Quota exceeded, network error, etc. — fall back to whatever we last
+    // stored rather than blanking the tide section, as long as it's not too old.
+    if (cached && cacheAgeMs < TIDE_STALE_FALLBACK_MS) return cached.tides as Tide[];
+    return null;
+  }
 }
 
 export async function getConditionsFor(locationId: string): Promise<WeatherConditions> {
@@ -120,7 +153,7 @@ export async function getConditionsFor(locationId: string): Promise<WeatherCondi
   const [weather, marine, tides] = await Promise.all([
     fetchWeather(location.lat, location.lng).catch(() => null),
     location.coastal ? fetchMarine(location.lat, location.lng).catch(() => null) : Promise.resolve(null),
-    location.coastal ? fetchTides(location.lat, location.lng).catch(() => null) : Promise.resolve(null),
+    location.coastal ? fetchTides(location.id, location.lat, location.lng).catch(() => null) : Promise.resolve(null),
   ]);
 
   return {

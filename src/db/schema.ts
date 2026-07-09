@@ -228,6 +228,17 @@ export const siteSettings = pgTable("site_settings", {
   heroImages: jsonb("hero_images").$type<string[]>().default([]),
 });
 
+// Stormglass's free tier is a hard 10 requests/day, and Next's per-fetch
+// revalidate cache resets on every deploy (this project redeploys often),
+// so it alone isn't enough to stay under quota. This table is the durable
+// cache: it survives deploys since it lives in Postgres, not the build.
+export const tideCache = pgTable("tide_cache", {
+  id: serial("id").primaryKey(),
+  locationId: varchar("location_id", { length: 32 }).notNull().unique(),
+  tides: jsonb("tides").$type<{ time: string; type: "high" | "low"; height: number }[]>().notNull(),
+  fetchedAt: timestamp("fetched_at").notNull().defaultNow(),
+});
+
 // ---- Assistance & Urgences ----
 export const emergencyContacts = pgTable("emergency_contacts", {
   id: serial("id").primaryKey(),
