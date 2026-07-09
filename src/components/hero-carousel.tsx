@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-const SLIDE_DURATION = 6000;
-const FADE_DURATION = 1500;
+const SLIDE_DURATION = 3500;
+const FADE_DURATION = 1000;
 
 // Background photo slideshow for the homepage hero: crossfades between admin-
 // uploaded photos while each one slowly zooms/pans (Ken Burns effect) to read
