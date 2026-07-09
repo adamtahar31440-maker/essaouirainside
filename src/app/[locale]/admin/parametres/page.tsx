@@ -1,5 +1,6 @@
 import { getSiteSettings } from "@/lib/admin-data";
 import { updateSiteSettings } from "@/lib/admin-actions";
+import { ImageUploader } from "@/components/image-uploader";
 
 const inputClass = "w-full rounded-lg border border-black/10 px-3 py-2 text-sm outline-none focus:border-ocean-dark";
 const labelClass = "mb-1 block text-xs font-semibold text-foreground/60";
@@ -9,12 +10,17 @@ export default async function AdminSettingsPage() {
 
   async function save(formData: FormData) {
     "use server";
+    const heroImages = String(formData.get("heroImages") ?? "")
+      .split("\n")
+      .map((url) => url.trim())
+      .filter(Boolean);
     await updateSiteSettings({
       siteName: String(formData.get("siteName") ?? "Essaouira Inside"),
       logoUrl: String(formData.get("logoUrl") ?? ""),
       primaryColor: String(formData.get("primaryColor") ?? ""),
       secondaryColor: String(formData.get("secondaryColor") ?? ""),
       contactEmail: String(formData.get("contactEmail") ?? ""),
+      heroImages,
     });
   }
 
@@ -44,6 +50,16 @@ export default async function AdminSettingsPage() {
         <div>
           <label className={labelClass}>Email de contact</label>
           <input name="contactEmail" type="email" defaultValue={settings?.contactEmail ?? ""} className={inputClass} />
+        </div>
+        <div>
+          <ImageUploader
+            label="Photos du hero (page d'accueil)"
+            hint="1 à 10 photos qui défilent en fond du bandeau d'accueil. Sans photo, le fond bleu uni reste affiché."
+            defaultImages={settings?.heroImages ?? []}
+            max={10}
+            limitReachedText="Maximum 10 photos"
+            fieldName="heroImages"
+          />
         </div>
         <button type="submit" className="rounded-full bg-ocean-dark px-6 py-2.5 text-sm font-semibold text-white hover:bg-ocean">
           Enregistrer

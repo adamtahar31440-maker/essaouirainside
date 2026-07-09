@@ -660,6 +660,7 @@ export async function updateSiteSettings(data: {
   primaryColor?: string;
   secondaryColor?: string;
   contactEmail?: string;
+  heroImages?: string[];
 }) {
   await requireRole("settings");
   const db = getDb();

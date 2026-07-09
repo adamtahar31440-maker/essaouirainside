@@ -8,11 +8,13 @@ import {
 } from "@/lib/data";
 import { buildSubcategoryMap, subcategoryLabel } from "@/lib/labels";
 import { getActiveModuleKeys } from "@/lib/modules";
+import { getSiteSettings } from "@/lib/admin-data";
 import { EstablishmentCard } from "@/components/establishment-card";
 import { Section } from "@/components/section";
 import { SearchBar } from "@/components/search-bar";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { MapSection } from "@/components/map-section";
+import { HeroCarousel } from "@/components/hero-carousel";
 
 export default async function HomePage({
   params,
@@ -22,13 +24,15 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [t, categoriesAll, establishmentsAll, activeModules, allSubcategories] = await Promise.all([
+  const [t, categoriesAll, establishmentsAll, activeModules, allSubcategories, siteSettings] = await Promise.all([
     getTranslations("home"),
     getCategories(),
     getEstablishments({ limit: 12 }),
     getActiveModuleKeys(),
     getAllSubcategories(),
+    getSiteSettings(),
   ]);
+  const heroImages = siteSettings?.heroImages ?? [];
   const subcategoryMap = buildSubcategoryMap(allSubcategories);
 
   const categoryById = new Map(categoriesAll.map((c) => [c.id, c]));
@@ -54,8 +58,9 @@ export default async function HomePage({
 
   return (
     <div>
-      <section className="bg-ocean-dark text-white">
-        <div className="mx-auto flex max-w-7xl flex-col items-start gap-6 px-4 py-24 sm:px-6 lg:py-32">
+      <section className="relative overflow-hidden bg-ocean-dark text-white">
+        {heroImages.length > 0 && <HeroCarousel images={heroImages} />}
+        <div className="relative mx-auto flex max-w-7xl flex-col items-start gap-6 px-4 py-24 sm:px-6 lg:py-32">
           <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-6xl">
             {t("heroTitle")}
           </h1>

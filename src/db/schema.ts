@@ -223,6 +223,9 @@ export const siteSettings = pgTable("site_settings", {
   secondaryColor: varchar("secondary_color", { length: 16 }).default("#bf6a45"),
   socialLinks: jsonb("social_links").$type<Record<string, string>>().default({}),
   contactEmail: varchar("contact_email", { length: 255 }),
+  // Homepage hero background: 1 to 10 photo URLs, shown as a slow crossfade
+  // slideshow. Empty means the plain bg-ocean-dark fallback is used instead.
+  heroImages: jsonb("hero_images").$type<string[]>().default([]),
 });
 
 // ---- Assistance & Urgences ----
