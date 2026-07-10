@@ -40,7 +40,12 @@ export function ContentDetail({
           <ArrowLeft size={16} /> {backLabel}
         </Link>
         <h1 className="text-3xl font-semibold text-ocean-dark sm:text-4xl">{title}</h1>
-        <p className="mt-6 whitespace-pre-line text-lg leading-relaxed text-foreground/80">{body}</p>
+        {body && (
+          <div
+            className="prose prose-lg mt-6 max-w-none text-foreground/80 prose-headings:text-ocean-dark prose-img:rounded-xl"
+            dangerouslySetInnerHTML={{ __html: body }}
+          />
+        )}
 
         {priceGroups && priceGroups.length > 0 && (
           <div className="mt-8">

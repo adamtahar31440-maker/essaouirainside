@@ -7,6 +7,7 @@ import { Check, Loader2 } from "lucide-react";
 import { upsertContentPage } from "@/lib/admin-actions";
 import { ProductsEditor } from "@/components/products-editor";
 import { ImageUploader } from "@/components/image-uploader";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import { MapSectionToggle } from "@/components/admin/map-section-toggle";
 import { MapPointsEditor } from "@/components/admin/map-points-editor";
 import { ALL_LOCALES, LOCALE_LABELS } from "@/lib/localized-form";
@@ -167,7 +168,8 @@ export function ContentPageForm({
       </div>
 
       <p className="rounded-lg bg-ocean-dark/5 px-3 py-2 text-xs text-foreground/60">
-        Rédigez en français : les autres langues du site seront automatiquement retraduites lors de l&apos;enregistrement.
+        Rédigez en français : les autres langues du site seront automatiquement retraduites lors de l&apos;enregistrement
+        (mise en forme et photos conservées).
       </p>
 
       <div>
@@ -175,8 +177,12 @@ export function ContentPageForm({
         <input name="title" defaultValue={page?.title.fr} className={inputClass} required />
       </div>
       <div>
-        <label className={labelClass}>Contenu</label>
-        <textarea name="body" defaultValue={page?.body.fr} rows={8} className={inputClass} />
+        <RichTextEditor
+          name="body"
+          label="Contenu"
+          defaultValue={page?.body.fr}
+          unsupportedFormatText='Format non supporté (souvent des photos iPhone en HEIC). Réglages > Appareil photo > Formats > "Le plus compatible", puis reprenez la photo — ou choisissez une photo déjà au format JPEG/PNG.'
+        />
       </div>
 
       <ImageUploader

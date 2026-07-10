@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getContentPageBySlug } from "@/lib/data";
 import { isModuleActive } from "@/lib/modules";
 import { ContentDetail } from "@/components/content-detail";
+import { stripHtml } from "@/lib/html";
 
 export async function generateMetadata({
   params,
@@ -16,7 +17,7 @@ export async function generateMetadata({
   const title = page.title[locale] ?? page.title.fr;
   return {
     title,
-    description: (page.body[locale] ?? page.body.fr).slice(0, 155),
+    description: stripHtml(page.body[locale] ?? page.body.fr).slice(0, 155),
     alternates: { canonical: `https://essaouirainside.com/${locale}/assistance/${slug}` },
   };
 }

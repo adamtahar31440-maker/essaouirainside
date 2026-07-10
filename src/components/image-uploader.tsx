@@ -1,50 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { upload } from "@vercel/blob/client";
 import { X, Loader2 } from "lucide-react";
+import { isUnsupportedImageFile, uploadImageFile } from "@/lib/image-upload";
 
 type UploadItem = { id: string; url: string; uploading: boolean; error?: string };
-
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
-
-// Phone cameras routinely produce 4-10MB photos, which is what actually makes
-// "uploading a photo" feel slow on a mobile connection — the upload itself has
-// nothing left to optimize (already a direct-to-blob client upload). Downscale
-// and re-encode to JPEG before it ever hits the network. Skip GIFs since
-// re-encoding would drop the animation.
-const MAX_DIMENSION = 1920;
-const JPEG_QUALITY = 0.82;
-
-async function compressImage(file: File): Promise<File> {
-  if (file.type === "image/gif") return file;
-
-  try {
-    const bitmap = await createImageBitmap(file);
-    const scale = Math.min(1, MAX_DIMENSION / Math.max(bitmap.width, bitmap.height));
-    const width = Math.round(bitmap.width * scale);
-    const height = Math.round(bitmap.height * scale);
-
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return file;
-    ctx.drawImage(bitmap, 0, 0, width, height);
-    bitmap.close();
-
-    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", JPEG_QUALITY));
-    if (!blob || blob.size >= file.size) return file;
-
-    const newName = file.name.replace(/\.\w+$/, "") + ".jpg";
-    return new File([blob], newName, { type: "image/jpeg" });
-  } catch {
-    // Fall back to the original file if decoding/compression fails for any reason
-    // (unsupported format, out-of-memory on a huge image, etc.) — better to upload
-    // slowly than to block the user entirely.
-    return file;
-  }
-}
 
 export function ImageUploader({
   label,
@@ -93,8 +53,7 @@ export function ImageUploader({
         // iPhones save photos as HEIC by default, which browsers can't even display in
         // an <img> tag and which this upload flow doesn't accept — catch it up front
         // with a clear message instead of a generic failure after a network round-trip.
-        const looksLikeHeic = /\.heic$|\.heif$/i.test(file.name) || /heic|heif/i.test(file.type);
-        if (!ALLOWED_TYPES.includes(file.type) || looksLikeHeic) {
+        if (isUnsupportedImageFile(file)) {
           setItems((prev) =>
             prev.map((it) =>
               it.id === item.id
@@ -106,12 +65,8 @@ export function ImageUploader({
         }
 
         try {
-          const uploadFile = await compressImage(file);
-          const blob = await upload(uploadFile.name, uploadFile, {
-            access: "public",
-            handleUploadUrl: "/api/upload/image",
-          });
-          setItems((prev) => prev.map((it) => (it.id === item.id ? { ...it, url: blob.url, uploading: false } : it)));
+          const url = await uploadImageFile(file);
+          setItems((prev) => prev.map((it) => (it.id === item.id ? { ...it, url, uploading: false } : it)));
         } catch (err) {
           console.error("Image upload failed:", err);
           setItems((prev) =>

@@ -98,7 +98,11 @@ async function translateChunk(
         "You are a professional tourism translator for a Morocco travel platform (Essaouira Inside). " +
         `Translate the given ${sourceLanguageName} source fields into every requested target language. ` +
         "Keep proper nouns, brand names, and place names in their original script. " +
-        "Preserve tone (warm, informative, tourism-oriented) and any formatting. Do not add commentary.",
+        "Preserve tone (warm, informative, tourism-oriented) and any formatting. Do not add commentary. " +
+        "Some field values are HTML (e.g. <p>, <strong>, <em>, <h2>, <ul><li>, <img src=... alt=...>) rather " +
+        "than plain text. For those, reproduce the exact same tags, attributes, and nesting — including " +
+        "every <img> tag's src URL untouched — and translate only the human-readable text between tags " +
+        "(and the alt attribute, if present). Never drop, add, or reorder tags.",
       messages: [
         {
           role: "user",

@@ -32,6 +32,7 @@ import { LABEL_CRITERIA } from "@/lib/label-criteria";
 import { slugify } from "@/lib/slug";
 import { readLocalized, ALL_LOCALES } from "@/lib/localized-form";
 import { translateFields } from "@/lib/translate";
+import { sanitizeBody } from "@/lib/sanitize-body";
 import { RESERVED_TOP_LEVEL_SLUGS } from "@/lib/categories";
 import { adminCountEstablishmentsByCategory, adminCountEstablishmentsBySubcategory } from "@/lib/admin-data";
 import { getNavItems } from "@/lib/nav";
@@ -216,12 +217,20 @@ export async function upsertContentPage(formData: FormData) {
     mapPoints = [];
   }
 
+  // The body is rich HTML from the article editor — the fr source is sanitized (a
+  // trusted admin still can't hand-inject a stray <script> through devtools) and
+  // every AI-translated locale is sanitized too, since a translation pass could in
+  // theory hallucinate a tag outside what the editor's toolbar can actually produce.
+  const sanitizedBodyTranslations = Object.fromEntries(
+    Object.entries(translations.body ?? {}).map(([l, v]) => [l, sanitizeBody(v)])
+  );
+
   const section = String(formData.get("section") ?? "assistance-guides");
   const data = {
     section,
     slug: id ? String(formData.get("slug")) : slugify(title),
     title: { fr: title, ...translations.title },
-    body: { fr: body, ...translations.body },
+    body: { fr: sanitizeBody(body), ...sanitizedBodyTranslations },
     coverImage: String(formData.get("coverImage") ?? "") || null,
     prices,
     mapEnabled: formData.get("mapEnabled") === "on",
