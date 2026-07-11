@@ -124,8 +124,13 @@ async function fetchTides(locationId: LocationId, lat: number, lng: number): Pro
     const start = new Date(Date.UTC(nowInMorocco.getUTCFullYear(), nowInMorocco.getUTCMonth(), nowInMorocco.getUTCDate()) - 60 * 60 * 1000);
     const end = new Date(start.getTime() + 96 * 60 * 60 * 1000);
 
+    // The Postgres cache above already gates how often this ever runs (at most
+    // once per TIDE_CACHE_TTL_MS) — `no-store` here would additionally force
+    // every page that renders the weather widget into fully dynamic rendering,
+    // defeating ISR for the entire (site) layout. force-cache is safe: Next's
+    // fetch cache is just a secondary layer on top of the real Postgres gate.
     const url = `https://api.stormglass.io/v2/tide/extremes/point?lat=${lat}&lng=${lng}&start=${start.toISOString()}&end=${end.toISOString()}`;
-    const res = await fetch(url, { headers: { Authorization: key }, cache: "no-store" });
+    const res = await fetch(url, { headers: { Authorization: key }, cache: "force-cache" });
     if (!res.ok) throw new Error("tide fetch failed");
     const data = await res.json();
     const tides: Tide[] = (data.data ?? []).map((t: { time: string; type: string; height: number }) => ({

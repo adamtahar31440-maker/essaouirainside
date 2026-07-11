@@ -6,6 +6,10 @@ import { isModuleActive } from "@/lib/modules";
 import { ContentDetail } from "@/components/content-detail";
 import { stripHtml } from "@/lib/html";
 
+// Cached and reused for every visitor for up to 1h instead of hitting the DB on
+// every request — admin saves still show up immediately via revalidatePath.
+export const revalidate = 3600;
+
 export async function generateMetadata({
   params,
 }: {

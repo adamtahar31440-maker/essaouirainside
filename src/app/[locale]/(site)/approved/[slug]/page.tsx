@@ -7,6 +7,10 @@ import { getEstablishmentBySlug } from "@/lib/data";
 import { getLabelBadges, getLabelEvaluationById } from "@/lib/admin-data";
 import { LabelBadgeHistory } from "@/components/label-badge-history";
 
+// Cached and reused for every visitor for up to 1h instead of hitting the DB on
+// every request — admin saves still show up immediately via revalidatePath.
+export const revalidate = 3600;
+
 export async function generateMetadata({
   params,
 }: {

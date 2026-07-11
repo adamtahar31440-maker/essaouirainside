@@ -1,13 +1,19 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Suspense } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { buildSubcategoryMap, subcategoryLabel } from "@/lib/labels";
+import { buildSubcategoryMap } from "@/lib/labels";
 import { getEstablishments, getSiteSectionBySlug, getContentPages, getCategoryBySlug, getSubcategories } from "@/lib/data";
-import { EstablishmentCard } from "@/components/establishment-card";
 import { Section } from "@/components/section";
 import { ContentHub } from "@/components/content-hub";
-import { cn } from "@/lib/utils";
+import { CategoryEstablishments } from "@/components/category-establishments";
+
+// Cached and reused for every visitor for up to 1h instead of hitting the DB on
+// every request — admin saves still show up immediately via revalidatePath.
+// The subcategory filter (`?sub=`) is handled client-side (see
+// CategoryEstablishments) specifically so this page never has to read
+// searchParams, which would otherwise force it out of ISR entirely.
+export const revalidate = 3600;
 
 export async function generateMetadata({
   params,
@@ -35,13 +41,10 @@ export async function generateMetadata({
 
 export default async function CategoryPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ locale: string; category: string }>;
-  searchParams: Promise<{ sub?: string }>;
 }) {
   const { locale, category } = await params;
-  const { sub } = await searchParams;
   setRequestLocale(locale);
 
   const cat = await getCategoryBySlug(category);
@@ -63,7 +66,7 @@ export default async function CategoryPage({
 
   const [t, establishments, subcategories] = await Promise.all([
     getTranslations("search"),
-    getEstablishments({ type: cat.type, subcategory: sub }),
+    getEstablishments({ type: cat.type }),
     getSubcategories(cat.id),
   ]);
   const subcategoryMap = buildSubcategoryMap(subcategories);
@@ -79,50 +82,17 @@ export default async function CategoryPage({
       </div>
 
       <Section>
-        <div className="mb-8 flex flex-wrap gap-2">
-          <Link
-            href={`/${locale}/${category}`}
-            className={cn(
-              "rounded-full border px-4 py-1.5 text-sm font-medium",
-              !sub ? "border-ocean-dark bg-ocean-dark text-white" : "border-black/10 text-foreground/70"
-            )}
-          >
-            {t("all")}
-          </Link>
-          {subcategories.map((s) => (
-            <Link
-              key={s.slug}
-              href={`/${locale}/${category}?sub=${s.slug}`}
-              className={cn(
-                "rounded-full border px-4 py-1.5 text-sm font-medium",
-                sub === s.slug ? "border-ocean-dark bg-ocean-dark text-white" : "border-black/10 text-foreground/70"
-              )}
-            >
-              {subcategoryLabel(subcategoryMap, s.slug, locale)}
-            </Link>
-          ))}
-        </div>
-
-        {establishments.length === 0 ? (
-          <p className="text-foreground/60">{t("noResults")}</p>
-        ) : (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {establishments.map((e) => (
-              <EstablishmentCard
-                key={e.id}
-                href={`/${locale}/${category}/${e.slug}`}
-                name={e.name[locale] ?? e.name.fr}
-                image={e.images?.[0]}
-                subcategory={subcategoryLabel(subcategoryMap, e.subcategory, locale)}
-                address={e.address}
-                priceLevel={e.priceLevel}
-                badge={e.badge}
-                wifi={e.wifi}
-                parking={e.parking}
-              />
-            ))}
-          </div>
-        )}
+        <Suspense>
+          <CategoryEstablishments
+            locale={locale}
+            category={category}
+            establishments={establishments}
+            subcategories={subcategories}
+            subcategoryMap={subcategoryMap}
+            allLabel={t("all")}
+            noResultsLabel={t("noResults")}
+          />
+        </Suspense>
       </Section>
     </div>
   );

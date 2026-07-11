@@ -16,6 +16,10 @@ import { NewsletterForm } from "@/components/newsletter-form";
 import { MapSection } from "@/components/map-section";
 import { HeroCarousel } from "@/components/hero-carousel";
 
+// Cached and reused for every visitor for up to 1h instead of hitting the DB on
+// every request — admin saves still show up immediately via revalidatePath.
+export const revalidate = 3600;
+
 export default async function HomePage({
   params,
 }: {
