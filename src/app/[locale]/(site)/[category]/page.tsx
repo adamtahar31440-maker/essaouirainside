@@ -3,7 +3,15 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { buildSubcategoryMap } from "@/lib/labels";
-import { getEstablishments, getSiteSectionBySlug, getContentPages, getCategoryBySlug, getSubcategories } from "@/lib/data";
+import {
+  getEstablishments,
+  getSiteSectionBySlug,
+  getContentPages,
+  getCategoryBySlug,
+  getSubcategories,
+  getCategories,
+  getSiteSections,
+} from "@/lib/data";
 import { Section } from "@/components/section";
 import { ContentHub } from "@/components/content-hub";
 import { CategoryEstablishments } from "@/components/category-establishments";
@@ -14,6 +22,15 @@ import { CategoryEstablishments } from "@/components/category-establishments";
 // CategoryEstablishments) specifically so this page never has to read
 // searchParams, which would otherwise force it out of ISR entirely.
 export const revalidate = 3600;
+
+// Nested dynamic segments need their own generateStaticParams to be registered
+// for ISR at all — without it, Next.js falls back to fully dynamic rendering
+// for this segment regardless of `revalidate` (only the [locale] segment above
+// it would get cached). The actual category/section list is small and known.
+export async function generateStaticParams() {
+  const [categories, sections] = await Promise.all([getCategories(), getSiteSections()]);
+  return [...categories.map((c) => ({ category: c.slug })), ...sections.map((s) => ({ category: s.slug }))];
+}
 
 export async function generateMetadata({
   params,

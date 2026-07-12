@@ -43,6 +43,16 @@ import { stripHtml } from "@/lib/html";
 // every request — admin saves still show up immediately via revalidatePath.
 export const revalidate = 3600;
 
+// A nested dynamic segment (here two: [category] and [slug]) needs its own
+// generateStaticParams to be registered for ISR at all, even an empty one —
+// without it Next.js silently falls back to fully dynamic, per-request
+// rendering regardless of `revalidate`. Returning [] means nothing is built
+// upfront (hundreds of establishments/articles would slow the build a lot),
+// but the first visit to any path renders once and gets cached from then on.
+export async function generateStaticParams() {
+  return [];
+}
+
 export async function generateMetadata({
   params,
 }: {

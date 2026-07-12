@@ -11,6 +11,15 @@ import { LabelBadgeHistory } from "@/components/label-badge-history";
 // every request — admin saves still show up immediately via revalidatePath.
 export const revalidate = 3600;
 
+// The [slug] segment needs its own generateStaticParams to be registered for
+// ISR at all, even an empty one — without it Next.js falls back to fully
+// dynamic rendering regardless of `revalidate`. Returning [] means nothing is
+// built upfront, but the first visit to any certificate renders once and is
+// then cached until the next revalidation window.
+export async function generateStaticParams() {
+  return [];
+}
+
 export async function generateMetadata({
   params,
 }: {
