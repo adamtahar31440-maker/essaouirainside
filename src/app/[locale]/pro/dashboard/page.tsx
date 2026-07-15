@@ -14,7 +14,6 @@ import {
   adminGetSubcategories,
 } from "@/lib/admin-data";
 import { applyAsProfessional, requestMarketplaceService, applyForLabel, updateOwnEstablishment } from "@/lib/pro-actions";
-import { SubscriptionPlans } from "@/components/subscription-plans";
 import { LabelBadgeHistory } from "@/components/label-badge-history";
 import { ProApplicationForm } from "@/components/pro-application-form";
 import { DashboardLangSwitcher } from "@/components/dashboard-lang-switcher";
@@ -148,22 +147,6 @@ export default async function ProDashboardPage({
         </div>
         {langSwitcher}
       </div>
-
-      <section className="rounded-2xl border border-black/5 bg-white p-6">
-        <h2 className="mb-3 text-sm font-semibold text-ocean-dark">{t("subscriptionTitle")}</h2>
-        {subscription && subscription.status === "active" ? (
-          <p className="mb-4 text-sm text-foreground/70">
-            {t("subscriptionActive", {
-              plan: subscription.planKey,
-              cycle: subscription.billingCycle,
-              status: subscription.status,
-            })}
-          </p>
-        ) : (
-          <p className="mb-4 text-sm text-foreground/60">{t("subscriptionFree")}</p>
-        )}
-        <SubscriptionPlans plans={plans} currentPlanKey={subscription?.status === "active" ? subscription.planKey : undefined} />
-      </section>
 
       <section className="rounded-2xl border border-black/5 bg-white p-6">
         <h2 className="mb-3 text-sm font-semibold text-ocean-dark">{t("establishmentTitle")}</h2>

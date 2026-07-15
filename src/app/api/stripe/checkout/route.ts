@@ -3,7 +3,15 @@ import { safeCurrentUser as currentUser } from "@/lib/auth";
 import { getStripe, STRIPE_CURRENCY } from "@/lib/stripe";
 import { getProfessionalByClerkId, getSubscriptionPlans } from "@/lib/admin-data";
 
+// Paid subscriptions are paused for 6 months (launch phase: free signup only).
+// Flip this back to false to re-enable checkout.
+const SUBSCRIPTIONS_DISABLED = true;
+
 export async function POST(req: NextRequest) {
+  if (SUBSCRIPTIONS_DISABLED) {
+    return NextResponse.json({ error: "subscriptions_disabled" }, { status: 503 });
+  }
+
   const user = await currentUser();
   if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
