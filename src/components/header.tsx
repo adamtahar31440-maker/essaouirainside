@@ -49,14 +49,21 @@ export function Header({
           </Link>
           {navLinks.map((link) =>
             link.pages && link.pages.length > 0 ? (
-              <div key={link.href} className="group relative">
-                <Link
-                  href={localePrefixed(link.href)}
-                  className="flex items-center gap-1 text-sm font-medium text-foreground/80 transition hover:text-ocean-dark"
-                >
-                  {link.label}
-                  <ChevronDown size={14} className="transition group-hover:rotate-180" />
-                </Link>
+              <div key={link.href || link.label} className="group relative">
+                {link.href ? (
+                  <Link
+                    href={localePrefixed(link.href)}
+                    className="flex items-center gap-1 text-sm font-medium text-foreground/80 transition hover:text-ocean-dark"
+                  >
+                    {link.label}
+                    <ChevronDown size={14} className="transition group-hover:rotate-180" />
+                  </Link>
+                ) : (
+                  <span className="flex cursor-default items-center gap-1 text-sm font-medium text-foreground/80 transition group-hover:text-ocean-dark">
+                    {link.label}
+                    <ChevronDown size={14} className="transition group-hover:rotate-180" />
+                  </span>
+                )}
                 <div className="invisible absolute left-0 top-full z-20 pt-2 opacity-0 transition group-hover:visible group-hover:opacity-100 rtl:left-auto rtl:right-0">
                   <div className="w-56 rounded-xl border border-black/10 bg-white p-2 shadow-lg">
                     {link.pages.map((p) => (
@@ -118,31 +125,42 @@ export function Header({
             >
               {t("home")}
             </Link>
-            {navLinks.map((link) =>
-              link.pages && link.pages.length > 0 ? (
-                <div key={link.href}>
+            {navLinks.map((link) => {
+              const groupKey = link.href || link.label;
+              return link.pages && link.pages.length > 0 ? (
+                <div key={groupKey}>
                   <div className="flex items-center rounded-md hover:bg-sand/50">
-                    <Link
-                      href={localePrefixed(link.href)}
-                      onClick={() => setOpen(false)}
-                      className="flex-1 px-2 py-2 text-sm font-medium text-foreground/80"
-                    >
-                      {link.label}
-                    </Link>
+                    {link.href ? (
+                      <Link
+                        href={localePrefixed(link.href)}
+                        onClick={() => setOpen(false)}
+                        className="flex-1 px-2 py-2 text-sm font-medium text-foreground/80"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => toggleExpanded(groupKey)}
+                        className="flex-1 px-2 py-2 text-left text-sm font-medium text-foreground/80"
+                      >
+                        {link.label}
+                      </button>
+                    )}
                     <button
                       type="button"
-                      onClick={() => toggleExpanded(link.href)}
+                      onClick={() => toggleExpanded(groupKey)}
                       aria-label={link.label}
-                      aria-expanded={expanded.has(link.href)}
+                      aria-expanded={expanded.has(groupKey)}
                       className="p-2 text-foreground/60"
                     >
                       <ChevronDown
                         size={16}
-                        className={cn("transition", expanded.has(link.href) && "rotate-180")}
+                        className={cn("transition", expanded.has(groupKey) && "rotate-180")}
                       />
                     </button>
                   </div>
-                  {expanded.has(link.href) && (
+                  {expanded.has(groupKey) && (
                     <div className="ms-3 flex flex-col gap-0.5 border-s border-black/10 ps-3">
                       {link.pages.map((p) => (
                         <Link
@@ -166,8 +184,8 @@ export function Header({
                 >
                   {link.label}
                 </Link>
-              )
-            )}
+              );
+            })}
             {isActive("assistance") && (
               <Link
                 href={localePrefixed("/assistance")}
