@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 
-const MODEL = "claude-sonnet-5";
+const MODEL = "claude-haiku-4-5";
 
 const LANGUAGE_NAMES: Record<string, string> = {
   fr: "French",
