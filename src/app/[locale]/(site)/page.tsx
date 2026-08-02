@@ -1,15 +1,15 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { MapPinned } from "lucide-react";
 import {
   getCategories,
   getEstablishments,
-  getAllSubcategories,
+  getSiteSectionBySlug,
+  getContentPages,
 } from "@/lib/data";
-import { buildSubcategoryMap, subcategoryLabel } from "@/lib/labels";
 import { getActiveModuleKeys } from "@/lib/modules";
 import { getSiteSettings } from "@/lib/admin-data";
-import { EstablishmentCard } from "@/components/establishment-card";
 import { Section } from "@/components/section";
 import { SearchBar } from "@/components/search-bar";
 import { NewsletterForm } from "@/components/newsletter-form";
@@ -28,16 +28,18 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [t, categoriesAll, establishmentsAll, activeModules, allSubcategories, siteSettings] = await Promise.all([
-    getTranslations("home"),
-    getCategories(),
-    getEstablishments({ limit: 12 }),
-    getActiveModuleKeys(),
-    getAllSubcategories(),
-    getSiteSettings(),
-  ]);
+  const [t, categoriesAll, establishmentsAll, activeModules, siteSettings, discoverSection, discoverPagesAll] =
+    await Promise.all([
+      getTranslations("home"),
+      getCategories(),
+      getEstablishments({ limit: 12 }),
+      getActiveModuleKeys(),
+      getSiteSettings(),
+      getSiteSectionBySlug("decouvrir"),
+      getContentPages("decouvrir"),
+    ]);
+  const discoverPages = discoverPagesAll.slice(0, 6);
   const heroImages = siteSettings?.heroImages ?? [];
-  const subcategoryMap = buildSubcategoryMap(allSubcategories);
 
   const categoryById = new Map(categoriesAll.map((c) => [c.id, c]));
   const establishments = establishmentsAll
@@ -73,35 +75,41 @@ export default async function HomePage({
         </div>
       </section>
 
-      <Section
-        title={t("latestEstablishments")}
-        action={
-          <Link href={`/${locale}/recherche`} className="text-sm font-semibold text-azur hover:underline">
-            {t("viewAll")}
-          </Link>
-        }
-      >
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {establishments.map((e) => {
-            const cat = categoryById.get(e.categoryId);
-            const path = cat ? cat.slug : "";
-            return (
-              <EstablishmentCard
-                key={e.id}
-                href={`/${locale}/${path}/${e.slug}`}
-                name={e.name[locale] ?? e.name.fr}
-                image={e.images?.[0]}
-                subcategory={subcategoryLabel(subcategoryMap, e.subcategory, locale)}
-                address={e.address}
-                priceLevel={e.priceLevel}
-                badge={e.badge}
-                wifi={e.wifi}
-                parking={e.parking}
-              />
-            );
-          })}
-        </div>
-      </Section>
+      {discoverSection && discoverPages.length > 0 && (
+        <Section
+          title={discoverSection.name[locale] ?? discoverSection.name.fr}
+          action={
+            <Link href={`/${locale}/decouvrir`} className="text-sm font-semibold text-azur hover:underline">
+              {t("viewAll")}
+            </Link>
+          }
+        >
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {discoverPages.map((p) => (
+              <Link
+                key={p.slug}
+                href={`/${locale}/decouvrir/${p.slug}`}
+                className="group block overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+              >
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-sand">
+                  {p.coverImage && (
+                    <Image
+                      src={p.coverImage}
+                      alt={p.title[locale] ?? p.title.fr}
+                      fill
+                      className="object-cover transition duration-500 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                  )}
+                </div>
+                <div className="p-4">
+                  <h3 className="text-base font-semibold text-ocean-dark">{p.title[locale] ?? p.title.fr}</h3>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </Section>
+      )}
 
       <Section className="bg-sand/40 max-w-none px-0 py-16">
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 sm:px-6">
