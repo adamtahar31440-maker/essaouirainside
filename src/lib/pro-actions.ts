@@ -2,6 +2,7 @@
 
 import { safeCurrentUser as currentUser } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { waitUntil } from "@vercel/functions";
 import { eq, and } from "drizzle-orm";
 import { getDb } from "@/db";
 import { professionals, establishments, categories, serviceOrders, labelApplications } from "@/db/schema";
@@ -37,11 +38,11 @@ export async function applyAsProfessional(formData: FormData) {
   const name = String(formData.get("name") ?? "");
   const description = String(formData.get("description") ?? "");
 
-  const targetLocales = ALL_LOCALES.filter((l) => l !== sourceLocale);
-  const translations = await translateFields({ name, description }, targetLocales, sourceLocale);
-
-  const localizedName = { [sourceLocale]: name, ...translations.name };
-  const localizedDescription = { [sourceLocale]: description, ...translations.description };
+  // Translating into all locales is an LLM call that can take several seconds; running it
+  // before the insert made "Enregistrer" feel frozen. Save in the source locale immediately
+  // and fill in the other locales afterwards via waitUntil, once the response has been sent.
+  const localizedName = { [sourceLocale]: name };
+  const localizedDescription = { [sourceLocale]: description };
 
   const [professional] = await db
     .insert(professionals)
@@ -57,10 +58,10 @@ export async function applyAsProfessional(formData: FormData) {
     })
     .returning();
 
-  await db.insert(establishments).values({
+  const [establishment] = await db.insert(establishments).values({
     categoryId,
     subcategory: String(formData.get("subcategory") ?? ""),
-    slug: `${slugify(localizedName.fr || name)}-${professional.id}`,
+    slug: `${slugify(name)}-${professional.id}`,
     name: localizedName,
     description: localizedDescription,
     address: String(formData.get("address") ?? ""),
@@ -82,7 +83,23 @@ export async function applyAsProfessional(formData: FormData) {
     petsAllowed: formData.get("petsAllowed") === "on",
     status: "pending",
     professionalId: professional.id,
-  });
+  }).returning();
+
+  const targetLocales = ALL_LOCALES.filter((l) => l !== sourceLocale);
+  waitUntil(
+    translateFields({ name, description }, targetLocales, sourceLocale)
+      .then(async (translations) => {
+        if (Object.keys(translations).length === 0) return;
+        await db
+          .update(establishments)
+          .set({
+            name: { ...localizedName, ...translations.name },
+            description: { ...localizedDescription, ...translations.description },
+          })
+          .where(eq(establishments.id, establishment.id));
+      })
+      .catch((err) => console.error("Background translation failed for establishment", establishment.id, err))
+  );
 
   revalidatePath("/", "layout");
 }
