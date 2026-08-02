@@ -4,6 +4,7 @@ import { clerkClient } from "@clerk/nextjs/server";
 import { safeCurrentUser as currentUser } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { waitUntil } from "@vercel/functions";
 import { eq, desc, and, asc, ne } from "drizzle-orm";
 import { getDb } from "@/db";
 import {
@@ -83,11 +84,35 @@ export async function upsertEstablishment(formData: FormData) {
   const id = formData.get("id") ? Number(formData.get("id")) : null;
   const name = String(formData.get("name") ?? "");
   const description = String(formData.get("description") ?? "");
+  const hours = String(formData.get("hours") ?? "");
 
-  const targetLocales = ALL_LOCALES.filter((l) => l !== "fr");
-  const translations = await translateFields({ name, description }, targetLocales, "fr");
-  const localizedName = { fr: name, ...translations.name };
-  const localizedDescription = { fr: description, ...translations.description };
+  let productsInput: { name: string; price: number | null; category: string | null }[] = [];
+  try {
+    productsInput = JSON.parse(String(formData.get("products") ?? "[]"));
+  } catch {
+    productsInput = [];
+  }
+
+  const activitiesInput = String(formData.get("otherActivities") ?? "")
+    .split(/\r?\n/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  const vacationStart = String(formData.get("vacationStart") ?? "") || null;
+  const vacationEnd = String(formData.get("vacationEnd") ?? "") || null;
+
+  // Translating into all locales is an LLM call that can take several seconds; running it
+  // before the insert/update made "Enregistrer" feel frozen. Save in French immediately and
+  // fill in the other locales afterwards via waitUntil, once the redirect has been sent.
+  const localizedName = { fr: name };
+  const localizedDescription = { fr: description };
+  const localizedHours = hours ? { fr: hours } : null;
+  const products = productsInput.map((p) => ({
+    name: { fr: p.name },
+    price: p.price,
+    category: p.category ? { fr: p.category } : null,
+  }));
+  const services = activitiesInput.length > 0 ? { fr: activitiesInput } : null;
 
   const data = {
     categoryId: Number(formData.get("categoryId")),
@@ -95,13 +120,22 @@ export async function upsertEstablishment(formData: FormData) {
     slug: id ? String(formData.get("slug")) : slugify(name),
     name: localizedName,
     description: localizedDescription,
+    hours: localizedHours,
+    vacationStart,
+    vacationEnd,
     address: String(formData.get("address") ?? ""),
     lat: formData.get("lat") ? Number(formData.get("lat")) : null,
     lng: formData.get("lng") ? Number(formData.get("lng")) : null,
     phone: String(formData.get("phone") ?? ""),
     whatsapp: String(formData.get("whatsapp") ?? ""),
     website: String(formData.get("website") ?? ""),
+    instagram: String(formData.get("instagram") ?? "") || null,
+    facebook: String(formData.get("facebook") ?? "") || null,
+    googleReviewsUrl: String(formData.get("googleReviewsUrl") ?? "") || null,
+    tripadvisorUrl: String(formData.get("tripadvisorUrl") ?? "") || null,
     priceLevel: String(formData.get("priceLevel") ?? ""),
+    products,
+    services,
     parking: formData.get("parking") === "on",
     wifi: formData.get("wifi") === "on",
     accessibility: formData.get("accessibility") === "on",
@@ -118,11 +152,59 @@ export async function upsertEstablishment(formData: FormData) {
       .filter(Boolean),
   };
 
+  let establishmentId = id;
   if (id) {
     await db.update(establishments).set(data).where(eq(establishments.id, id));
   } else {
-    await db.insert(establishments).values(data);
+    const [inserted] = await db.insert(establishments).values(data).returning();
+    establishmentId = inserted.id;
   }
+
+  const targetLocales = ALL_LOCALES.filter((l) => l !== "fr");
+  const translationFields: Record<string, string> = { name, description };
+  if (hours) translationFields.hours = hours;
+  productsInput.forEach((p, i) => {
+    translationFields[`product_${i}`] = p.name;
+    if (p.category) translationFields[`category_${i}`] = p.category;
+  });
+  activitiesInput.forEach((a, i) => {
+    translationFields[`activity_${i}`] = a;
+  });
+
+  waitUntil(
+    translateFields(translationFields, targetLocales, "fr")
+      .then(async (translations) => {
+        if (Object.keys(translations).length === 0 || !establishmentId) return;
+
+        const update: Partial<typeof establishments.$inferInsert> = {
+          name: { ...localizedName, ...translations.name },
+          description: { ...localizedDescription, ...translations.description },
+        };
+
+        if (localizedHours) {
+          update.hours = { ...localizedHours, ...translations.hours };
+        }
+
+        if (products.length > 0) {
+          update.products = productsInput.map((p, i) => ({
+            name: { fr: p.name, ...translations[`product_${i}`] },
+            price: p.price,
+            category: p.category ? { fr: p.category, ...translations[`category_${i}`] } : null,
+          }));
+        }
+
+        if (services) {
+          const servicesByLocale: Record<string, string[]> = { fr: activitiesInput };
+          for (const locale of targetLocales) {
+            servicesByLocale[locale] = activitiesInput.map((text, i) => translations[`activity_${i}`]?.[locale] ?? text);
+          }
+          update.services = servicesByLocale;
+        }
+
+        await db.update(establishments).set(update).where(eq(establishments.id, establishmentId));
+      })
+      .catch((err) => console.error("Background translation failed for establishment", establishmentId, err))
+  );
 
   revalidatePath("/", "layout");
   redirect(`/${formData.get("locale")}/admin/establissements`);

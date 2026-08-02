@@ -65,7 +65,8 @@
     "noReviews": "لا توجد آراء حتى الآن.",
     "basedOnReviews": "بناءً على {count} رأي",
     "viewCertificate": "عرض الشهادة الرسمية",
-    "morePhotos": "+{count} صور"
+    "morePhotos": "+{count} صور",
+    "closedForVacation": "مغلق من {start} إلى {end}"
   },
   "search": {
     "title": "بحث",
@@ -163,6 +164,10 @@
     "hoursClosed": "مغلق",
     "hoursOpenDay": "مفتوح",
     "hoursAddRange": "إضافة فترة زمنية (استراحة)",
+    "fieldVacation": "عطلة / إغلاق مؤقت",
+    "vacationHint": "اختياري. إذا كنت ستغلق مؤقتًا (عطلة، أعمال تجديد...)، حدد التواريخ: ستظهر رسالة تلقائيًا على ملفك العام خلال هذه الفترة.",
+    "vacationStart": "من",
+    "vacationEnd": "إلى",
     "fieldAddress": "العنوان",
     "fieldPhone": "الهاتف",
     "fieldWhatsapp": "واتساب",
@@ -182,6 +187,9 @@
     "scanning": "جارٍ تحليل الصورة...",
     "scanHint": "التقط صورة أو ارفع قائمة الطعام أو قائمة الأسعار المعروضة — سيضيف الذكاء الاصطناعي العناصر تلقائيًا إلى القائمة أعلاه لمراجعتها قبل الحفظ.",
     "scanError": "تعذر تحليل هذه الصورة، أعد المحاولة أو أضف المنتجات يدويًا.",
+    "fieldOtherActivities": "أنشطة أخرى في المكان",
+    "otherActivitiesHint": "اختياري. هل يقدم منشأتك أنشطة أو خدمات أخرى في المكان (مطعم، متجر، سبا، حمام...)؟ أضفها كل واحدة في سطر — ستظهر في ملفك العام.",
+    "otherActivitiesPlaceholder": "مطعم\nمتجر\nحمام ومساج",
     "fieldAmenities": "المرافق والخدمات",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "موقف سيارات",

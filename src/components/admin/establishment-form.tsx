@@ -2,6 +2,8 @@ import { upsertEstablishment } from "@/lib/admin-actions";
 import { PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
 import { SubmitButton } from "@/components/submit-button";
 import { CategorySubcategoryPicker } from "@/components/category-subcategory-picker";
+import { HoursEditor } from "@/components/hours-editor";
+import { ProductsEditor } from "@/components/products-editor";
 
 type Category = { id: number; type: string; name: Record<string, string> };
 type Subcategory = { slug: string; name: Record<string, string> };
@@ -13,13 +15,22 @@ type Establishment = {
   slug: string;
   name: Record<string, string>;
   description: Record<string, string>;
+  hours: Record<string, string> | null;
+  vacationStart: string | null;
+  vacationEnd: string | null;
   address: string | null;
   lat: number | null;
   lng: number | null;
   phone: string | null;
   whatsapp: string | null;
   website: string | null;
+  instagram: string | null;
+  facebook: string | null;
+  googleReviewsUrl: string | null;
+  tripadvisorUrl: string | null;
   priceLevel: string | null;
+  products: { name: Record<string, string>; price: number | null; category: Record<string, string> | null }[] | null;
+  services: Record<string, string[]> | null;
   parking: boolean | null;
   wifi: boolean | null;
   accessibility: boolean | null;
@@ -90,6 +101,30 @@ export function EstablishmentForm({
         <textarea name="description" defaultValue={establishment?.description.fr} rows={4} className={inputClass} />
       </div>
 
+      <div>
+        <label className={labelClass}>Horaires</label>
+        <HoursEditor
+          name="hours"
+          defaultValue={establishment?.hours?.fr ?? ""}
+          dayLabels={["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]}
+          closedLabel="Fermé"
+          openLabel="Ouvert"
+          addRangeLabel="Ajouter une plage (pause)"
+          copyLabel="Copier la veille"
+        />
+      </div>
+
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelClass}>Vacances / Fermeture temporaire — Du</label>
+          <input type="date" name="vacationStart" defaultValue={establishment?.vacationStart ?? ""} className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Vacances / Fermeture temporaire — Au</label>
+          <input type="date" name="vacationEnd" defaultValue={establishment?.vacationEnd ?? ""} className={inputClass} />
+        </div>
+      </section>
+
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div>
           <label className={labelClass}>Adresse</label>
@@ -120,6 +155,25 @@ export function EstablishmentForm({
         </div>
       </section>
 
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelClass}>Instagram</label>
+          <input name="instagram" defaultValue={establishment?.instagram ?? ""} placeholder="https://instagram.com/..." className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Facebook</label>
+          <input name="facebook" defaultValue={establishment?.facebook ?? ""} placeholder="https://facebook.com/..." className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Avis Google</label>
+          <input name="googleReviewsUrl" defaultValue={establishment?.googleReviewsUrl ?? ""} placeholder="https://g.page/r/..." className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Avis TripAdvisor</label>
+          <input name="tripadvisorUrl" defaultValue={establishment?.tripadvisorUrl ?? ""} placeholder="https://tripadvisor.com/..." className={inputClass} />
+        </div>
+      </section>
+
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div>
           <label className={labelClass}>Niveau de prix</label>
@@ -144,6 +198,41 @@ export function EstablishmentForm({
           </select>
         </div>
       </section>
+
+      <div>
+        <label className={labelClass}>Produits & Services</label>
+        <ProductsEditor
+          name="products"
+          defaultProducts={(establishment?.products ?? []).map((p) => ({
+            name: p.name.fr,
+            price: p.price,
+            category: p.category?.fr ?? null,
+          }))}
+          namePlaceholder="Nom du produit ou service"
+          pricePlaceholder="Prix (MAD)"
+          categoryPlaceholder="Catégorie (ex : Entrées)"
+          addLabel="Ajouter un produit"
+          scanLabel="Scanner un menu ou une carte de prix (photo)"
+          scanningLabel="Analyse de la photo en cours..."
+          scanHint="Prenez en photo ou importez votre menu, carte de prix ou tarifs affichés — l'IA les ajoutera automatiquement à la liste ci-dessus, à vérifier avant d'enregistrer."
+          scanErrorText="Impossible d'analyser cette image, réessayez ou ajoutez les produits manuellement."
+          scanSuccessTemplate="{count} élément(s) détecté(s) et ajouté(s) à la liste."
+        />
+      </div>
+
+      <div>
+        <label className={labelClass}>Autres activités sur place</label>
+        <p className="mb-2 text-xs text-foreground/50">
+          Restaurant, boutique, spa, hammam... si l&apos;établissement propose d&apos;autres activités sur place, une par ligne.
+        </p>
+        <textarea
+          name="otherActivities"
+          defaultValue={(establishment?.services?.fr ?? []).join("\n")}
+          rows={3}
+          className={inputClass}
+          placeholder={"Restaurant\nBoutique\nHammam & massage"}
+        />
+      </div>
 
       <section className="flex flex-wrap gap-6">
         <label className="flex items-center gap-2 text-sm">

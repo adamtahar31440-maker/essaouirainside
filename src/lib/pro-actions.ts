@@ -37,12 +37,38 @@ export async function applyAsProfessional(formData: FormData) {
   const sourceLocale = ALL_LOCALES.includes(requestedLocale) ? requestedLocale : "fr";
   const name = String(formData.get("name") ?? "");
   const description = String(formData.get("description") ?? "");
+  const hours = String(formData.get("hours") ?? "");
+
+  let productsInput: { name: string; price: number | null; category: string | null }[] = [];
+  try {
+    productsInput = JSON.parse(String(formData.get("products") ?? "[]"));
+  } catch {
+    productsInput = [];
+  }
+
+  // Other on-site activities (e.g. a hotel that also has a restaurant, a shop, a
+  // hammam) — kept as simple translated tags rather than real secondary categories,
+  // so the establishment still has one canonical category/URL for listings and search.
+  const activitiesInput = String(formData.get("otherActivities") ?? "")
+    .split(/\r?\n/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  const vacationStart = String(formData.get("vacationStart") ?? "") || null;
+  const vacationEnd = String(formData.get("vacationEnd") ?? "") || null;
 
   // Translating into all locales is an LLM call that can take several seconds; running it
   // before the insert made "Enregistrer" feel frozen. Save in the source locale immediately
   // and fill in the other locales afterwards via waitUntil, once the response has been sent.
   const localizedName = { [sourceLocale]: name };
   const localizedDescription = { [sourceLocale]: description };
+  const localizedHours = hours ? { [sourceLocale]: hours } : null;
+  const products = productsInput.map((p) => ({
+    name: { [sourceLocale]: p.name },
+    price: p.price,
+    category: p.category ? { [sourceLocale]: p.category } : null,
+  }));
+  const services = activitiesInput.length > 0 ? { [sourceLocale]: activitiesInput } : null;
 
   const [professional] = await db
     .insert(professionals)
@@ -64,13 +90,22 @@ export async function applyAsProfessional(formData: FormData) {
     slug: `${slugify(name)}-${professional.id}`,
     name: localizedName,
     description: localizedDescription,
+    hours: localizedHours,
+    vacationStart,
+    vacationEnd,
     address: String(formData.get("address") ?? ""),
     lat: formData.get("lat") ? Number(formData.get("lat")) : null,
     lng: formData.get("lng") ? Number(formData.get("lng")) : null,
     phone: String(formData.get("phone") ?? ""),
     whatsapp: String(formData.get("whatsapp") ?? ""),
     website: String(formData.get("website") ?? ""),
+    instagram: String(formData.get("instagram") ?? "") || null,
+    facebook: String(formData.get("facebook") ?? "") || null,
+    googleReviewsUrl: String(formData.get("googleReviewsUrl") ?? "") || null,
+    tripadvisorUrl: String(formData.get("tripadvisorUrl") ?? "") || null,
     priceLevel: String(formData.get("priceLevel") ?? "€€"),
+    products,
+    services,
     images: String(formData.get("images") ?? "")
       .split(/\r?\n/)
       .map((s) => s.trim())
@@ -86,17 +121,47 @@ export async function applyAsProfessional(formData: FormData) {
   }).returning();
 
   const targetLocales = ALL_LOCALES.filter((l) => l !== sourceLocale);
+  const translationFields: Record<string, string> = { name, description };
+  if (hours) translationFields.hours = hours;
+  productsInput.forEach((p, i) => {
+    translationFields[`product_${i}`] = p.name;
+    if (p.category) translationFields[`category_${i}`] = p.category;
+  });
+  activitiesInput.forEach((a, i) => {
+    translationFields[`activity_${i}`] = a;
+  });
+
   waitUntil(
-    translateFields({ name, description }, targetLocales, sourceLocale)
+    translateFields(translationFields, targetLocales, sourceLocale)
       .then(async (translations) => {
         if (Object.keys(translations).length === 0) return;
-        await db
-          .update(establishments)
-          .set({
-            name: { ...localizedName, ...translations.name },
-            description: { ...localizedDescription, ...translations.description },
-          })
-          .where(eq(establishments.id, establishment.id));
+
+        const update: Partial<typeof establishments.$inferInsert> = {
+          name: { ...localizedName, ...translations.name },
+          description: { ...localizedDescription, ...translations.description },
+        };
+
+        if (localizedHours) {
+          update.hours = { ...localizedHours, ...translations.hours };
+        }
+
+        if (products.length > 0) {
+          update.products = productsInput.map((p, i) => ({
+            name: { [sourceLocale]: p.name, ...translations[`product_${i}`] },
+            price: p.price,
+            category: p.category ? { [sourceLocale]: p.category, ...translations[`category_${i}`] } : null,
+          }));
+        }
+
+        if (services) {
+          const servicesByLocale: Record<string, string[]> = { [sourceLocale]: activitiesInput };
+          for (const locale of targetLocales) {
+            servicesByLocale[locale] = activitiesInput.map((text, i) => translations[`activity_${i}`]?.[locale] ?? text);
+          }
+          update.services = servicesByLocale;
+        }
+
+        await db.update(establishments).set(update).where(eq(establishments.id, establishment.id));
       })
       .catch((err) => console.error("Background translation failed for establishment", establishment.id, err))
   );
@@ -127,6 +192,14 @@ export async function updateOwnEstablishment(formData: FormData) {
     productsInput = [];
   }
 
+  const activitiesInput = String(formData.get("otherActivities") ?? "")
+    .split(/\r?\n/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  const vacationStart = String(formData.get("vacationStart") ?? "") || null;
+  const vacationEnd = String(formData.get("vacationEnd") ?? "") || null;
+
   let clientTranslations: Record<string, Record<string, string>> = {};
   try {
     clientTranslations = JSON.parse(String(formData.get("translations") ?? "{}"));
@@ -139,6 +212,9 @@ export async function updateOwnEstablishment(formData: FormData) {
   productsInput.forEach((p, i) => {
     translationFields[`product_${i}`] = p.name;
     if (p.category) translationFields[`category_${i}`] = p.category;
+  });
+  activitiesInput.forEach((a, i) => {
+    translationFields[`activity_${i}`] = a;
   });
 
   // The dashboard already translates language by language client-side (for a real
@@ -164,6 +240,19 @@ export async function updateOwnEstablishment(formData: FormData) {
     price: p.price,
     category: p.category ? { fr: p.category, ...translations[`category_${i}`] } : null,
   }));
+
+  const services =
+    activitiesInput.length > 0
+      ? {
+          fr: activitiesInput,
+          ...Object.fromEntries(
+            targetLocales.map((locale) => [
+              locale,
+              activitiesInput.map((text, i) => translations[`activity_${i}`]?.[locale] || text),
+            ])
+          ),
+        }
+      : null;
 
   const [subscription, plans] = await Promise.all([
     getSubscriptionByProfessionalId(professional.id),
@@ -194,9 +283,12 @@ export async function updateOwnEstablishment(formData: FormData) {
       googleReviewsUrl: String(formData.get("googleReviewsUrl") ?? "") || null,
       tripadvisorUrl: String(formData.get("tripadvisorUrl") ?? "") || null,
       hours: { fr: hours, ...translations.hours },
+      vacationStart,
+      vacationEnd,
       priceLevel: String(formData.get("priceLevel") ?? establishment.priceLevel ?? "€€"),
       images,
       products,
+      services,
       wifi: formData.get("wifi") === "on",
       parking: formData.get("parking") === "on",
       accessibility: formData.get("accessibility") === "on",

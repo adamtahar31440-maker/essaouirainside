@@ -65,7 +65,8 @@
     "noReviews": "Nessuna recensione per il momento.",
     "basedOnReviews": "Basato su {count} recensioni",
     "viewCertificate": "Vedi il certificato ufficiale",
-    "morePhotos": "+{count} foto"
+    "morePhotos": "+{count} foto",
+    "closedForVacation": "Chiuso dal {start} al {end}"
   },
   "search": {
     "title": "Ricerca",
@@ -163,6 +164,10 @@
     "hoursClosed": "Chiuso",
     "hoursOpenDay": "Aperto",
     "hoursAddRange": "Aggiungi una fascia oraria (pausa)",
+    "fieldVacation": "Ferie / Chiusura temporanea",
+    "vacationHint": "Facoltativo. Se chiudi temporaneamente (ferie, lavori...), indica le date: un avviso apparirà automaticamente sulla tua scheda pubblica durante questo periodo.",
+    "vacationStart": "Dal",
+    "vacationEnd": "Al",
     "fieldAddress": "Indirizzo",
     "fieldPhone": "Telefono",
     "fieldWhatsapp": "WhatsApp",
@@ -182,6 +187,9 @@
     "scanning": "Analisi della foto in corso...",
     "scanHint": "Scatta una foto o carica il tuo menu, listino prezzi o cartello prezzi — l'IA aggiungerà automaticamente gli articoli all'elenco sopra, da controllare prima di salvare.",
     "scanError": "Impossibile analizzare questa immagine, riprova o aggiungi i prodotti manualmente.",
+    "fieldOtherActivities": "Altre attività in loco",
+    "otherActivitiesHint": "Facoltativo. La tua attività offre altre attività o servizi in loco (ristorante, negozio, spa, hammam...)? Aggiungile una per riga — appariranno sulla tua scheda pubblica.",
+    "otherActivitiesPlaceholder": "Ristorante\nNegozio\nHammam e massaggi",
     "fieldAmenities": "Servizi e comfort",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "Parcheggio",

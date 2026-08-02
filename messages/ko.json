@@ -65,7 +65,8 @@
     "noReviews": "아직 리뷰가 없습니다.",
     "basedOnReviews": "리뷰 {count}개 기준",
     "viewCertificate": "공식 인증서 보기",
-    "morePhotos": "+{count}장의 사진"
+    "morePhotos": "+{count}장의 사진",
+    "closedForVacation": "{start}부터 {end}까지 휴업"
   },
   "search": {
     "title": "검색",
@@ -163,6 +164,10 @@
     "hoursClosed": "휴무",
     "hoursOpenDay": "영업",
     "hoursAddRange": "시간대 추가 (휴게시간)",
+    "fieldVacation": "휴가 / 임시 휴업",
+    "vacationHint": "선택 사항입니다. 임시로 휴업하는 경우(휴가, 공사 등) 날짜를 입력하세요. 해당 기간 동안 공개 페이지에 자동으로 안내 문구가 표시됩니다.",
+    "vacationStart": "부터",
+    "vacationEnd": "까지",
     "fieldAddress": "주소",
     "fieldPhone": "전화번호",
     "fieldWhatsapp": "WhatsApp",
@@ -182,6 +187,9 @@
     "scanning": "사진 분석 중...",
     "scanHint": "메뉴, 가격표 또는 게시된 요금표를 촬영하거나 업로드하세요 — AI가 자동으로 위 목록에 항목을 추가하며, 저장 전에 검토할 수 있습니다.",
     "scanError": "이 이미지를 분석할 수 없습니다. 다시 시도하거나 제품을 수동으로 추가하세요.",
+    "fieldOtherActivities": "현장 기타 활동/서비스",
+    "otherActivitiesHint": "선택 사항입니다. 업체에서 현장에서 제공하는 다른 활동이나 서비스가 있나요(레스토랑, 상점, 스파, 하맘...)? 한 줄에 하나씩 추가하세요 — 공개 페이지에 표시됩니다.",
+    "otherActivitiesPlaceholder": "레스토랑\n상점\n하맘 & 마사지",
     "fieldAmenities": "편의시설 및 서비스",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "주차 공간",

@@ -65,7 +65,8 @@
     "noReviews": "Henüz yorum yok.",
     "basedOnReviews": "{count} yoruma dayanmaktadır",
     "viewCertificate": "Resmi sertifikayı görüntüle",
-    "morePhotos": "+{count} fotoğraf"
+    "morePhotos": "+{count} fotoğraf",
+    "closedForVacation": "{start} - {end} tarihleri arasında kapalı"
   },
   "search": {
     "title": "Arama",
@@ -163,6 +164,10 @@
     "hoursClosed": "Kapalı",
     "hoursOpenDay": "Açık",
     "hoursAddRange": "Zaman aralığı ekle (mola)",
+    "fieldVacation": "Tatil / Geçici kapanış",
+    "vacationHint": "İsteğe bağlı. Geçici olarak kapatacaksanız (tatil, tadilat...) tarihleri belirtin: bu süre boyunca herkese açık sayfanızda otomatik olarak bir bildirim görünecektir.",
+    "vacationStart": "Başlangıç",
+    "vacationEnd": "Bitiş",
     "fieldAddress": "Adres",
     "fieldPhone": "Telefon",
     "fieldWhatsapp": "WhatsApp",
@@ -182,6 +187,9 @@
     "scanning": "Fotoğraf analiz ediliyor...",
     "scanHint": "Menünüzün, fiyat listenizin veya fiyat panonuzun fotoğrafını çekin veya yükleyin — yapay zeka öğeleri otomatik olarak yukarıdaki listeye ekleyecek, kaydetmeden önce gözden geçirebilirsiniz.",
     "scanError": "Bu görsel analiz edilemedi, tekrar deneyin veya ürünleri manuel olarak ekleyin.",
+    "fieldOtherActivities": "Tesiste sunulan diğer faaliyetler",
+    "otherActivitiesHint": "İsteğe bağlı. İşletmeniz tesiste başka faaliyetler veya hizmetler sunuyor mu (restoran, mağaza, spa, hamam...)? Her satıra bir tane olacak şekilde ekleyin — herkese açık sayfanızda görünecektir.",
+    "otherActivitiesPlaceholder": "Restoran\nMağaza\nHamam ve masaj",
     "fieldAmenities": "Olanaklar ve Hizmetler",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "Otopark",

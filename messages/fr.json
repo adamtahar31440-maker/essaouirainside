@@ -65,7 +65,8 @@
     "noReviews": "Aucun avis pour le moment.",
     "basedOnReviews": "Basé sur {count} avis",
     "viewCertificate": "Voir le certificat officiel",
-    "morePhotos": "+{count} photos"
+    "morePhotos": "+{count} photos",
+    "closedForVacation": "Fermé du {start} au {end}"
   },
   "search": {
     "title": "Recherche",
@@ -163,6 +164,10 @@
     "hoursClosed": "Fermé",
     "hoursOpenDay": "Ouvert",
     "hoursAddRange": "Ajouter une plage (pause)",
+    "fieldVacation": "Vacances / Fermeture temporaire",
+    "vacationHint": "Facultatif. Si vous fermez temporairement (vacances, travaux...), indiquez les dates : un message s'affichera automatiquement sur votre fiche publique pendant cette période.",
+    "vacationStart": "Du",
+    "vacationEnd": "Au",
     "fieldAddress": "Adresse",
     "fieldPhone": "Téléphone",
     "fieldWhatsapp": "WhatsApp",
@@ -182,6 +187,9 @@
     "scanning": "Analyse de la photo en cours...",
     "scanHint": "Prenez en photo ou importez votre menu, carte de prix ou tarifs affichés — l'IA les ajoutera automatiquement à la liste ci-dessus, à vérifier avant d'enregistrer.",
     "scanError": "Impossible d'analyser cette image, réessayez ou ajoutez les produits manuellement.",
+    "fieldOtherActivities": "Autres activités sur place",
+    "otherActivitiesHint": "Facultatif. Votre établissement propose-t-il d'autres activités ou services sur place (restaurant, boutique, spa, hammam...) ? Ajoutez-les une par ligne — elles s'afficheront sur votre fiche publique.",
+    "otherActivitiesPlaceholder": "Restaurant\nBoutique\nHammam & massage",
     "fieldAmenities": "Équipements & Services",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "Parking",

@@ -159,6 +159,7 @@ export default async function ProDashboardPage({
               description: myEstablishment.description,
               hours: myEstablishment.hours,
               products: myEstablishment.products,
+              services: myEstablishment.services,
             }}
             saveLabel={t("save")}
             savePendingLabel={t("savePending")}
@@ -214,6 +215,31 @@ export default async function ProDashboardPage({
                 openLabel={t("hoursOpenDay")}
                 addRangeLabel={t("hoursAddRange")}
               />
+            </div>
+
+            <div>
+              <label className={labelClass}>{t("fieldVacation")}</label>
+              <p className="mb-2 text-xs text-foreground/50">{t("vacationHint")}</p>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className={labelClass}>{t("vacationStart")}</label>
+                  <input
+                    type="date"
+                    name="vacationStart"
+                    defaultValue={myEstablishment.vacationStart ?? ""}
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>{t("vacationEnd")}</label>
+                  <input
+                    type="date"
+                    name="vacationEnd"
+                    defaultValue={myEstablishment.vacationEnd ?? ""}
+                    className={inputClass}
+                  />
+                </div>
+              </div>
             </div>
 
             <div>
@@ -312,6 +338,18 @@ export default async function ProDashboardPage({
                 scanHint={t("scanHint")}
                 scanErrorText={t("scanError")}
                 scanSuccessTemplate={t.raw("scanSuccess")}
+              />
+            </div>
+
+            <div>
+              <label className={labelClass}>{t("fieldOtherActivities")}</label>
+              <p className="mb-2 text-xs text-foreground/50">{t("otherActivitiesHint")}</p>
+              <textarea
+                name="otherActivities"
+                defaultValue={(myEstablishment.services?.fr ?? []).join("\n")}
+                rows={3}
+                className={inputClass}
+                placeholder={t("otherActivitiesPlaceholder")}
               />
             </div>
 

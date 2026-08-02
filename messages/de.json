@@ -65,7 +65,8 @@
     "noReviews": "Noch keine Bewertungen.",
     "basedOnReviews": "Basierend auf {count} Bewertungen",
     "viewCertificate": "Offizielles Zertifikat ansehen",
-    "morePhotos": "+{count} Fotos"
+    "morePhotos": "+{count} Fotos",
+    "closedForVacation": "Geschlossen vom {start} bis {end}"
   },
   "search": {
     "title": "Suche",
@@ -163,6 +164,10 @@
     "hoursClosed": "Geschlossen",
     "hoursOpenDay": "Geöffnet",
     "hoursAddRange": "Zeitfenster hinzufügen (Pause)",
+    "fieldVacation": "Urlaub / Vorübergehende Schließung",
+    "vacationHint": "Optional. Wenn Sie vorübergehend schließen (Urlaub, Renovierung...), geben Sie die Daten an: Während dieses Zeitraums wird automatisch ein Hinweis auf Ihrem öffentlichen Profil angezeigt.",
+    "vacationStart": "Von",
+    "vacationEnd": "Bis",
     "fieldAddress": "Adresse",
     "fieldPhone": "Telefon",
     "fieldWhatsapp": "WhatsApp",
@@ -182,6 +187,9 @@
     "scanning": "Foto wird analysiert...",
     "scanHint": "Fotografieren oder laden Sie Ihre Speisekarte, Preisliste oder Preistafel hoch — die KI fügt die Einträge automatisch zur obigen Liste hinzu, damit Sie sie vor dem Speichern prüfen können.",
     "scanError": "Dieses Bild konnte nicht analysiert werden. Versuchen Sie es erneut oder fügen Sie die Produkte manuell hinzu.",
+    "fieldOtherActivities": "Weitere Angebote vor Ort",
+    "otherActivitiesHint": "Optional. Bietet Ihr Betrieb weitere Aktivitäten oder Dienstleistungen vor Ort an (Restaurant, Boutique, Spa, Hammam...)? Fügen Sie sie zeilenweise hinzu — sie werden auf Ihrem öffentlichen Profil angezeigt.",
+    "otherActivitiesPlaceholder": "Restaurant\nBoutique\nHammam & Massage",
     "fieldAmenities": "Ausstattung & Services",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "Parkplatz",

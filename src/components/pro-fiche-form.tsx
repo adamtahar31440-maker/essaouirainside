@@ -11,6 +11,7 @@ type Establishment = {
   description: Record<string, string>;
   hours?: Record<string, string> | null;
   products?: { name: Record<string, string>; price: number | null; category: Record<string, string> | null }[] | null;
+  services?: Record<string, string[]> | null;
 };
 
 export function ProFicheForm({
@@ -58,11 +59,18 @@ export function ProFicheForm({
     } catch {
       productsInput = [];
     }
+    const activitiesInput = String(formData.get("otherActivities") ?? "")
+      .split(/\r?\n/)
+      .map((s) => s.trim())
+      .filter(Boolean);
 
     const fields: Record<string, string> = { name, description, hours };
     productsInput.forEach((p, i) => {
       if (p.name) fields[`product_${i}`] = p.name;
       if (p.category) fields[`category_${i}`] = p.category;
+    });
+    activitiesInput.forEach((a, i) => {
+      fields[`activity_${i}`] = a;
     });
 
     // Changing just the photos (or another non-text field) shouldn't re-translate
@@ -82,7 +90,8 @@ export function ProFicheForm({
       normalizeText(name) === normalizeText(establishment.name.fr) &&
       normalizeText(description) === normalizeText(establishment.description.fr) &&
       hours === (establishment.hours?.fr ?? "") &&
-      JSON.stringify(productsInput) === JSON.stringify(originalProducts);
+      JSON.stringify(productsInput) === JSON.stringify(originalProducts) &&
+      JSON.stringify(activitiesInput) === JSON.stringify(establishment.services?.fr ?? []);
 
     const allTranslations: Record<string, Record<string, string>> = {};
     if (textUnchanged && establishment) {
@@ -95,6 +104,9 @@ export function ProFicheForm({
         (establishment.products ?? []).forEach((p, i) => {
           if (p.name[code]) flat[`product_${i}`] = p.name[code];
           if (p.category?.[code]) flat[`category_${i}`] = p.category[code];
+        });
+        (establishment.services?.[code] ?? establishment.services?.fr ?? []).forEach((text, i) => {
+          if (text) flat[`activity_${i}`] = text;
         });
         allTranslations[code] = flat;
       }

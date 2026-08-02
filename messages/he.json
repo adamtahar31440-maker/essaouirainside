@@ -65,7 +65,8 @@
     "noReviews": "אין עדיין חוות דעת.",
     "basedOnReviews": "בהתבסס על {count} חוות דעת",
     "viewCertificate": "צפייה בתעודה הרשמית",
-    "morePhotos": "+{count} תמונות"
+    "morePhotos": "+{count} תמונות",
+    "closedForVacation": "סגור מ-{start} עד {end}"
   },
   "search": {
     "title": "חיפוש",
@@ -163,6 +164,10 @@
     "hoursClosed": "סגור",
     "hoursOpenDay": "פתוח",
     "hoursAddRange": "הוספת טווח שעות (הפסקה)",
+    "fieldVacation": "חופשה / סגירה זמנית",
+    "vacationHint": "אופציונלי. אם אתם סוגרים באופן זמני (חופשה, שיפוצים...), ציינו את התאריכים: הודעה תופיע אוטומטית בעמוד הציבורי שלכם במהלך תקופה זו.",
+    "vacationStart": "מ־",
+    "vacationEnd": "עד",
     "fieldAddress": "כתובת",
     "fieldPhone": "טלפון",
     "fieldWhatsapp": "וואטסאפ",
@@ -182,6 +187,9 @@
     "scanning": "מנתח את התמונה...",
     "scanHint": "צלמו או העלו את התפריט, רשימת המחירים או לוח המחירים שלכם — הבינה המלאכותית תוסיף אוטומטית את הפריטים לרשימה למעלה, לבדיקה לפני השמירה.",
     "scanError": "לא ניתן היה לנתח את התמונה הזו, נסו שוב או הוסיפו את המוצרים ידנית.",
+    "fieldOtherActivities": "פעילויות נוספות במקום",
+    "otherActivitiesHint": "אופציונלי. האם העסק שלכם מציע פעילויות או שירותים נוספים במקום (מסעדה, חנות, ספא, חמאם...)? הוסיפו אותם אחד בכל שורה — הם יופיעו בעמוד הציבורי שלכם.",
+    "otherActivitiesPlaceholder": "מסעדה\nחנות\nחמאם ועיסויים",
     "fieldAmenities": "מתקנים ושירותים",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "חניה",

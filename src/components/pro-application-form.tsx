@@ -7,6 +7,8 @@ import { PRO_FORM_STRINGS } from "@/lib/pro-form-i18n";
 import { PRICE_LEVELS, priceLevelLabel } from "@/lib/labels";
 import { AddressLocationPicker } from "@/components/address-location-picker";
 import { CategorySubcategoryPicker } from "@/components/category-subcategory-picker";
+import { HoursEditor } from "@/components/hours-editor";
+import { ProductsEditor } from "@/components/products-editor";
 import { ImageUploader } from "@/components/image-uploader";
 import { PhoneField } from "@/components/phone-field";
 import { SubmitButton } from "@/components/submit-button";
@@ -140,6 +142,33 @@ export function ProApplicationForm({
         </div>
 
         <div>
+          <label className={labelClass}>{t.fieldHours}</label>
+          <HoursEditor
+            name="hours"
+            dayLabels={[t.dayMon, t.dayTue, t.dayWed, t.dayThu, t.dayFri, t.daySat, t.daySun]}
+            closedLabel={t.hoursClosed}
+            openLabel={t.hoursOpenDay}
+            addRangeLabel={t.hoursAddRange}
+            copyLabel={t.hoursCopyPrevious}
+          />
+        </div>
+
+        <div>
+          <label className={labelClass}>{t.fieldVacation}</label>
+          <p className="mb-2 text-xs text-foreground/50">{t.vacationHint}</p>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label className={labelClass}>{t.vacationStart}</label>
+              <input type="date" name="vacationStart" className={inputClass} />
+            </div>
+            <div>
+              <label className={labelClass}>{t.vacationEnd}</label>
+              <input type="date" name="vacationEnd" className={inputClass} />
+            </div>
+          </div>
+        </div>
+
+        <div>
           <label className={labelClass}>{t.address}</label>
           <AddressLocationPicker className={inputClass} dir={dir} />
           <p className="mt-1 text-xs text-foreground/50">{t.addressHint}</p>
@@ -161,6 +190,29 @@ export function ProApplicationForm({
         </div>
 
         <div>
+          <label className={labelClass}>{t.fieldSocialReviews}</label>
+          <p className="mb-2 text-xs text-foreground/50">{t.socialReviewsHint}</p>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label className={labelClass}>Instagram</label>
+              <input name="instagram" placeholder="https://instagram.com/..." className={inputClass} />
+            </div>
+            <div>
+              <label className={labelClass}>Facebook</label>
+              <input name="facebook" placeholder="https://facebook.com/..." className={inputClass} />
+            </div>
+            <div>
+              <label className={labelClass}>{t.googleReviewsLabel}</label>
+              <input name="googleReviewsUrl" placeholder="https://g.page/r/..." className={inputClass} />
+            </div>
+            <div>
+              <label className={labelClass}>{t.tripadvisorLabel}</label>
+              <input name="tripadvisorUrl" placeholder="https://tripadvisor.com/..." className={inputClass} />
+            </div>
+          </div>
+        </div>
+
+        <div>
           <label className={labelClass}>{t.priceLevel}</label>
           <select name="priceLevel" defaultValue="€€" className={inputClass}>
             {PRICE_LEVELS.map((level) => (
@@ -170,6 +222,35 @@ export function ProApplicationForm({
             ))}
           </select>
           <p className="mt-1 text-xs text-foreground/50">{t.priceLevelHint}</p>
+        </div>
+
+        <div>
+          <label className={labelClass}>{t.fieldProducts}</label>
+          <p className="mb-2 text-xs text-foreground/50">{t.productsHint}</p>
+          <ProductsEditor
+            name="products"
+            namePlaceholder={t.productNamePlaceholder}
+            pricePlaceholder={t.productPricePlaceholder}
+            categoryPlaceholder={t.productCategoryPlaceholder}
+            addLabel={t.addProduct}
+            scanLabel={t.scanDocument}
+            scanningLabel={t.scanning}
+            scanHint={t.scanHint}
+            scanErrorText={t.scanErrorText}
+            scanSuccessTemplate={t.scanSuccessTemplate}
+          />
+        </div>
+
+        <div>
+          <label className={labelClass}>{t.fieldOtherActivities}</label>
+          <p className="mb-2 text-xs text-foreground/50">{t.otherActivitiesHint}</p>
+          <textarea
+            name="otherActivities"
+            rows={3}
+            placeholder={t.otherActivitiesPlaceholder}
+            className={inputClass}
+            dir={dir}
+          />
         </div>
 
         <div>

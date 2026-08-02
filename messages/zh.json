@@ -65,7 +65,8 @@
     "noReviews": "暂无评价。",
     "basedOnReviews": "基于 {count} 条评价",
     "viewCertificate": "查看官方证书",
-    "morePhotos": "+{count} 张照片"
+    "morePhotos": "+{count} 张照片",
+    "closedForVacation": "{start} 至 {end} 停业"
   },
   "search": {
     "title": "搜索",
@@ -163,6 +164,10 @@
     "hoursClosed": "休息",
     "hoursOpenDay": "营业",
     "hoursAddRange": "添加时间段（午休）",
+    "fieldVacation": "假期 / 临时停业",
+    "vacationHint": "可选。如果您将临时停业（假期、装修等），请设置日期：在此期间，公开页面将自动显示提示信息。",
+    "vacationStart": "从",
+    "vacationEnd": "至",
     "fieldAddress": "地址",
     "fieldPhone": "电话",
     "fieldWhatsapp": "WhatsApp",
@@ -182,6 +187,9 @@
     "scanning": "正在分析照片...",
     "scanHint": "拍照或上传您的菜单、价目表或价目牌——AI 会自动将条目添加到上方列表，保存前请核对。",
     "scanError": "无法分析此图片，请重试或手动添加产品。",
+    "fieldOtherActivities": "现场其他活动/服务",
+    "otherActivitiesHint": "可选。您的商户是否在现场提供其他活动或服务（餐厅、商店、水疗、哈马姆浴...）？请每行添加一项——将显示在您的公开页面上。",
+    "otherActivitiesPlaceholder": "餐厅\n商店\n哈马姆浴与按摩",
     "fieldAmenities": "设施与服务",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "停车场",

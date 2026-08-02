@@ -8,6 +8,7 @@ import {
   timestamp,
   doublePrecision,
   integer,
+  date,
 } from "drizzle-orm/pg-core";
 
 // Localized text is stored as JSONB: { fr: "...", en: "...", ar: "..." }
@@ -53,7 +54,15 @@ export const establishments = pgTable("establishments", {
   googleReviewsUrl: varchar("google_reviews_url", { length: 255 }),
   tripadvisorUrl: varchar("tripadvisor_url", { length: 255 }),
   hours: jsonb("hours").$type<Localized>(),
+  // Optional single closure window (e.g. annual vacation) — while today falls
+  // within [vacationStart, vacationEnd], the public listing shows a closed banner.
+  vacationStart: date("vacation_start"),
+  vacationEnd: date("vacation_end"),
   priceLevel: varchar("price_level", { length: 8 }), // €, €€, €€€
+  // Free-form tags for other activities offered on-site (e.g. a hotel that also
+  // has a restaurant, a shop, a hammam) — an establishment keeps a single primary
+  // category/subcategory for its URL and listing pages, these are just labels
+  // shown on its own page, translated like other list content.
   services: jsonb("services").$type<LocalizedList>(),
   // Merchant-editable product/service list — name is translated like other
   // content, price is optional (MAD, whole units) since not every listing

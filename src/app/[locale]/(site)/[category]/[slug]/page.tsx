@@ -161,6 +161,15 @@ export default async function EstablishmentPage({
     else groups.push({ category: categoryLabel, items: [p] });
     return groups;
   }, []);
+  const today = new Date().toISOString().slice(0, 10);
+  const isOnVacation = !!(e.vacationStart && e.vacationEnd && today >= e.vacationStart && today <= e.vacationEnd);
+  const vacationMessage = isOnVacation
+    ? t("closedForVacation", {
+        start: new Date(e.vacationStart as string).toLocaleDateString(locale, { day: "numeric", month: "long" }),
+        end: new Date(e.vacationEnd as string).toLocaleDateString(locale, { day: "numeric", month: "long" }),
+      })
+    : null;
+
   const review = e.ourReview?.[locale] ?? e.ourReview?.fr;
   const hours = e.hours?.[locale] ?? e.hours?.fr;
   const faq = e.faq ?? [];
@@ -202,6 +211,12 @@ export default async function EstablishmentPage({
           <ChevronRight size={12} className="rtl:rotate-180" />
           <span className="truncate text-foreground/70">{name}</span>
         </nav>
+
+        {vacationMessage && (
+          <p className="mt-4 rounded-xl bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800">
+            {vacationMessage}
+          </p>
+        )}
       </div>
 
       {images.length > 0 && (

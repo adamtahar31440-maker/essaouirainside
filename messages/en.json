@@ -65,7 +65,8 @@
     "noReviews": "No reviews yet.",
     "basedOnReviews": "Based on {count} reviews",
     "viewCertificate": "View official certificate",
-    "morePhotos": "+{count} photos"
+    "morePhotos": "+{count} photos",
+    "closedForVacation": "Closed from {start} to {end}"
   },
   "search": {
     "title": "Search",
@@ -163,6 +164,10 @@
     "hoursClosed": "Closed",
     "hoursOpenDay": "Open",
     "hoursAddRange": "Add a time slot (break)",
+    "fieldVacation": "Vacation / Temporary closure",
+    "vacationHint": "Optional. If you're closing temporarily (vacation, renovations...), set the dates: a notice will automatically appear on your public listing during that period.",
+    "vacationStart": "From",
+    "vacationEnd": "To",
     "fieldAddress": "Address",
     "fieldPhone": "Phone",
     "fieldWhatsapp": "WhatsApp",
@@ -182,6 +187,9 @@
     "scanning": "Analyzing photo...",
     "scanHint": "Take a photo or upload your menu, price list, or price board — AI will automatically add the items to the list above for you to review before saving.",
     "scanError": "Couldn't analyze this image, try again or add products manually.",
+    "fieldOtherActivities": "Other activities on-site",
+    "otherActivitiesHint": "Optional. Does your establishment offer other activities or services on-site (restaurant, shop, spa, hammam...)? Add them one per line — they'll appear on your public listing.",
+    "otherActivitiesPlaceholder": "Restaurant\nShop\nHammam & massage",
     "fieldAmenities": "Amenities & Services",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "Parking",
