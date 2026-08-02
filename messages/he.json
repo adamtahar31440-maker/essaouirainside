@@ -190,6 +190,8 @@
     "fieldOtherActivities": "פעילויות נוספות במקום",
     "otherActivitiesHint": "אופציונלי. האם העסק שלכם מציע פעילויות או שירותים נוספים במקום (מסעדה, חנות, ספא, חמאם...)? הוסיפו אותם אחד בכל שורה — הם יופיעו בעמוד הציבורי שלכם.",
     "otherActivitiesPlaceholder": "מסעדה\nחנות\nחמאם ועיסויים",
+    "otherOptionLabel": "אחר",
+    "otherActivitySpecifyPlaceholder": "פרטו את הפעילות שלכם",
     "fieldAmenities": "מתקנים ושירותים",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "חניה",

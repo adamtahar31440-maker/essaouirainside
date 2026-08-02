@@ -190,6 +190,8 @@
     "fieldOtherActivities": "أنشطة أخرى في المكان",
     "otherActivitiesHint": "اختياري. هل يقدم منشأتك أنشطة أو خدمات أخرى في المكان (مطعم، متجر، سبا، حمام...)؟ أضفها كل واحدة في سطر — ستظهر في ملفك العام.",
     "otherActivitiesPlaceholder": "مطعم\nمتجر\nحمام ومساج",
+    "otherOptionLabel": "أخرى",
+    "otherActivitySpecifyPlaceholder": "حدد نشاطك",
     "fieldAmenities": "المرافق والخدمات",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "موقف سيارات",

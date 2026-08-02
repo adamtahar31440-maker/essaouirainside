@@ -190,6 +190,8 @@
     "fieldOtherActivities": "Tesiste sunulan diğer faaliyetler",
     "otherActivitiesHint": "İsteğe bağlı. İşletmeniz tesiste başka faaliyetler veya hizmetler sunuyor mu (restoran, mağaza, spa, hamam...)? Her satıra bir tane olacak şekilde ekleyin — herkese açık sayfanızda görünecektir.",
     "otherActivitiesPlaceholder": "Restoran\nMağaza\nHamam ve masaj",
+    "otherOptionLabel": "Diğer",
+    "otherActivitySpecifyPlaceholder": "Faaliyetinizi belirtin",
     "fieldAmenities": "Olanaklar ve Hizmetler",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "Otopark",

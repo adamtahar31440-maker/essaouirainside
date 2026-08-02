@@ -190,6 +190,8 @@
     "fieldOtherActivities": "Outras atividades no local",
     "otherActivitiesHint": "Opcional. O seu estabelecimento oferece outras atividades ou serviços no local (restaurante, loja, spa, hammam...)? Adicione-as uma por linha — vão aparecer na sua ficha pública.",
     "otherActivitiesPlaceholder": "Restaurante\nLoja\nHammam e massagens",
+    "otherOptionLabel": "Outro",
+    "otherActivitySpecifyPlaceholder": "Especifique a sua atividade",
     "fieldAmenities": "Comodidades e serviços",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "Estacionamento",

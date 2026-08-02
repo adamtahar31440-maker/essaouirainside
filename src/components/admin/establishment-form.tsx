@@ -4,6 +4,8 @@ import { SubmitButton } from "@/components/submit-button";
 import { CategorySubcategoryPicker } from "@/components/category-subcategory-picker";
 import { HoursEditor } from "@/components/hours-editor";
 import { ProductsEditor } from "@/components/products-editor";
+import { ActivityTagsPicker } from "@/components/activity-tags-picker";
+import { flattenSubcategories } from "@/lib/labels";
 
 type Category = { id: number; type: string; name: Record<string, string> };
 type Subcategory = { slug: string; name: Record<string, string> };
@@ -61,6 +63,7 @@ export function EstablishmentForm({
   professionals?: Professional[];
   establishment?: Establishment;
 }) {
+  const activityOptions = flattenSubcategories(categories, subcategoriesByCategory);
   return (
     <form action={upsertEstablishment} className="space-y-8">
       <input type="hidden" name="locale" value={locale} />
@@ -223,14 +226,14 @@ export function EstablishmentForm({
       <div>
         <label className={labelClass}>Autres activités sur place</label>
         <p className="mb-2 text-xs text-foreground/50">
-          Restaurant, boutique, spa, hammam... si l&apos;établissement propose d&apos;autres activités sur place, une par ligne.
+          Si l&apos;établissement propose d&apos;autres activités sur place (ex : un hôtel avec restaurant, boutique et hammam).
         </p>
-        <textarea
-          name="otherActivities"
-          defaultValue={(establishment?.services?.fr ?? []).join("\n")}
-          rows={3}
-          className={inputClass}
-          placeholder={"Restaurant\nBoutique\nHammam & massage"}
+        <ActivityTagsPicker
+          options={activityOptions}
+          locale="fr"
+          defaultValues={establishment?.services?.fr ?? []}
+          otherLabel="Autre"
+          otherPlaceholder="Précisez votre activité"
         />
       </div>
 

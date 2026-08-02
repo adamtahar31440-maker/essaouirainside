@@ -190,6 +190,8 @@
     "fieldOtherActivities": "Другие услуги на месте",
     "otherActivitiesHint": "Необязательно. Предлагает ли ваше заведение другие услуги на месте (ресторан, магазин, спа, хаммам...)? Добавьте их по одной в строке — они появятся на вашей публичной странице.",
     "otherActivitiesPlaceholder": "Ресторан\nМагазин\nХаммам и массаж",
+    "otherOptionLabel": "Другое",
+    "otherActivitySpecifyPlaceholder": "Уточните вашу деятельность",
     "fieldAmenities": "Удобства и услуги",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "Парковка",

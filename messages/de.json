@@ -190,6 +190,8 @@
     "fieldOtherActivities": "Weitere Angebote vor Ort",
     "otherActivitiesHint": "Optional. Bietet Ihr Betrieb weitere Aktivitäten oder Dienstleistungen vor Ort an (Restaurant, Boutique, Spa, Hammam...)? Fügen Sie sie zeilenweise hinzu — sie werden auf Ihrem öffentlichen Profil angezeigt.",
     "otherActivitiesPlaceholder": "Restaurant\nBoutique\nHammam & Massage",
+    "otherOptionLabel": "Andere",
+    "otherActivitySpecifyPlaceholder": "Geben Sie Ihre Tätigkeit an",
     "fieldAmenities": "Ausstattung & Services",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "Parkplatz",

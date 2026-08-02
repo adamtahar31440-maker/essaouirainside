@@ -190,6 +190,8 @@
     "fieldOtherActivities": "现场其他活动/服务",
     "otherActivitiesHint": "可选。您的商户是否在现场提供其他活动或服务（餐厅、商店、水疗、哈马姆浴...）？请每行添加一项——将显示在您的公开页面上。",
     "otherActivitiesPlaceholder": "餐厅\n商店\n哈马姆浴与按摩",
+    "otherOptionLabel": "其他",
+    "otherActivitySpecifyPlaceholder": "请说明您的经营活动",
     "fieldAmenities": "设施与服务",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "停车场",

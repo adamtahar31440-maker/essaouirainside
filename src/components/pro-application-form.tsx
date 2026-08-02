@@ -9,9 +9,11 @@ import { AddressLocationPicker } from "@/components/address-location-picker";
 import { CategorySubcategoryPicker } from "@/components/category-subcategory-picker";
 import { HoursEditor } from "@/components/hours-editor";
 import { ProductsEditor } from "@/components/products-editor";
+import { ActivityTagsPicker } from "@/components/activity-tags-picker";
 import { ImageUploader } from "@/components/image-uploader";
 import { PhoneField } from "@/components/phone-field";
 import { SubmitButton } from "@/components/submit-button";
+import { flattenSubcategories } from "@/lib/labels";
 
 const RTL_LOCALES = ["ar", "he"];
 
@@ -32,6 +34,7 @@ export function ProApplicationForm({
   const [lang, setLang] = useState(ALL_LOCALES.includes(defaultLocale) ? defaultLocale : "fr");
   const t = PRO_FORM_STRINGS[lang] ?? PRO_FORM_STRINGS.fr;
   const dir = RTL_LOCALES.includes(lang) ? "rtl" : "ltr";
+  const activityOptions = flattenSubcategories(categories, subcategoriesByCategory);
 
   const nameRef = useRef<HTMLInputElement>(null);
   const categorySelectRef = useRef<HTMLSelectElement>(null);
@@ -107,6 +110,8 @@ export function ProApplicationForm({
           categoryRef={categorySelectRef}
           categoryLabel={t.category}
           subcategoryLabel={t.subcategory}
+          otherLabel={t.otherOptionLabel}
+          otherPlaceholder={t.otherActivitySpecifyPlaceholder}
         />
 
         <div>
@@ -244,12 +249,11 @@ export function ProApplicationForm({
         <div>
           <label className={labelClass}>{t.fieldOtherActivities}</label>
           <p className="mb-2 text-xs text-foreground/50">{t.otherActivitiesHint}</p>
-          <textarea
-            name="otherActivities"
-            rows={3}
-            placeholder={t.otherActivitiesPlaceholder}
-            className={inputClass}
-            dir={dir}
+          <ActivityTagsPicker
+            options={activityOptions}
+            locale={lang}
+            otherLabel={t.otherOptionLabel}
+            otherPlaceholder={t.otherActivitySpecifyPlaceholder}
           />
         </div>
 

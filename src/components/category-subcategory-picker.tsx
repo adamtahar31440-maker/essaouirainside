@@ -5,6 +5,8 @@ import { useState } from "react";
 type Category = { id: number; name: Record<string, string> };
 type Subcategory = { slug: string; name: Record<string, string> };
 
+const OTHER_VALUE = "__other__";
+
 const inputClass =
   "w-full rounded-lg border border-black/10 px-3 py-2 text-sm outline-none focus:border-ocean-dark";
 const labelClass = "mb-1 block text-xs font-semibold text-foreground/60";
@@ -18,6 +20,8 @@ export function CategorySubcategoryPicker({
   categoryRef,
   categoryLabel = "Catégorie",
   subcategoryLabel = "Sous-catégorie",
+  otherLabel = "Autre",
+  otherPlaceholder = "Précisez votre activité",
 }: {
   categories: Category[];
   subcategoriesByCategory: Record<number, Subcategory[]>;
@@ -27,18 +31,26 @@ export function CategorySubcategoryPicker({
   categoryRef?: React.RefObject<HTMLSelectElement | null>;
   categoryLabel?: string;
   subcategoryLabel?: string;
+  otherLabel?: string;
+  otherPlaceholder?: string;
 }) {
   const [categoryId, setCategoryId] = useState<number>(defaultCategoryId ?? categories[0]?.id);
   const subs = subcategoriesByCategory[categoryId] ?? [];
+  const defaultIsKnown = !!defaultSubcategory && subs.some((s) => s.slug === defaultSubcategory);
+  const defaultIsOther = !!defaultSubcategory && !defaultIsKnown;
   const [subcategory, setSubcategory] = useState<string>(
-    defaultSubcategory && subs.some((s) => s.slug === defaultSubcategory) ? defaultSubcategory : (subs[0]?.slug ?? "")
+    defaultIsKnown ? defaultSubcategory! : defaultIsOther ? OTHER_VALUE : subs[0]?.slug ?? ""
   );
+  const [otherText, setOtherText] = useState<string>(defaultIsOther ? defaultSubcategory! : "");
 
   function handleCategoryChange(id: number) {
     setCategoryId(id);
     const next = subcategoriesByCategory[id] ?? [];
     setSubcategory(next[0]?.slug ?? "");
+    setOtherText("");
   }
+
+  const submittedSubcategory = subcategory === OTHER_VALUE ? otherText : subcategory;
 
   return (
     <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -62,7 +74,6 @@ export function CategorySubcategoryPicker({
       <div>
         <label className={labelClass}>{subcategoryLabel}</label>
         <select
-          name="subcategory"
           value={subcategory}
           onChange={(e) => setSubcategory(e.target.value)}
           className={inputClass}
@@ -73,7 +84,18 @@ export function CategorySubcategoryPicker({
               {s.name[locale] ?? s.name.fr}
             </option>
           ))}
+          <option value={OTHER_VALUE}>{otherLabel}</option>
         </select>
+        {subcategory === OTHER_VALUE && (
+          <input
+            value={otherText}
+            onChange={(e) => setOtherText(e.target.value)}
+            placeholder={otherPlaceholder}
+            required
+            className={`${inputClass} mt-2`}
+          />
+        )}
+        <input type="hidden" name="subcategory" value={submittedSubcategory} />
       </div>
     </section>
   );

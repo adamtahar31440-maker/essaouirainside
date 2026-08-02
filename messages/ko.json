@@ -190,6 +190,8 @@
     "fieldOtherActivities": "현장 기타 활동/서비스",
     "otherActivitiesHint": "선택 사항입니다. 업체에서 현장에서 제공하는 다른 활동이나 서비스가 있나요(레스토랑, 상점, 스파, 하맘...)? 한 줄에 하나씩 추가하세요 — 공개 페이지에 표시됩니다.",
     "otherActivitiesPlaceholder": "레스토랑\n상점\n하맘 & 마사지",
+    "otherOptionLabel": "기타",
+    "otherActivitySpecifyPlaceholder": "활동을 명시해 주세요",
     "fieldAmenities": "편의시설 및 서비스",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "주차 공간",

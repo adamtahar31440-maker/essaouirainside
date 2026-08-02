@@ -20,8 +20,9 @@ import { DashboardLangSwitcher } from "@/components/dashboard-lang-switcher";
 import { ImageUploader } from "@/components/image-uploader";
 import { HoursEditor } from "@/components/hours-editor";
 import { ProductsEditor } from "@/components/products-editor";
+import { ActivityTagsPicker } from "@/components/activity-tags-picker";
 import { UpdateSuccessBanner } from "@/components/update-success-banner";
-import { PRICE_LEVELS, priceLevelLabel, buildSubcategoryMap, subcategoryLabel } from "@/lib/labels";
+import { PRICE_LEVELS, priceLevelLabel, buildSubcategoryMap, subcategoryLabel, flattenSubcategories } from "@/lib/labels";
 import { AiDescriptionField } from "@/components/ai-description-field";
 import { ALL_LOCALES } from "@/lib/localized-form";
 import { localeNames } from "@/i18n/routing";
@@ -97,18 +98,23 @@ export default async function ProDashboardPage({
     );
   }
 
-  const [subscription, invoices, serviceOrders, allEstablishments, plans] = await Promise.all([
+  const [subscription, invoices, serviceOrders, allEstablishments, plans, categories] = await Promise.all([
     getSubscriptionByProfessionalId(professional.id),
     getInvoicesByProfessionalId(professional.id),
     getServiceOrdersByProfessionalId(professional.id),
     adminGetEstablishments(),
     getSubscriptionPlans(),
+    getAllCategories(),
   ]);
   const myEstablishment = allEstablishments.find((e) => e.professionalId === professional.id);
   const currentPlanKey = subscription?.status === "active" ? subscription.planKey : "starter";
   const maxPhotos = plans.find((p) => p.key === currentPlanKey)?.maxPhotos ?? null;
-  const myEstablishmentSubcategories = myEstablishment ? await adminGetSubcategories(myEstablishment.categoryId) : [];
+  const subcategoriesByCategory = Object.fromEntries(
+    await Promise.all(categories.map(async (c) => [c.id, await adminGetSubcategories(c.id)]))
+  );
+  const myEstablishmentSubcategories = myEstablishment ? subcategoriesByCategory[myEstablishment.categoryId] ?? [] : [];
   const subcategoryMap = buildSubcategoryMap(myEstablishmentSubcategories);
+  const activityOptions = flattenSubcategories(categories, subcategoriesByCategory);
 
   const [labelApplication, labelBadges] = myEstablishment
     ? await Promise.all([
@@ -344,12 +350,12 @@ export default async function ProDashboardPage({
             <div>
               <label className={labelClass}>{t("fieldOtherActivities")}</label>
               <p className="mb-2 text-xs text-foreground/50">{t("otherActivitiesHint")}</p>
-              <textarea
-                name="otherActivities"
-                defaultValue={(myEstablishment.services?.fr ?? []).join("\n")}
-                rows={3}
-                className={inputClass}
-                placeholder={t("otherActivitiesPlaceholder")}
+              <ActivityTagsPicker
+                options={activityOptions}
+                locale="fr"
+                defaultValues={myEstablishment.services?.fr ?? []}
+                otherLabel={t("otherOptionLabel")}
+                otherPlaceholder={t("otherActivitySpecifyPlaceholder")}
               />
             </div>
 

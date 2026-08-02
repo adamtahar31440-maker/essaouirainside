@@ -190,6 +190,8 @@
     "fieldOtherActivities": "Other activities on-site",
     "otherActivitiesHint": "Optional. Does your establishment offer other activities or services on-site (restaurant, shop, spa, hammam...)? Add them one per line — they'll appear on your public listing.",
     "otherActivitiesPlaceholder": "Restaurant\nShop\nHammam & massage",
+    "otherOptionLabel": "Other",
+    "otherActivitySpecifyPlaceholder": "Specify your activity",
     "fieldAmenities": "Amenities & Services",
     "amenityWifi": "Wi-Fi",
     "amenityParking": "Parking",
